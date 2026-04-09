@@ -1,0 +1,237 @@
+\section{Keylime Architecture Recap}
+
+\begin{frame}{Keylime - Architecture Overview}
+  \begin{block}{Core Components}
+    \scriptsize
+    Keylime is an open-source scalable trust system harnessing TPM 2.0 technology
+    for remote attestation and runtime integrity monitoring.
+  \end{block}
+
+  \vspace{0.1cm}
+
+  \begin{center}
+    \begin{tikzpicture}[scale=0.72, transform shape, node distance=1.2cm,
+        component/.style={rectangle, draw, fill=keylimeblue!20, text width=2.2cm, text centered, minimum height=1cm, font=\scriptsize\bfseries},
+        subcomp/.style={rectangle, draw, fill=keylimegreen!15, text width=1.8cm, text centered, minimum height=0.7cm, font=\tiny},
+        arrow/.style={->, >=stealth, thick}]
+
+      % Core components
+      \node[component] (agent) {Agent\\(Rust)};
+      \node[component, right=2.5cm of agent] (registrar) {Registrar};
+      \node[component, right=2.5cm of registrar] (verifier) {Verifier};
+      \node[component, below=1.5cm of registrar] (tenant) {Tenant / Attest\\Client};
+
+      % TPM
+      \node[subcomp, below=0.6cm of agent, fill=keylimeorange!20] (tpm) {TPM 2.0};
+
+      % Database
+      \node[subcomp, above=0.6cm of registrar, fill=codepurple!10] (regdb) {Registrar DB};
+      \node[subcomp, above=0.6cm of verifier, fill=codepurple!10] (verdb) {Verifier DB};
+
+      % Arrows
+      \draw[arrow] (agent) -- node[above, font=\tiny] {Register} (registrar);
+      \draw[arrow] (verifier) -- node[above, font=\tiny] {Validate} (registrar);
+      \draw[arrow, keylimegreen!70!black] (verifier) to[bend left=15] node[below, font=\tiny] {Quote Request} (agent);
+      \draw[arrow, keylimeblue] (agent) to[bend left=15] node[above, font=\tiny] {TPM Quote} (verifier);
+      \draw[arrow] (tenant) -- node[right, font=\tiny] {Enroll/Manage} (verifier);
+      \draw[arrow, dashed] (tpm) -- (agent);
+      \draw[arrow, dashed] (registrar) -- (regdb);
+      \draw[arrow, dashed] (verifier) -- (verdb);
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.1cm}
+
+  \begin{center}
+    \scriptsize
+    \begin{tabular}{|l|p{7cm}|}
+      \hline
+      \textbf{Component} & \textbf{Role} \\
+      \hline
+      \textbf{Agent} & Deployed on remote machines; generates TPM quotes and measurements \\
+      \hline
+      \textbf{Registrar} & Stores agent identities and TPM vendor public keys \\
+      \hline
+      \textbf{Verifier} & Continuously validates agent integrity against policies \\
+      \hline
+      \textbf{Tenant} & Client-side tool for managing attestation operations \\
+      \hline
+    \end{tabular}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Keylime - Agent State Machine}
+  \begin{block}{Agent Lifecycle States (Pull Mode)}
+    \scriptsize
+    Each agent transitions through well-defined states during its lifecycle.
+    The dashboard must track and visualize these transitions.
+  \end{block}
+
+  \vspace{0.1cm}
+
+  \begin{center}
+    \begin{tikzpicture}[scale=0.62, transform shape,
+        state/.style={rectangle, draw, rounded corners, fill=keylimeblue!15, text width=1.5cm, text centered, minimum height=0.7cm, font=\tiny\bfseries},
+        failstate/.style={rectangle, draw, rounded corners, fill=dangered!20, text width=1.5cm, text centered, minimum height=0.7cm, font=\tiny\bfseries},
+        arrow/.style={->, >=stealth, thick, font=\tiny}]
+
+      \node[state] (reg) at (0,0) {REGISTERED\\(0)};
+      \node[state] (start) at (2.5,0) {START\\(1)};
+      \node[state] (saved) at (5,0) {SAVED\\(2)};
+      \node[state, fill=successgreen!20] (getq) at (7.5,0) {GET\_QUOTE\\(3)};
+      \node[state] (retry) at (10,0) {RETRY\\(4)};
+      \node[state] (provv) at (5,-1.8) {PROVIDE\_V\\(5)};
+      \node[failstate] (failed) at (0,-1.8) {FAILED\\(7)};
+      \node[failstate] (invq) at (2.5,-1.8) {INVALID\\QUOTE (9)};
+      \node[failstate] (term) at (7.5,-1.8) {TERMINATED\\(8)};
+      \node[failstate] (tfail) at (10,-1.8) {TENANT\\FAILED (10)};
+
+      \draw[arrow] (reg) -- (start);
+      \draw[arrow] (start) -- (saved);
+      \draw[arrow] (saved) -- (getq);
+      \draw[arrow] (getq) -- (retry);
+      \draw[arrow] (getq) -- (provv);
+      \draw[arrow, dangered] (getq) to[bend right=15] (failed);
+      \draw[arrow, dangered] (getq) -- (invq);
+      \draw[arrow] (retry) to[bend right=25] (getq);
+      \draw[arrow] (provv) to[bend right=15] (getq);
+      \draw[arrow, dangered] (term) -- (tfail);
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.1cm}
+
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \scriptsize
+      \textbf{Healthy States:}
+      \begin{itemize}
+        \item \textcolor{keylimegreen}{GET\_QUOTE} - Active monitoring
+        \item SAVED - Awaiting first check
+        \item PROVIDE\_V - Key delivery
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \scriptsize
+      \textbf{Alert States:}
+      \begin{itemize}
+        \item \textcolor{dangered}{FAILED} - Integrity proof failed
+        \item \textcolor{dangered}{INVALID\_QUOTE} - Policy violation
+        \item \textcolor{dangered}{TENANT\_FAILED} - Removal error
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Keylime - Push Mode State Machine}
+  \begin{block}{Attestation Stages (Push Mode, v3 API)}
+    \scriptsize
+    In push mode, agents initiate attestation by submitting capabilities and evidence.
+    The state model is simpler (3 stages), but introduces session lifecycle management.
+  \end{block}
+
+  \vspace{0.1cm}
+
+  \begin{center}
+    \begin{tikzpicture}[scale=0.65, transform shape,
+        state/.style={rectangle, draw, rounded corners, fill=keylimeblue!15, text width=2.2cm, align=center, minimum height=0.8cm, font=\tiny\bfseries},
+        failstate/.style={rectangle, draw, rounded corners, fill=dangered!20, text width=2.2cm, align=center, minimum height=0.8cm, font=\tiny\bfseries},
+        sessstate/.style={rectangle, draw, rounded corners, fill=codepurple!10, text width=2.2cm, align=center, minimum height=0.8cm, font=\tiny\bfseries},
+        arrow/.style={->, >=stealth, thick, font=\tiny}]
+
+      % Session lifecycle
+      \node[sessstate] (session) at (0,2) {Session\\Created};
+      \node[sessstate] (authed) at (4,2) {Session\\Authenticated};
+
+      % Attestation stages
+      \node[state] (await) at (0,0) {Awaiting\\Evidence};
+      \node[state, fill=warningyellow!20] (eval) at (4,0) {Evaluating\\Evidence};
+      \node[state, fill=successgreen!20] (pass) at (8.5,1) {Verification\\Complete (Pass)};
+      \node[failstate] (fail) at (8.5,-1) {Verification\\Complete (Fail)};
+
+      % Session arrows
+      \draw[arrow] (session) -- node[above] {PoP token} (authed);
+      \draw[arrow, dashed] (authed) -- node[right] {POST capabilities} (await);
+
+      % Attestation arrows
+      \draw[arrow] (await) -- node[above] {PATCH evidence} (eval);
+      \draw[arrow, keylimegreen!70!black] (eval) -- node[above] {pass} (pass);
+      \draw[arrow, dangered] (eval) -- node[above] {fail} (fail);
+
+      % Loop - "next challenge" goes right then below to avoid Fail box
+      \draw[arrow, dashed] (pass.east) -- ++(0.8,0) -- ++(0,-3.8) -| node[below, pos=0.2] {next challenge} (await.south);
+      % "retry" goes down then left with 90-degree angles, south of Evaluating Evidence
+      \draw[arrow, dashed, dangered] (fail.west) -- ++(-1,0) -- ++(0,-1.5) -| node[below, pos=0.75] {retry} (await.south east);
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.05cm}
+
+  \tiny
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{Attestation Stages:}
+      \begin{itemize}
+        \setlength{\itemsep}{0pt}
+        \item \textbf{Awaiting Evidence} - Challenge issued, waiting for agent
+        \item \textbf{Evaluating Evidence} - Verifier processing quote
+        \item \textbf{Verification Complete} - Pass or Fail result
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{Session Lifecycle:}
+      \begin{itemize}
+        \setlength{\itemsep}{0pt}
+        \item Session created via \texttt{POST /sessions}
+        \item PoP (Proof-of-Possession) token issued
+        \item Challenge lifetime configurable
+        \item Session expiry triggers re-authentication
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Keylime - Data Model Overview}
+  \begin{block}{Key Data Entities to Monitor}
+    \scriptsize
+    The dashboard consumes data from Keylime's REST APIs and databases.
+  \end{block}
+
+  \vspace{0.1cm}
+
+  \scriptsize
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{Verifier Data:}
+      \begin{itemize}
+        \item Agent records (state, IPs, keys)
+        \item Attestation history (quotes, timestamps)
+        \item IMA policies (allowlists)
+        \item Measured boot policies
+        \item Authentication sessions
+        \item Failure counts and reasons
+        \item Last attestation timestamps
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{Registrar Data:}
+      \begin{itemize}
+        \item Registered agents
+        \item TPM keys (EK, AK, IAK, IDevID)
+        \item EK certificates
+        \item Registration counts
+        \item Agent activation status
+        \item mTLS certificates
+        \item Cloud provider keys
+      \end{itemize}
+    \end{column}
+  \end{columns}
+
+  \vspace{0.3cm}
+
+  \begin{alertblock}{API Versions}
+    \scriptsize
+    Dashboard must support both \textbf{v2} (pull mode, legacy) and \textbf{v3} (push mode, modern) API endpoints.
+    Current supported versions: 1.0, 2.0--2.5, 3.0.
+  \end{alertblock}
+\end{frame}

@@ -1,0 +1,175 @@
+\section{Revocation \& Alerts}
+
+\begin{frame}{Revocation - Notification Channels}
+  \begin{block}{Multi-Channel Revocation Notifications}
+    \scriptsize
+    When an agent fails attestation, Keylime triggers revocation notifications
+    through multiple configurable channels. The dashboard monitors all channels.
+  \end{block}
+
+  \vspace{0.1cm}
+
+  \begin{center}
+    \begin{tikzpicture}[scale=0.72, transform shape,
+        component/.style={rectangle, draw, rounded corners, fill=keylimeblue!15, text width=2.2cm, text centered, minimum height=1cm, font=\tiny\bfseries},
+        channel/.style={rectangle, draw, rounded corners, fill=keylimegreen!15, text width=2cm, text centered, minimum height=0.8cm, font=\tiny},
+        arrow/.style={->, >=stealth, thick}]
+
+      \node[component, fill=dangered!15] (verifier) at (0,0) {Verifier\\(Failure Detected)};
+
+      \node[channel] (agent) at (5,1.5) {Agent\\Notification};
+      \node[channel] (zmq) at (5,0) {ZeroMQ\\Notification};
+      \node[channel] (webhook) at (5,-1.5) {Webhook\\Notification};
+
+      \node[component, fill=warningyellow!15] (target) at (10,1.5) {Target Agent\\(Revocation Script)};
+      \node[component, fill=codepurple!10] (siem) at (10,0) {SIEM / Monitoring\\System};
+      \node[component, fill=infoblue!10] (external) at (10,-1.5) {External Service\\(PagerDuty, etc.)};
+
+      \draw[arrow] (verifier) -- (agent);
+      \draw[arrow] (verifier) -- (zmq);
+      \draw[arrow] (verifier) -- (webhook);
+      \draw[arrow] (agent) -- (target);
+      \draw[arrow] (zmq) -- (siem);
+      \draw[arrow] (webhook) -- (external);
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.1cm}
+
+  \scriptsize
+  \begin{center}
+    \begin{tabular}{|l|p{3.5cm}|l|}
+      \hline
+      \textbf{Channel} & \textbf{Configuration} & \textbf{Dashboard Monitors} \\
+      \hline
+      Agent (REST) & Direct notification to agent & Delivery status, latency \\
+      \hline
+      ZeroMQ & \texttt{zmq\_ip:zmq\_port} & Connection state, queue depth \\
+      \hline
+      Webhook & \texttt{webhook\_url} & HTTP status, retry count \\
+      \hline
+    \end{tabular}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Revocation - Alert Management Dashboard}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.62, transform shape]
+      % Background
+      \fill[dashbg] (0,0) rectangle (14,8);
+
+      % Header
+      \fill[headerblue] (0,7.3) rectangle (14,8);
+      \node[text=white, font=\tiny\bfseries, anchor=west] at (0.3,7.65) {Revocation \& Alert Management};
+
+      % Active alerts summary
+      \fill[dangered!10, rounded corners=2pt] (0.3,6.0) rectangle (4.5,7.1);
+      \node[font=\tiny\bfseries, dangered] at (2.4,6.85) {Active Critical: 2};
+      \node[font=\tiny, keylimegray] at (2.4,6.35) {Requires attention};
+
+      \fill[warningyellow!10, rounded corners=2pt] (4.8,6.0) rectangle (9,7.1);
+      \node[font=\tiny\bfseries, warningyellow!80!black] at (6.9,6.85) {Active Warnings: 5};
+      \node[font=\tiny, keylimegray] at (6.9,6.35) {Under investigation};
+
+      \fill[successgreen!10, rounded corners=2pt] (9.3,6.0) rectangle (13.7,7.1);
+      \node[font=\tiny\bfseries, successgreen] at (11.5,6.85) {Resolved (24h): 12};
+      \node[font=\tiny, keylimegray] at (11.5,6.35) {Auto + manual};
+
+      % Alert timeline
+      \fill[cardwhite, rounded corners=2pt] (0.3,3.0) rectangle (13.7,5.8);
+      \node[font=\tiny\bfseries, anchor=west] at (0.5,5.55) {Revocation Event Timeline (Last 7 Days)};
+      % Scatter-like timeline
+      \draw[keylimegray, thin] (1,3.3) -- (13,3.3);
+      \draw[keylimegray, thin] (1,3.3) -- (1,5.3);
+      % Events as dots
+      \node[circle, fill=dangered, inner sep=2pt] at (2,4.8) {};
+      \node[circle, fill=dangered, inner sep=2pt] at (2.3,4.2) {};
+      \node[circle, fill=warningyellow, inner sep=1.5pt] at (4,3.8) {};
+      \node[circle, fill=warningyellow, inner sep=1.5pt] at (5.5,4.0) {};
+      \node[circle, fill=dangered, inner sep=2pt] at (7,4.5) {};
+      \node[circle, fill=warningyellow, inner sep=1.5pt] at (8,3.6) {};
+      \node[circle, fill=warningyellow, inner sep=1.5pt] at (9,3.9) {};
+      \node[circle, fill=dangered, inner sep=2pt] at (10.5,4.7) {};
+      \node[circle, fill=dangered, inner sep=2pt] at (11,4.3) {};
+      \node[circle, fill=warningyellow, inner sep=1.5pt] at (12,3.7) {};
+      % Axis labels
+      \node[font=\tiny, keylimegray] at (1.5,3.1) {Mon};
+      \node[font=\tiny, keylimegray] at (4,3.1) {Tue};
+      \node[font=\tiny, keylimegray] at (6.5,3.1) {Wed};
+      \node[font=\tiny, keylimegray] at (9,3.1) {Thu};
+      \node[font=\tiny, keylimegray] at (11.5,3.1) {Fri};
+
+      % Alert detail list
+      \fill[cardwhite, rounded corners=2pt] (0.3,0.3) rectangle (13.7,2.8);
+      \node[font=\tiny\bfseries, anchor=west] at (0.5,2.55) {Recent Revocations};
+      \fill[dangered!8] (0.5,1.9) rectangle (13.5,2.35);
+      \node[font=\tiny, anchor=west] at (0.7,2.15) {\textcolor{dangered}{$\bullet$} agent-042 | IMA policy violation | \texttt{/usr/bin/suspicious} | Webhook: delivered | ZMQ: sent};
+      \fill[dangered!8] (0.5,1.35) rectangle (13.5,1.8);
+      \node[font=\tiny, anchor=west] at (0.7,1.6) {\textcolor{dangered}{$\bullet$} agent-189 | Quote invalid | TPM signature mismatch | Webhook: failed (retry 2) | ZMQ: sent};
+      \fill[warningyellow!8] (0.5,0.8) rectangle (13.5,1.25);
+      \node[font=\tiny, anchor=west] at (0.7,1.05) {\textcolor{warningyellow}{$\bullet$} agent-067 | Boot violation | Firmware changed | Webhook: delivered | Acknowledged};
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Revocation - Alert Workflow}
+  \begin{block}{Alert Lifecycle Management}
+    \scriptsize
+    Each revocation event follows a structured lifecycle that operators can track
+    and manage through the dashboard.
+  \end{block}
+
+  \vspace{0.1cm}
+
+  \begin{center}
+    \begin{tikzpicture}[scale=0.72, transform shape,
+        state/.style={rectangle, draw, rounded corners, fill=keylimeblue!15, text width=2cm, text centered, minimum height=1cm, font=\tiny\bfseries},
+        arrow/.style={->, >=stealth, thick, font=\tiny}]
+
+      \node[state, fill=dangered!20] (new) at (0,0) {New\\Alert};
+      \node[state, fill=warningyellow!20] (ack) at (3.5,0) {Acknowledged};
+      \node[state, fill=infoblue!15] (invest) at (7,0) {Under\\Investigation};
+      \node[state, fill=successgreen!20] (resolved) at (10.5,0.8) {Resolved};
+      \node[state, fill=keylimegray!20] (dismissed) at (10.5,-0.8) {Dismissed};
+
+      \draw[arrow] (new) -- node[above] {operator ack} (ack);
+      \draw[arrow] (ack) -- node[above] {assigned} (invest);
+      \draw[arrow] (invest) -- node[above] {fixed} (resolved);
+      \draw[arrow] (invest) -- node[below] {false positive} (dismissed);
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.2cm}
+
+  \scriptsize
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{Operator Actions:}
+      \begin{itemize}
+        \item Acknowledge alert
+        \item Assign to team member
+        \item Add investigation notes
+        \item Reactivate agent after fix
+        \item Update policy if false positive
+        \item Escalate to security team
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{Automated Actions:}
+      \begin{itemize}
+        \item Auto-escalate after SLA timeout
+        \item Group related alerts by correlation
+        \item Auto-resolve on successful re-attestation
+        \item Notification deduplication
+        \item Severity auto-adjustment
+      \end{itemize}
+
+      \vspace{0.1cm}
+      \textbf{Webhook Security:}
+      \begin{itemize}
+        \item SSRF protection: validate webhook URLs against allowlist of permitted hosts/CIDRs
+        \item Block internal IPs (RFC 1918, link-local)
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}

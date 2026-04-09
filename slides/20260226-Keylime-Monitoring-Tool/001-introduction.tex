@@ -1,0 +1,101 @@
+\section{Introduction}
+
+\begin{frame}{Introduction - The Challenge}
+  \begin{block}{Remote Attestation at Scale}
+    As organizations deploy Keylime across hundreds or thousands of machines,
+    system administrators face a critical challenge: \textbf{how to effectively monitor,
+    operate, and troubleshoot a distributed trust infrastructure}.
+  \end{block}
+
+  \vspace{0.3cm}
+
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{Without a Dashboard:}
+      \begin{itemize}
+        \item Manual CLI queries per agent
+        \item No visibility into fleet health
+        \item Delayed detection of failures
+        \item Complex log correlation
+        \item No trend analysis capability
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{With a Dashboard:}
+      \begin{itemize}
+        \item Real-time fleet overview
+        \item Immediate failure alerts
+        \item Historical trend analysis
+        \item Centralized policy management
+        \item Operational efficiency
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Introduction - Why Keylime Monitoring?}
+  \begin{alertblock}{Business Case}
+    \footnotesize
+    In production environments, a single undetected attestation failure
+    can mean a compromised machine remains trusted. A monitoring dashboard
+    transforms Keylime from a security tool into a \textbf{security operations platform}.
+  \end{alertblock}
+
+  \vspace{0.2cm}
+
+  \textbf{Key Requirements for Enterprise Adoption:}
+  \begin{enumerate}
+    \item \textbf{Visibility}: Real-time view of all agent states and attestation results
+    \item \textbf{Alerting}: Immediate notification on policy violations and failures
+    \item \textbf{Operations}: Manage agents, policies, and certificates from a single pane
+    \item \textbf{Compliance}: Audit trail and historical attestation records
+    \item \textbf{Performance}: Monitor system health and resource utilization
+    \item \textbf{Integration}: Connect with existing SIEM and monitoring tools
+  \end{enumerate}
+
+  \vspace{0.2cm}
+
+  \begin{exampleblock}{Target Users}
+    \scriptsize
+    Security Operations (SecOps) teams, System Administrators, Compliance Officers, and DevSecOps engineers
+  \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Introduction - Scope of the Dashboard}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.62, transform shape,
+        box/.style={rectangle, draw, rounded corners, fill=keylimeblue!15, text width=2.4cm, text centered, minimum height=1cm, font=\tiny\bfseries},
+        secbox/.style={rectangle, draw, rounded corners, fill=dangered!10, text width=2.4cm, text centered, minimum height=1cm, font=\tiny\bfseries}]
+
+      % Row 1 - Core Monitoring
+      \node[box] (fleet) at (0,0) {Agent Fleet\\Management};
+      \node[box] (attest) at (3.2,0) {Attestation\\Analytics};
+      \node[box] (policy) at (6.4,0) {Policy\\Management};
+      \node[box] (verify) at (9.6,0) {Verification\\Pipeline};
+
+      % Row 2 - Operations
+      \node[box] (security) at (0,-1.8) {Security\\Audit};
+      \node[box] (perf) at (3.2,-1.8) {System\\Performance};
+      \node[box] (revoke) at (6.4,-1.8) {Revocation\\\& Alerts};
+      \node[box] (certs) at (9.6,-1.8) {Certificate\\Management};
+
+      % Row 3 - Security & Enterprise
+      \node[secbox] (threat) at (0,-3.6) {Threat Model\\\& Security};
+      \node[secbox] (rbac) at (3.2,-3.6) {Authentication\\\& RBAC};
+      \node[box] (compliance) at (6.4,-3.6) {Compliance\\\& Incident};
+      \node[box] (ha) at (9.6,-3.6) {HA \&\\Scalability};
+
+      \node[rectangle, draw, thick, rounded corners, fit=(fleet)(verify)(threat)(ha),
+            inner sep=0.3cm, keylimeblue, label={[font=\scriptsize\bfseries,keylimeblue]above:Keylime Monitoring Dashboard}] {};
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.1cm}
+
+  \begin{block}{Twelve Core Modules}
+    \scriptsize
+    The dashboard covers every aspect of Keylime operations: monitoring, security
+    (threat model, RBAC, secret management), compliance, incident response,
+    and enterprise readiness (HA, scalability, air-gapped deployment).
+  \end{block}
+\end{frame}

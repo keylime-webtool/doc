@@ -1,0 +1,176 @@
+\section{Dashboard Overview}
+
+\begin{frame}{Dashboard - Main Screen Layout}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.65, transform shape]
+      % Background
+      \fill[dashbg] (0,0) rectangle (14,8.5);
+
+      % Sidebar
+      \fill[sidebarblue] (0,0) rectangle (2.5,8.5);
+      \node[text=white, font=\tiny\bfseries] at (1.25,8) {KEYLIME};
+      \node[text=white, font=\tiny\bfseries] at (1.25,7.6) {MONITOR};
+      \draw[white, thick] (0.3,7.3) -- (2.2,7.3);
+
+      % Sidebar menu items
+      \foreach \y/\label in {6.8/Dashboard, 6.3/Agents, 5.8/Attestations, 5.3/Policies, 4.8/Certificates, 4.3/Revocations, 3.8/Performance, 3.3/Audit Log, 2.8/Settings} {
+        \node[text=white!80, font=\tiny, anchor=west] at (0.4,\y) {\label};
+      }
+
+      % Header bar
+      \fill[headerblue] (2.5,7.8) rectangle (14,8.5);
+      \node[text=white, font=\tiny\bfseries, anchor=west] at (3,8.15) {Fleet Overview Dashboard};
+      \node[text=white!80, font=\tiny, anchor=east] at (13.5,8.15) {admin@keylime.local};
+
+      % KPI Cards Row
+      \fill[cardwhite, rounded corners=2pt] (3,6.8) rectangle (5.5,7.6);
+      \node[font=\tiny\bfseries, successgreen] at (4.25,7.35) {247};
+      \node[font=\tiny, keylimegray] at (4.25,7.0) {Active Agents};
+
+      \fill[cardwhite, rounded corners=2pt] (5.8,6.8) rectangle (8.3,7.6);
+      \node[font=\tiny\bfseries, dangered] at (7.05,7.35) {3};
+      \node[font=\tiny, keylimegray] at (7.05,7.0) {Failed Agents};
+
+      \fill[cardwhite, rounded corners=2pt] (8.6,6.8) rectangle (11.1,7.6);
+      \node[font=\tiny\bfseries, keylimeblue] at (9.85,7.35) {99.2\%};
+      \node[font=\tiny, keylimegray] at (9.85,7.0) {Attestation Rate};
+
+      \fill[cardwhite, rounded corners=2pt] (11.4,6.8) rectangle (13.8,7.6);
+      \node[font=\tiny\bfseries, warningyellow!80!black] at (12.6,7.35) {5};
+      \node[font=\tiny, keylimegray] at (12.6,7.0) {Cert Warnings};
+
+      % Agent State Distribution (left chart area)
+      \fill[cardwhite, rounded corners=2pt] (3,3.5) rectangle (8.2,6.6);
+      \node[font=\tiny\bfseries, anchor=west] at (3.2,6.35) {Agent State Distribution};
+      % Pie chart simulation
+      \fill[successgreen] (5.6,5) circle (1);
+      \fill[dangered] (5.6,5) -- ++(90:1) arc(90:100:1) -- cycle;
+      \fill[warningyellow] (5.6,5) -- ++(100:1) arc(100:115:1) -- cycle;
+      \fill[keylimeblue] (5.6,5) -- ++(115:1) arc(115:130:1) -- cycle;
+      % Legend
+      \node[font=\tiny, anchor=west] at (3.3,3.9) {\textcolor{successgreen}{$\blacksquare$} GET\_QUOTE (94\%)};
+      \node[font=\tiny, anchor=west] at (5.8,3.9) {\textcolor{dangered}{$\blacksquare$} FAILED (1.2\%)};
+      \node[font=\tiny, anchor=west] at (3.3,3.65) {\textcolor{warningyellow}{$\blacksquare$} RETRY (2.4\%)};
+      \node[font=\tiny, anchor=west] at (5.8,3.65) {\textcolor{keylimeblue}{$\blacksquare$} OTHER (2.4\%)};
+
+      % Recent Alerts (right panel)
+      \fill[cardwhite, rounded corners=2pt] (8.5,3.5) rectangle (13.8,6.6);
+      \node[font=\tiny\bfseries, anchor=west] at (8.7,6.35) {Recent Alerts};
+      % Alert items
+      \fill[dangered!10] (8.7,5.7) rectangle (13.6,6.1);
+      \node[font=\tiny, dangered, anchor=west] at (8.8,5.9) {CRITICAL: agent-042 FAILED};
+      \fill[warningyellow!10] (8.7,5.2) rectangle (13.6,5.6);
+      \node[font=\tiny, warningyellow!80!black, anchor=west] at (8.8,5.4) {WARN: cert expires in 7d};
+      \fill[warningyellow!10] (8.7,4.7) rectangle (13.6,5.1);
+      \node[font=\tiny, warningyellow!80!black, anchor=west] at (8.8,4.9) {WARN: 3 agents retrying};
+      \fill[infoblue!10] (8.7,4.2) rectangle (13.6,4.6);
+      \node[font=\tiny, infoblue, anchor=west] at (8.8,4.4) {INFO: policy updated};
+      \fill[infoblue!10] (8.7,3.7) rectangle (13.6,4.1);
+      \node[font=\tiny, infoblue, anchor=west] at (8.8,3.9) {INFO: 2 agents registered};
+
+      % Attestation Timeline (bottom)
+      \fill[cardwhite, rounded corners=2pt] (3,0.3) rectangle (13.8,3.3);
+      \node[font=\tiny\bfseries, anchor=west] at (3.2,3.05) {Attestation Success Rate (24h)};
+      % Chart axes
+      \draw[keylimegray, thin] (3.5,0.6) -- (3.5,2.8);
+      \draw[keylimegray, thin] (3.5,0.6) -- (13.5,0.6);
+      % Simulated line chart
+      \draw[successgreen, thick] (3.5,2.6) -- (5,2.5) -- (6,2.55) -- (7,2.4) -- (8,2.45) -- (9,2.3) -- (10,2.5) -- (11,2.55) -- (12,2.6) -- (13.5,2.5);
+      \draw[dangered, thick, dashed] (3.5,0.8) -- (5,0.85) -- (6,0.8) -- (7,1.0) -- (8,0.9) -- (9,1.1) -- (10,0.85) -- (11,0.8) -- (12,0.75) -- (13.5,0.8);
+      % Labels
+      \node[font=\tiny, keylimegray, rotate=90] at (3.2,1.7) {Rate \%};
+      \node[font=\tiny, keylimegray] at (8.5,0.4) {Time (hours)};
+      \node[font=\tiny, anchor=west] at (4,2.85) {\textcolor{successgreen}{\rule{0.3cm}{1pt}} Success};
+      \node[font=\tiny, anchor=west] at (6.5,2.85) {\textcolor{dangered}{\rule{0.3cm}{1pt}} Failure};
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Dashboard - Key Performance Indicators}
+  \begin{block}{Top-Level KPIs}
+    \scriptsize
+    The main dashboard presents at-a-glance health metrics computed from
+    Keylime's Verifier and Registrar APIs.
+  \end{block}
+
+  \vspace{0.1cm}
+
+  \scriptsize
+  \begin{center}
+    \begin{tabular}{|l|p{4cm}|p{3.5cm}|}
+      \hline
+      \textbf{KPI} & \textbf{Source} & \textbf{Alert Threshold} \\
+      \hline
+      \hline
+      Total Active Agents & Verifier: \texttt{GET /agents/} & N/A (informational) \\
+      \hline
+      Failed Agents & Agents in state 7, 9, 10 & Any count $>$ 0 \\
+      \hline
+      Attestation Success Rate & Computed from attestation history & Below 99\% \\
+      \hline
+      Avg Attestation Latency & Time between quote requests & Above 2x quote\_interval \\
+      \hline
+      Certificate Expiry Warnings & mTLS cert validity check & Within 30 days \\
+      \hline
+      Active IMA Policies & Verifier: \texttt{GET /policies/ima} & N/A (informational) \\
+      \hline
+      Revocation Events (24h) & Revocation notifier events & Any count $>$ 0 \\
+      \hline
+      Consecutive Failures & Per-agent failure counter & Above 3 consecutive \\
+      \hline
+      Registration Count & Registrar: \texttt{GET /agents/} & Unexpected re-registrations \\
+      \hline
+    \end{tabular}
+  \end{center}
+
+  \vspace{0.2cm}
+
+  \begin{alertblock}{Data Refresh}
+    \scriptsize
+    KPIs refresh every 30 seconds via polling or WebSocket push.
+    Alert thresholds are configurable per deployment.
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{Dashboard - Navigation Structure}
+  \begin{columns}[T]
+    \begin{column}{0.35\textwidth}
+      \textbf{Sidebar Navigation:}
+      \scriptsize
+      \begin{enumerate}
+        \item \textbf{Dashboard} - Fleet overview
+        \item \textbf{Agents} - Fleet management
+        \item \textbf{Attestations} - Analytics
+        \item \textbf{Policies} - IMA \& MB
+        \item \textbf{Certificates} - TLS/TPM certs
+        \item \textbf{Revocations} - Alert history
+        \item \textbf{Performance} - System metrics
+        \item \textbf{Audit Log} - Security events
+        \item \textbf{Integrations} - Backend status
+        \item \textbf{Settings} - Configuration
+      \end{enumerate}
+    \end{column}
+    \begin{column}{0.6\textwidth}
+      \textbf{Common UI Elements:}
+      \scriptsize
+      \begin{itemize}
+        \item \textbf{Search Bar}: Global agent search by UUID, IP, or hostname
+        \item \textbf{Time Range Selector}: Filter data by 1h, 6h, 24h, 7d, 30d, custom
+        \item \textbf{Auto-Refresh Toggle}: Enable/disable live updates
+        \item \textbf{Export}: CSV/JSON export for compliance reporting
+        \item \textbf{Dark/Light Mode}: Theme preference
+        \item \textbf{Role-Based Access}: Admin, Operator, Viewer roles
+      \end{itemize}
+
+      \vspace{0.2cm}
+
+      \textbf{Notification System:}
+      \begin{itemize}
+        \item In-app notification bell with badge count
+        \item Email/Slack integration for critical alerts
+        \item Configurable severity thresholds
+        \item Alert acknowledgment workflow
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}

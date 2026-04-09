@@ -1,0 +1,271 @@
+\section{Policy Management}
+
+\begin{frame}{Policy Management - IMA Policies}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.62, transform shape]
+      % Background
+      \fill[dashbg] (0,0) rectangle (14,8);
+
+      % Header
+      \fill[headerblue] (0,7.3) rectangle (14,8);
+      \node[text=white, font=\tiny\bfseries, anchor=west] at (0.3,7.65) {IMA Runtime Policy Management};
+
+      % Action bar
+      \fill[cardwhite, rounded corners=2pt] (0.3,6.5) rectangle (13.7,7.1);
+      \fill[keylimeblue, rounded corners=1pt] (0.5,6.6) rectangle (2.8,7.0);
+      \node[text=white, font=\tiny\bfseries] at (1.65,6.8) {+ New Policy};
+      \fill[keylimegreen!80!black, rounded corners=1pt] (3.1,6.6) rectangle (5,7.0);
+      \node[text=white, font=\tiny\bfseries] at (4.05,6.8) {Import};
+      \draw[keylimegray, rounded corners=2pt] (8,6.6) rectangle (11,7.0);
+      \node[font=\tiny, keylimegray] at (9.5,6.8) {Search policies...};
+
+      % Policy list
+      \fill[keylimeblue!10] (0.3,5.9) rectangle (13.7,6.4);
+      \node[font=\tiny\bfseries, anchor=west] at (0.5,6.15) {Policy Name};
+      \node[font=\tiny\bfseries] at (5,6.15) {Agents};
+      \node[font=\tiny\bfseries] at (6.8,6.15) {Entries};
+      \node[font=\tiny\bfseries] at (8.5,6.15) {Checksum};
+      \node[font=\tiny\bfseries] at (10.5,6.15) {Last Updated};
+      \node[font=\tiny\bfseries] at (12.5,6.15) {Actions};
+
+      % Row 1
+      \fill[cardwhite] (0.3,5.3) rectangle (13.7,5.7);
+      \draw[dashbg] (0.3,5.3) -- (13.7,5.3);
+      \node[font=\tiny, anchor=west] at (0.5,5.5) {\texttt{production-v2}};
+      \node[font=\tiny] at (5,5.5) {185};
+      \node[font=\tiny] at (6.8,5.5) {2,450};
+      \node[font=\tiny] at (8.5,5.5) {\texttt{a4f3b2\ldots}};
+      \node[font=\tiny] at (10.5,5.5) {2026-02-20};
+      \node[font=\tiny, keylimeblue] at (12.5,5.5) {Edit | View};
+      % Row 2
+      \fill[cardwhite] (0.3,4.8) rectangle (13.7,5.2);
+      \draw[dashbg] (0.3,4.8) -- (13.7,4.8);
+      \node[font=\tiny, anchor=west] at (0.5,5.0) {\texttt{staging-v3}};
+      \node[font=\tiny] at (5,5.0) {35};
+      \node[font=\tiny] at (6.8,5.0) {1,890};
+      \node[font=\tiny] at (8.5,5.0) {\texttt{c7d8e9\ldots}};
+      \node[font=\tiny] at (10.5,5.0) {2026-02-24};
+      \node[font=\tiny, keylimeblue] at (12.5,5.0) {Edit | View};
+      % Row 3
+      \fill[cardwhite] (0.3,4.3) rectangle (13.7,4.7);
+      \draw[dashbg] (0.3,4.3) -- (13.7,4.3);
+      \node[font=\tiny, anchor=west] at (0.5,4.5) {\texttt{minimal}};
+      \node[font=\tiny] at (5,4.5) {15};
+      \node[font=\tiny] at (6.8,4.5) {320};
+      \node[font=\tiny] at (8.5,4.5) {\texttt{b2c3d4\ldots}};
+      \node[font=\tiny] at (10.5,4.5) {2026-01-15};
+      \node[font=\tiny, keylimeblue] at (12.5,4.5) {Edit | View};
+      % Row 4
+      \fill[cardwhite] (0.3,3.8) rectangle (13.7,4.2);
+      \draw[dashbg] (0.3,3.8) -- (13.7,3.8);
+      \node[font=\tiny, anchor=west] at (0.5,4.0) {\texttt{strict-compliance}};
+      \node[font=\tiny] at (5,4.0) {10};
+      \node[font=\tiny] at (6.8,4.0) {4,200};
+      \node[font=\tiny] at (8.5,4.0) {\texttt{f1a2b3\ldots}};
+      \node[font=\tiny] at (10.5,4.0) {2026-02-18};
+      \node[font=\tiny, keylimeblue] at (12.5,4.0) {Edit | View};
+      % Row 5
+      \fill[cardwhite] (0.3,3.3) rectangle (13.7,3.7);
+      \draw[dashbg] (0.3,3.3) -- (13.7,3.3);
+      \node[font=\tiny, anchor=west] at (0.5,3.5) {\texttt{dev-permissive}};
+      \node[font=\tiny] at (5,3.5) {5};
+      \node[font=\tiny] at (6.8,3.5) {150};
+      \node[font=\tiny] at (8.5,3.5) {\texttt{d4e5f6\ldots}};
+      \node[font=\tiny] at (10.5,3.5) {2026-02-10};
+      \node[font=\tiny, keylimeblue] at (12.5,3.5) {Edit | View};
+
+      % Policy detail panel
+      \fill[cardwhite, rounded corners=2pt] (0.3,0.3) rectangle (13.7,3.1);
+      \node[font=\tiny\bfseries, anchor=west] at (0.5,2.85) {Policy: production-v2 (Preview)};
+      \node[font=\tiny\ttfamily, anchor=west, text width=12cm] at (0.5,2.4) {
+        \textcolor{codegreen}{\# IMA allowlist - production servers v2}
+      };
+      \node[font=\tiny\ttfamily, anchor=west] at (0.5,2.0) {
+        sha256:a4f3b2c1... /usr/bin/bash
+      };
+      \node[font=\tiny\ttfamily, anchor=west] at (0.5,1.6) {
+        sha256:d7e8f9a0... /usr/lib64/libc.so.6
+      };
+      \node[font=\tiny\ttfamily, anchor=west] at (0.5,1.2) {
+        sha256:b5c6d7e8... /usr/sbin/sshd
+      };
+      \node[font=\tiny, keylimegray] at (7,0.6) {... showing 3 of 2,450 entries};
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Policy Management - Policy Editor}
+  \tiny
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{IMA Policy Operations}
+        \tiny
+        Full CRUD operations for IMA runtime policies via the dashboard.
+      \end{block}
+
+      \vspace{0.05cm}
+
+      \textbf{Create/Edit Features:}
+      \vspace{-0.1cm}
+      \begin{itemize}
+        \setlength{\itemsep}{0pt}
+        \item Upload allowlist file
+        \item Inline editor with syntax highlighting
+        \item Hash algorithm selection (SHA-256, SHA-384)
+        \item Exclude list configuration
+        \item IMA signature key management
+        \item Policy validation before save
+        \item Checksum auto-computation
+      \end{itemize}
+
+      \vspace{0.05cm}
+
+      \textbf{Policy Versioning:}
+      \vspace{-0.1cm}
+      \begin{itemize}
+        \setlength{\itemsep}{0pt}
+        \item Change history with diffs
+        \item Rollback to previous version
+        \item Audit trail of who changed what
+        \item Side-by-side comparison view
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Measured Boot Policies}
+        \tiny
+        UEFI event log policies define expected boot sequences.
+      \end{block}
+
+      \vspace{0.05cm}
+
+      \textbf{MB Policy Management:}
+      \vspace{-0.1cm}
+      \begin{itemize}
+        \setlength{\itemsep}{0pt}
+        \item List all measured boot policies
+        \item Create from reference boot log
+        \item Edit policy rules and constraints
+        \item Associate with agent groups
+        \item Validate against known event logs
+      \end{itemize}
+
+      \vspace{0.05cm}
+
+      \textbf{Policy Assignment Matrix:}
+      \vspace{-0.1cm}
+      \begin{itemize}
+        \setlength{\itemsep}{0pt}
+        \item View which agents use which policy
+        \item Batch reassignment capability
+        \item Orphan policy detection
+        \item Impact analysis before changes
+        \item Preview policy effect on agents
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Policy Management - Impact Analysis}
+  \begin{block}{Pre-Update Impact Assessment}
+    \scriptsize
+    Before applying policy changes, the dashboard estimates the impact on the agent fleet.
+  \end{block}
+
+  \vspace{0.1cm}
+
+  \begin{center}
+    \begin{tikzpicture}[scale=0.7, transform shape]
+      % Impact assessment mockup
+      \fill[cardwhite, rounded corners=3pt] (0,0) rectangle (12,5.5);
+      \draw[keylimeblue, thick, rounded corners=3pt] (0,0) rectangle (12,5.5);
+
+      \node[font=\small\bfseries, keylimeblue] at (6,5.1) {Policy Update Impact Analysis};
+      \draw[keylimegray] (0.3,4.8) -- (11.7,4.8);
+
+      % Policy change summary
+      \node[font=\tiny, anchor=west] at (0.5,4.4) {Policy: \texttt{production-v2} $\rightarrow$ \texttt{production-v3}};
+      \node[font=\tiny, anchor=west] at (0.5,4.0) {Changes: +45 new hashes, -12 removed hashes, 8 modified};
+
+      % Impact metrics
+      \fill[successgreen!10, rounded corners=2pt] (0.5,2.8) rectangle (4,3.7);
+      \node[font=\tiny\bfseries, successgreen] at (2.25,3.45) {Unaffected: 170 agents};
+      \node[font=\tiny, keylimegray] at (2.25,3.05) {No files match changes};
+
+      \fill[warningyellow!10, rounded corners=2pt] (4.3,2.8) rectangle (7.8,3.7);
+      \node[font=\tiny\bfseries, warningyellow!80!black] at (6.05,3.45) {Affected: 12 agents};
+      \node[font=\tiny, keylimegray] at (6.05,3.05) {Have modified files};
+
+      \fill[dangered!10, rounded corners=2pt] (8.1,2.8) rectangle (11.5,3.7);
+      \node[font=\tiny\bfseries, dangered] at (9.8,3.45) {Will Fail: 3 agents};
+      \node[font=\tiny, keylimegray] at (9.8,3.05) {Removed hash in use};
+
+      % Recommendation
+      \node[font=\tiny, anchor=west] at (0.5,2.3) {Recommendation: Update 3 agents before applying policy change};
+
+      % Action buttons
+      \fill[keylimeblue, rounded corners=1pt] (5.5,0.5) rectangle (8.2,1.0);
+      \node[text=white, font=\tiny\bfseries] at (6.85,0.75) {Submit for Approval};
+      \fill[keylimegray, rounded corners=1pt] (9,0.5) rectangle (11,1.0);
+      \node[text=white, font=\tiny\bfseries] at (10,0.75) {Cancel};
+      \fill[warningyellow, rounded corners=1pt] (3,0.5) rectangle (5.2,1.0);
+      \node[text=white, font=\tiny\bfseries] at (4.1,0.75) {Staged Rollout};
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Policy Management - Two-Person Rule}
+  \begin{block}{Multi-Party Authorization for Policy Changes}
+    \scriptsize
+    The dashboard holds an admin mTLS cert with write access to the Verifier.
+    A compromised admin session could push a malicious IMA policy that whitelists
+    malware. Policy changes require \textbf{two-person approval} (N-of-M quorum).
+  \end{block}
+
+  \vspace{0.1cm}
+
+  \begin{center}
+    \begin{tikzpicture}[scale=0.68, transform shape,
+        state/.style={rectangle, draw, rounded corners, fill=keylimeblue!15, text width=2cm, align=center, minimum height=0.9cm, font=\tiny\bfseries},
+        arrow/.style={->, >=stealth, thick, font=\tiny}]
+
+      \node[state, fill=infoblue!15] (draft) at (0,0) {Draft\\(Admin A)};
+      \node[state, fill=warningyellow!20] (review) at (3.5,0) {Pending\\Review};
+      \node[state, fill=keylimegreen!20] (approved) at (7,0) {Approved\\(Admin B)};
+      \node[state, fill=successgreen!20] (applied) at (10.5,0) {Applied to\\Verifier};
+
+      \draw[arrow] (draft) -- node[above] {submit} (review);
+      \draw[arrow] (review) -- node[above] {approve} (approved);
+      \draw[arrow] (approved) -- node[above] {auto-push} (applied);
+      \draw[arrow, dashed, dangered] (review) to[bend right=30] node[below] {reject} (draft);
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.1cm}
+
+  \scriptsize
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{Approval Workflow:}
+      \begin{itemize}
+        \setlength{\itemsep}{0pt}
+        \item Admin A drafts policy change
+        \item System runs impact analysis automatically
+        \item Admin B (different user) reviews and approves
+        \item Configurable quorum: 2-of-3, 3-of-5, etc.
+        \item Approver cannot be the same as drafter
+        \item Time-limited approval window (24h default)
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{Change Management Integration:}
+      \begin{itemize}
+        \setlength{\itemsep}{0pt}
+        \item Optionally gate on ServiceNow Change Request
+        \item Policy push blocked until CR approved
+        \item CR number linked in audit log
+        \item Jira ticket auto-created for review
+        \item Emergency bypass with break-glass audit
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}

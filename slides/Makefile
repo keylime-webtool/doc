@@ -1,4 +1,5 @@
-SUBDIRS=20260305-Keylime-Monitoring-Tool-Stakeholders
+SUBDIRS=20260226-Keylime-Monitoring-Tool
+SUBDIRS+=20260305-Keylime-Monitoring-Tool-Stakeholders
 
 all:
 	@for dir in $(SUBDIRS); do \

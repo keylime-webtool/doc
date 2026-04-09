@@ -1,0 +1,161 @@
+\section{Compliance \& Incident Response}
+
+\begin{frame}{Compliance - Framework Mapping}
+  \begin{block}{Regulatory Compliance Support}
+    \scriptsize
+    The dashboard maps attestation capabilities to specific compliance framework controls,
+    enabling auditors to verify coverage directly from the UI.
+  \end{block}
+
+  \vspace{0.1cm}
+
+  \tiny
+  \begin{center}
+    \begin{tabular}{|l|p{3cm}|p{4.5cm}|}
+      \hline
+      \textbf{Framework} & \textbf{Relevant Controls} & \textbf{Dashboard Evidence} \\
+      \hline
+      \hline
+      NIST SP 800-155 & BIOS integrity measurement & Measured boot policy compliance reports \\
+      \hline
+      NIST SP 800-193 & Platform firmware resilience & PCR monitoring, firmware change alerts \\
+      \hline
+      PCI DSS 4.0 & Req 11.5: File integrity monitoring & IMA attestation history per agent \\
+      \hline
+      PCI DSS 4.0 & Req 10.2: Audit trail & Tamper-evident audit log export \\
+      \hline
+      SOC 2 Type II & CC7.1: Monitoring activities & Attestation analytics, alert workflows \\
+      \hline
+      SOC 2 Type II & CC6.1: Logical access controls & RBAC audit trail, session logs \\
+      \hline
+      FedRAMP & CA-7: Continuous monitoring & Real-time attestation success rate \\
+      \hline
+      FedRAMP & SI-7: Software integrity & IMA policy enforcement reports \\
+      \hline
+      CIS Controls v8 & 2.5: Allowlisted software & IMA allowlist policy compliance \\
+      \hline
+    \end{tabular}
+  \end{center}
+
+  \vspace{0.1cm}
+
+  \begin{exampleblock}{Pre-Built Compliance Reports}
+    \scriptsize
+    One-click PDF/CSV export per framework: attestation coverage summary,
+    policy compliance matrix, exception list with justifications,
+    and time-bounded audit evidence packages.
+  \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Compliance - Tamper-Evident Audit Logging}
+  \begin{block}{Audit Log Integrity}
+    \scriptsize
+    The dashboard's own audit log must be tamper-evident to serve as
+    valid compliance evidence. Self-reported logs stored in a mutable database
+    are insufficient for SOC 2 or FedRAMP auditors.
+  \end{block}
+
+  \vspace{0.2cm}
+
+  \scriptsize
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{Hash-Chain Integrity:}
+      \begin{itemize}
+        \item Each log entry includes SHA-256 hash of previous entry
+        \item Chain root anchored to external timestamp (RFC 3161)
+        \item Periodic chain checkpoints to Rekor transparency log
+        \item Tamper detection on startup and periodic verification
+      \end{itemize}
+
+      \vspace{0.15cm}
+
+      \textbf{Immutable Storage Options:}
+      \begin{itemize}
+        \item Append-only database tables
+        \item S3 Object Lock (WORM)
+        \item Rekor transparency log
+        \item Syslog forwarding (real-time)
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{Log Entry Structure:}
+      \begin{itemize}
+        \item Timestamp (UTC, millisecond precision)
+        \item Actor (user identity from OIDC)
+        \item Action (CRUD operation + target)
+        \item Resource (agent ID, policy name)
+        \item Source IP and user agent
+        \item Result (success/denied/error)
+        \item Previous entry hash (chain link)
+      \end{itemize}
+
+      \vspace{0.15cm}
+
+      \textbf{Retention Policy:}
+      \begin{itemize}
+        \item Configurable per deployment
+        \item Minimum 1 year for compliance
+        \item Archival to cold storage (S3/NFS)
+        \item Secure deletion after retention
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Incident Response - Integration}
+  \begin{block}{Security Incident Workflow Integration}
+    \scriptsize
+    Attestation failures are potential security incidents that must integrate
+    with existing enterprise incident response tooling and processes.
+  \end{block}
+
+  \vspace{0.1cm}
+
+  \scriptsize
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{Ticketing Integration:}
+      \begin{itemize}
+        \setlength{\itemsep}{0pt}
+        \item ServiceNow incident + change request
+        \item Jira issue auto-creation
+        \item PagerDuty alert routing
+        \item OpsGenie on-call escalation
+        \item Bidirectional status sync
+      \end{itemize}
+
+      \vspace{0.1cm}
+
+      \textbf{Change Management (ITSM):}
+      \begin{itemize}
+        \setlength{\itemsep}{0pt}
+        \item Policy changes gated on approved CR
+        \item ServiceNow CR auto-creation on policy draft
+        \item CR number linked in dashboard audit log
+        \item Emergency bypass with break-glass audit
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{Automated Remediation:}
+      \begin{itemize}
+        \item Network quarantine via NAC integration
+        \item Agent isolation (stop attestation)
+        \item Trigger re-provisioning workflow
+        \item Configurable playbooks per failure type
+        \item Manual approval gate for destructive actions
+      \end{itemize}
+
+      \vspace{0.1cm}
+
+      \textbf{SIEM Integration (Day 1):}
+      \begin{itemize}
+        \item Syslog (CEF/LEEF format)
+        \item Splunk HEC (HTTP Event Collector)
+        \item Elastic Common Schema (ECS)
+        \item Prometheus metrics endpoint
+        \item OpenTelemetry traces
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}

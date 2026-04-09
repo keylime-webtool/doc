@@ -1,0 +1,142 @@
+\section{Integration \& Backend Status}
+
+\begin{frame}{Integration Status - Backend Connectivity}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.62, transform shape]
+      % Background
+      \fill[dashbg] (0,0) rectangle (14,8);
+
+      % Header
+      \fill[headerblue] (0,7.3) rectangle (14,8);
+      \node[text=white, font=\tiny\bfseries, anchor=west] at (0.3,7.65) {Integration \& Backend Status};
+
+      % Keylime Core Services
+      \fill[cardwhite, rounded corners=2pt] (0.3,5.0) rectangle (6.8,7.1);
+      \node[font=\tiny\bfseries, anchor=west] at (0.5,6.85) {Core Services};
+
+      \fill[successgreen!15, rounded corners=1pt] (0.5,6.2) rectangle (6.6,6.6);
+      \node[font=\tiny, anchor=west] at (0.7,6.4) {\textcolor{successgreen}{$\bullet$} Verifier (10.0.0.1:8881) -- UP -- 45d uptime};
+
+      \fill[successgreen!15, rounded corners=1pt] (0.5,5.7) rectangle (6.6,6.1);
+      \node[font=\tiny, anchor=west] at (0.7,5.9) {\textcolor{successgreen}{$\bullet$} Registrar (10.0.0.2:8890) -- UP -- 45d uptime};
+
+      \fill[warningyellow!15, rounded corners=1pt] (0.5,5.2) rectangle (6.6,5.6);
+      \node[font=\tiny, anchor=west] at (0.7,5.4) {\textcolor{warningyellow}{$\bullet$} Verifier-02 (10.0.0.3:8881) -- HIGH LOAD (72\%)};
+
+      % Database backends
+      \fill[cardwhite, rounded corners=2pt] (7.1,5.0) rectangle (13.7,7.1);
+      \node[font=\tiny\bfseries, anchor=west] at (7.3,6.85) {Database Backends};
+
+      \fill[successgreen!15, rounded corners=1pt] (7.3,6.2) rectangle (13.5,6.6);
+      \node[font=\tiny, anchor=west] at (7.5,6.4) {\textcolor{successgreen}{$\bullet$} Verifier DB (PostgreSQL) -- 12ms avg query};
+
+      \fill[successgreen!15, rounded corners=1pt] (7.3,5.7) rectangle (13.5,6.1);
+      \node[font=\tiny, anchor=west] at (7.5,5.9) {\textcolor{successgreen}{$\bullet$} Registrar DB (PostgreSQL) -- 8ms avg query};
+
+      \fill[successgreen!15, rounded corners=1pt] (7.3,5.2) rectangle (13.5,5.6);
+      \node[font=\tiny, anchor=west] at (7.5,5.4) {\textcolor{successgreen}{$\bullet$} Migration: rev a3b4c5d -- current};
+
+      % Durable Attestation Backends
+      \fill[cardwhite, rounded corners=2pt] (0.3,2.5) rectangle (6.8,4.8);
+      \node[font=\tiny\bfseries, anchor=west] at (0.5,4.55) {Durable Attestation Backends};
+
+      \fill[successgreen!15, rounded corners=1pt] (0.5,3.9) rectangle (6.6,4.3);
+      \node[font=\tiny, anchor=west] at (0.7,4.1) {\textcolor{successgreen}{$\bullet$} Rekor (transparency-log.example.com)};
+
+      \fill[successgreen!15, rounded corners=1pt] (0.5,3.4) rectangle (6.6,3.8);
+      \node[font=\tiny, anchor=west] at (0.7,3.6) {\textcolor{successgreen}{$\bullet$} Redis (redis.internal:6379) -- 2ms latency};
+
+      \fill[dangered!15, rounded corners=1pt] (0.5,2.9) rectangle (6.6,3.3);
+      \node[font=\tiny, anchor=west] at (0.7,3.1) {\textcolor{dangered}{$\bullet$} RFC3161 TSA (tsa.example.com) -- TIMEOUT};
+
+      % Notification channels
+      \fill[cardwhite, rounded corners=2pt] (7.1,2.5) rectangle (13.7,4.8);
+      \node[font=\tiny\bfseries, anchor=west] at (7.3,4.55) {Notification Channels};
+
+      \fill[successgreen!15, rounded corners=1pt] (7.3,3.9) rectangle (13.5,4.3);
+      \node[font=\tiny, anchor=west] at (7.5,4.1) {\textcolor{successgreen}{$\bullet$} ZeroMQ (10.0.0.1:8992) -- connected};
+
+      \fill[successgreen!15, rounded corners=1pt] (7.3,3.4) rectangle (13.5,3.8);
+      \node[font=\tiny, anchor=west] at (7.5,3.6) {\textcolor{successgreen}{$\bullet$} Webhook (hooks.slack.com) -- 200 OK};
+
+      \fill[successgreen!15, rounded corners=1pt] (7.3,2.9) rectangle (13.5,3.3);
+      \node[font=\tiny, anchor=west] at (7.5,3.1) {\textcolor{successgreen}{$\bullet$} Agent notifications -- enabled};
+
+      % API version compatibility
+      \fill[cardwhite, rounded corners=2pt] (0.3,0.3) rectangle (13.7,2.3);
+      \node[font=\tiny\bfseries, anchor=west] at (0.5,2.05) {API Version Distribution};
+      % Version bars
+      \fill[keylimeblue!40] (1,0.6) rectangle (1.8,1.8);
+      \node[font=\tiny] at (1.4,0.45) {v2.0};
+      \fill[keylimeblue!50] (2.2,0.6) rectangle (3,1.5);
+      \node[font=\tiny] at (2.6,0.45) {v2.1};
+      \fill[keylimeblue!60] (3.4,0.6) rectangle (4.2,1.6);
+      \node[font=\tiny] at (3.8,0.45) {v2.2};
+      \fill[keylimeblue!70] (4.6,0.6) rectangle (5.4,1.4);
+      \node[font=\tiny] at (5,0.45) {v2.3};
+      \fill[keylimeblue!80] (5.8,0.6) rectangle (6.6,1.7);
+      \node[font=\tiny] at (6.2,0.45) {v2.4};
+      \fill[keylimeblue] (7,0.6) rectangle (7.8,1.9);
+      \node[font=\tiny] at (7.4,0.45) {v2.5};
+      \fill[keylimegreen!70] (8.2,0.6) rectangle (9,1.3);
+      \node[font=\tiny] at (8.6,0.45) {v3.0};
+      \node[font=\tiny, keylimegray, anchor=west] at (9.5,1.2) {Agents by API version};
+      \node[font=\tiny, keylimegray, anchor=west] at (9.5,0.8) {Server: v2.5 / v3.0};
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Integration Status - Durable Attestation}
+  \begin{block}{Attestation Record Backends}
+    \scriptsize
+    Keylime supports multiple backends for durable attestation recording,
+    providing audit trails and evidence preservation.
+  \end{block}
+
+  \vspace{0.1cm}
+
+  \scriptsize
+  \begin{center}
+    \begin{tabular}{|l|p{3cm}|p{2.5cm}|p{2.5cm}|}
+      \hline
+      \textbf{Backend} & \textbf{Use Case} & \textbf{Monitored Metrics} & \textbf{Alert Conditions} \\
+      \hline
+      \hline
+      Rekor & Transparency log (tamper-evident) & Upload latency, inclusion proofs & Upload failures, log unavailable \\
+      \hline
+      Redis & Time-series attestation data & Latency, memory usage, key count & Connection lost, high latency \\
+      \hline
+      SQL DB & Persistent storage & Query time, storage growth & Storage full, slow queries \\
+      \hline
+      File-based & Local audit trail & Disk usage, write speed & Disk full, permission errors \\
+      \hline
+      RFC3161 TSA & Timestamping authority & Response time, token validity & TSA unreachable, cert expired \\
+      \hline
+    \end{tabular}
+  \end{center}
+
+  \vspace{0.2cm}
+
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{External Integration Points:}
+      \begin{itemize}
+        \item SIEM export (Splunk, ELK, etc.)
+        \item Prometheus metrics endpoint
+        \item Grafana dashboard templates
+        \item PagerDuty/OpsGenie alerts
+        \item Cloud provider integrations
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{Health Check Endpoints:}
+      \begin{itemize}
+        \item \texttt{GET /versions} - API availability
+        \item Database connectivity probe
+        \item Backend reachability tests
+        \item Certificate validity checks
+        \item Worker process health
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}

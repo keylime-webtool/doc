@@ -1,0 +1,229 @@
+\section{Attestation Analytics}
+
+\begin{frame}{Attestation Analytics - Overview Dashboard}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.62, transform shape]
+      % Background
+      \fill[dashbg] (0,0) rectangle (14,8);
+
+      % Header
+      \fill[headerblue] (0,7.3) rectangle (14,8);
+      \node[text=white, font=\tiny\bfseries, anchor=west] at (0.3,7.65) {Attestation Analytics -- Last 24 Hours};
+
+      % KPI row
+      \fill[cardwhite, rounded corners=2pt] (0.3,6.3) rectangle (3.3,7.1);
+      \node[font=\tiny\bfseries, successgreen] at (1.8,6.85) {12,450};
+      \node[font=\tiny, keylimegray] at (1.8,6.5) {Successful};
+
+      \fill[cardwhite, rounded corners=2pt] (3.6,6.3) rectangle (6.6,7.1);
+      \node[font=\tiny\bfseries, dangered] at (5.1,6.85) {38};
+      \node[font=\tiny, keylimegray] at (5.1,6.5) {Failed};
+
+      \fill[cardwhite, rounded corners=2pt] (6.9,6.3) rectangle (9.9,7.1);
+      \node[font=\tiny\bfseries, keylimeblue] at (8.4,6.85) {245ms};
+      \node[font=\tiny, keylimegray] at (8.4,6.5) {Avg Latency};
+
+      \fill[cardwhite, rounded corners=2pt] (10.2,6.3) rectangle (13.7,7.1);
+      \node[font=\tiny\bfseries, successgreen] at (11.95,6.85) {99.7\%};
+      \node[font=\tiny, keylimegray] at (11.95,6.5) {Success Rate};
+
+      % Success/Failure timeline
+      \fill[cardwhite, rounded corners=2pt] (0.3,3.3) rectangle (9,6.1);
+      \node[font=\tiny\bfseries, anchor=west] at (0.5,5.85) {Attestation Volume (hourly)};
+      % Bar chart simulation
+      \foreach \x/\h in {1/1.5,1.6/1.8,2.2/2,2.8/1.6,3.4/1.9,4/2.1,4.6/1.7,5.2/2.2,5.8/1.4,6.4/1.8,7/2,7.6/1.6,8.2/1.9} {
+        \fill[successgreen!70] (\x,3.6) rectangle (\x+0.4,3.6+\h);
+        \fill[dangered!70] (\x,3.6) rectangle (\x+0.4,3.65);
+      }
+      \draw[keylimegray, thin] (0.8,3.6) -- (0.8,5.8);
+      \draw[keylimegray, thin] (0.8,3.6) -- (8.6,3.6);
+
+      % Failure breakdown
+      \fill[cardwhite, rounded corners=2pt] (9.3,3.3) rectangle (13.7,6.1);
+      \node[font=\tiny\bfseries, anchor=west] at (9.5,5.85) {Failure Reasons};
+      % Donut chart
+      \fill[dangered] (11.5,4.7) circle (0.8);
+      \fill[warningyellow] (11.5,4.7) -- ++(0:0.8) arc(0:120:0.8) -- cycle;
+      \fill[keylimeblue] (11.5,4.7) -- ++(120:0.8) arc(120:180:0.8) -- cycle;
+      \fill[cardwhite] (11.5,4.7) circle (0.4);
+      \node[font=\tiny, anchor=west] at (9.5,3.85) {\textcolor{dangered}{$\blacksquare$} Quote invalid (42\%)};
+      \node[font=\tiny, anchor=west] at (9.5,3.6) {\textcolor{warningyellow}{$\blacksquare$} Policy viol. (33\%)};
+      \node[font=\tiny, anchor=west] at (9.5,3.35) {\textcolor{keylimeblue}{$\blacksquare$} Timeout (25\%)};
+
+      % Latency distribution
+      \fill[cardwhite, rounded corners=2pt] (0.3,0.3) rectangle (6.8,3.1);
+      \node[font=\tiny\bfseries, anchor=west] at (0.5,2.85) {Attestation Latency Distribution};
+      % Histogram
+      \foreach \x/\h in {1/0.3,1.5/0.8,2/1.5,2.5/2,3/1.8,3.5/1.2,4/0.7,4.5/0.4,5/0.2,5.5/0.1} {
+        \fill[keylimeblue!60] (\x,0.5) rectangle (\x+0.4,0.5+\h);
+      }
+      \node[font=\tiny, keylimegray] at (3.5,0.35) {Latency (ms)};
+
+      % Top failing agents
+      \fill[cardwhite, rounded corners=2pt] (7.1,0.3) rectangle (13.7,3.1);
+      \node[font=\tiny\bfseries, anchor=west] at (7.3,2.85) {Top Failing Agents};
+      \node[font=\tiny, anchor=west] at (7.3,2.5) {\textcolor{dangered}{$\bullet$} agent-042: 12 failures};
+      \node[font=\tiny, anchor=west] at (7.3,2.2) {\textcolor{dangered}{$\bullet$} agent-189: 8 failures};
+      \node[font=\tiny, anchor=west] at (7.3,1.9) {\textcolor{warningyellow}{$\bullet$} agent-067: 5 failures};
+      \node[font=\tiny, anchor=west] at (7.3,1.6) {\textcolor{warningyellow}{$\bullet$} agent-215: 4 failures};
+      \node[font=\tiny, anchor=west] at (7.3,1.3) {\textcolor{warningyellow}{$\bullet$} agent-033: 3 failures};
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Attestation Analytics - Failure Analysis}
+  \begin{block}{Understanding Attestation Failures}
+    \scriptsize
+    The dashboard categorizes failures by type, severity, and affected agents to enable
+    rapid root cause analysis.
+  \end{block}
+
+  \vspace{0.1cm}
+
+  \scriptsize
+  \begin{center}
+    \begin{tabular}{|l|p{3cm}|l|p{3cm}|}
+      \hline
+      \textbf{Failure Type} & \textbf{Description} & \textbf{Severity} & \textbf{Common Cause} \\
+      \hline
+      \hline
+      Quote Invalid & TPM quote signature fails & \textcolor{dangered}{Critical} & TPM hardware issue, key mismatch \\
+      \hline
+      Policy Violation & IMA hash mismatch & \textcolor{dangered}{Critical} & Unauthorized file modification \\
+      \hline
+      Evidence Chain & Broken attestation chain & \textcolor{dangered}{Critical} & Agent reboot, log truncation \\
+      \hline
+      Boot Violation & UEFI log mismatch & \textcolor{warningyellow}{High} & Firmware update, config change \\
+      \hline
+      Timeout & No response from agent & \textcolor{warningyellow}{Medium} & Network issue, agent down \\
+      \hline
+      PCR Mismatch & PCR drift detected & \textcolor{warningyellow}{Medium} & Software update, config drift \\
+      \hline
+      Clock Skew & TPM clock anomaly & \textcolor{infoblue}{Low} & Clock reset, VM migration \\
+      \hline
+    \end{tabular}
+  \end{center}
+
+\end{frame}
+
+\begin{frame}{Attestation Analytics - Automatic Correlation}
+  \begin{exampleblock}{Automatic Correlation}
+    \scriptsize
+    Dashboard correlates failures across agents -- if multiple agents fail simultaneously
+    with the same reason, it may indicate a policy update issue rather than actual compromise.
+  \end{exampleblock}
+
+  \vspace{0.3cm}
+
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Correlation Rules}
+        \scriptsize
+        \begin{itemize}
+          \item \textbf{Temporal}: Multiple agents failing within the same time window
+          \item \textbf{Causal}: Same failure reason across agents (e.g., same IMA hash mismatch)
+          \item \textbf{Topological}: Failures grouped by datacenter, subnet, or verifier
+          \item \textbf{Policy-linked}: Failures matching a recent policy update
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Correlation Outcomes}
+        \scriptsize
+        \begin{itemize}
+          \item \textbf{Mass policy update}: Many agents fail after policy change -- likely a policy misconfiguration
+          \item \textbf{Infrastructure event}: Cluster of timeouts -- likely a network or infrastructure issue
+          \item \textbf{Targeted attack}: Single agent with unique failure -- warrants immediate investigation
+          \item \textbf{Software rollout}: PCR/IMA changes after a package update wave
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+\begin{frame}{Attestation Analytics - Actionable Insights}
+  \begin{alertblock}{Actionable Insight}
+    \scriptsize
+    Correlated failures are grouped into a single incident with a suggested root cause,
+    reducing alert fatigue and enabling faster resolution.
+  \end{alertblock}
+
+  \vspace{0.3cm}
+
+  \begin{block}{Incident Grouping Example}
+    \scriptsize
+    \begin{itemize}
+      \item 15 agents report \textcolor{dangered}{IMA policy violation} within a 2-minute window
+      \item All 15 agents share the same IMA policy: \texttt{production-v2}
+      \item Policy \texttt{production-v2} was updated 3 minutes ago
+      \item \textbf{Suggested root cause}: Policy update introduced a missing hash entry
+      \item \textbf{Recommended action}: Review latest policy change and consider rollback
+    \end{itemize}
+  \end{block}
+
+  \vspace{0.3cm}
+
+  \begin{exampleblock}{Benefits}
+    \scriptsize
+    \begin{itemize}
+      \item Reduces 15 individual alerts to 1 correlated incident
+      \item Automatically links to the triggering policy change
+      \item Provides one-click rollback option from the incident view
+    \end{itemize}
+  \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Attestation Analytics - Push Mode Attestations}
+  \begin{block}{Push Mode (v3 API) Analytics}
+    \scriptsize
+    In push mode, agents initiate attestation. The dashboard tracks the complete
+    attestation lifecycle with stage-based visibility.
+  \end{block}
+
+  \vspace{0.1cm}
+
+  \begin{center}
+    \begin{tikzpicture}[scale=0.75, transform shape,
+        stage/.style={rectangle, draw, rounded corners, fill=keylimeblue!15, text width=2.5cm, text centered, minimum height=1cm, font=\tiny\bfseries},
+        arrow/.style={->, >=stealth, thick}]
+
+      \node[stage] (cap) at (0,0) {Submit\\Capabilities};
+      \node[stage] (await) at (4,0) {Awaiting\\Evidence};
+      \node[stage] (eval) at (8,0) {Evaluating\\Evidence};
+      \node[stage, fill=successgreen!20] (pass) at (12,0.8) {Pass};
+      \node[stage, fill=dangered!20] (fail) at (12,-0.8) {Fail};
+
+      \draw[arrow] (cap) -- node[above, font=\tiny] {nonce issued} (await);
+      \draw[arrow] (await) -- node[above, font=\tiny] {evidence received} (eval);
+      \draw[arrow, successgreen] (eval) -- node[above, font=\tiny] {} (pass);
+      \draw[arrow, dangered] (eval) -- node[below, font=\tiny] {} (fail);
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.2cm}
+
+  \scriptsize
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{Push Mode Metrics:}
+      \begin{itemize}
+        \item Attestation submission rate per agent
+        \item Nonce expiry tracking
+        \item Challenge lifetime compliance
+        \item Evidence evaluation duration
+        \item Rate limit violations per IP/agent
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{Push Mode Alerts:}
+      \begin{itemize}
+        \item Agent not submitting attestations
+        \item Nonce expired before evidence
+        \item Repeated evaluation failures
+        \item Rate limit threshold reached
+        \item Session token expiry warnings
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}

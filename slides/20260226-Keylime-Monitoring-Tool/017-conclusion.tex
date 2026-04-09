@@ -1,0 +1,97 @@
+\section{Conclusion}
+
+\begin{frame}{Key Takeaways}
+  \begin{itemize}
+    \item \textbf{Keylime Monitoring Dashboard} transforms remote attestation from
+          a CLI-driven workflow into a \textbf{secure visual operations platform}
+    \item \textbf{Twelve Core Modules} cover every aspect:
+    \begin{itemize}
+      \scriptsize
+      \item Agent Fleet Management and Attestation Analytics
+      \item Verification Pipeline and Policy Management
+      \item Security Audit, Revocation Alerts, and Certificate Lifecycle
+      \item \textbf{Threat Model \& Trust Boundaries} (dashboard as high-value target)
+      \item \textbf{Authentication (OIDC/SAML) \& Three-Tier RBAC}
+      \item \textbf{Secret Management \& Transport Security} (all hops encrypted)
+      \item \textbf{Compliance Framework Mapping \& Incident Response}
+      \item \textbf{HA, Scalability, and Air-Gapped Deployment}
+    \end{itemize}
+    \item \textbf{Security-First Design}: RBAC and audit logging from Phase 1, not Phase 3
+    \item \textbf{API-First}: Non-invasive -- consumes existing Keylime REST APIs
+    \item \textbf{Enterprise Ready}: Multi-tenancy, compliance reports, SIEM integration,
+          tamper-evident audit logging, and air-gapped deployment support
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Value Proposition}
+  \begin{block}{For Security Operations Teams}
+    \scriptsize
+    Reduce mean time to detect (MTTD) attestation failures from hours to seconds.
+    Centralized visibility eliminates the need to query individual agents or parse logs.
+  \end{block}
+
+  \vspace{0.1cm}
+
+  \begin{block}{For System Administrators}
+    \scriptsize
+    Manage policies, certificates, and agent lifecycle from a single interface.
+    Proactive alerts prevent certificate expiry outages and undetected compromises.
+  \end{block}
+
+  \vspace{0.1cm}
+
+  \begin{block}{For Compliance Officers}
+    \scriptsize
+    Pre-built compliance reports (NIST, PCI DSS, SOC 2, FedRAMP), tamper-evident
+    audit trails, and evidence preservation packages for security audits.
+  \end{block}
+
+  \vspace{0.1cm}
+
+  \scriptsize
+  \begin{center}
+    \begin{tabular}{|l|c|c|}
+      \hline
+      \textbf{Metric} & \textbf{Without Dashboard} & \textbf{With Dashboard} \\
+      \hline
+      Time to detect failure & Minutes to hours & Seconds \\
+      \hline
+      Agent fleet visibility & Per-agent CLI queries & Single view \\
+      \hline
+      Policy change impact & Unknown until applied & Pre-analyzed \\
+      \hline
+      Certificate expiry & Surprise outages & 90-day advance warning \\
+      \hline
+      Compliance reporting & Manual log parsing & One-click export \\
+      \hline
+      Audit log integrity & Mutable database & Hash-chained, signed \\
+      \hline
+    \end{tabular}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Resources}
+  \begin{itemize}
+    \item \textbf{Keylime Project}: \textcolor{blue}{\underline{\href{https://keylime.dev/}{keylime.dev}}}
+    \item \textbf{Keylime GitHub}: \textcolor{blue}{\underline{\href{https://github.com/keylime/keylime}{github.com/keylime/keylime}}}
+    \item \textbf{Keylime Rust Agent}: \textcolor{blue}{\underline{\href{https://github.com/keylime/rust-keylime}{github.com/keylime/rust-keylime}}}
+    \item \textbf{Keylime Documentation}: \textcolor{blue}{\underline{\href{https://keylime.readthedocs.io/}{keylime.readthedocs.io}}}
+    \item \textbf{API Reference}: Verifier v2/v3 and Registrar v2 REST APIs
+    \item \textbf{TPM 2.0 Specification}: \textcolor{blue}{\underline{\href{https://trustedcomputinggroup.org/resource/tpm-library-specification/}{Trusted Computing Group}}}
+    \item \textbf{IMA Documentation}: Linux Kernel Integrity Measurement Architecture
+    \item \textbf{UEFI Secure Boot}: Measured Boot Event Log Specification
+  \end{itemize}
+
+  \vspace{0.5cm}
+
+  \begin{center}
+    \Large{\textbf{Questions?}}
+  \end{center}
+
+  \vspace{0.3cm}
+
+  \begin{center}
+    \scriptsize
+    \textit{Contact: sec-eng-special@redhat.com | Security Special Projects}
+  \end{center}
+\end{frame}

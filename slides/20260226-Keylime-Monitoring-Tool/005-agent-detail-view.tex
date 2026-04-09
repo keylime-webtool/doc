@@ -1,0 +1,213 @@
+\section{Agent Detail View}
+
+\begin{frame}{Agent Detail - Overview Panel}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.62, transform shape]
+      % Background
+      \fill[dashbg] (0,0) rectangle (14,8);
+
+      % Header
+      \fill[headerblue] (0,7.3) rectangle (14,8);
+      \node[text=white, font=\tiny\bfseries, anchor=west] at (0.3,7.65) {Agent Detail: a1b2c3d4-e5f6-7890-abcd-ef1234567890};
+      \fill[successgreen, rounded corners=1pt] (11,7.5) rectangle (12.5,7.8);
+      \node[text=white, font=\tiny\bfseries] at (11.75,7.65) {GET\_QUOTE};
+
+      % Agent Info Card
+      \fill[cardwhite, rounded corners=2pt] (0.3,5.5) rectangle (6.8,7.1);
+      \node[font=\tiny\bfseries, anchor=west] at (0.5,6.85) {Agent Information};
+      \node[font=\tiny, anchor=west] at (0.5,6.5) {UUID: \texttt{a1b2c3d4-e5f6-7890}};
+      \node[font=\tiny, anchor=west] at (0.5,6.2) {IP: \texttt{192.168.1.10:9002}};
+      \node[font=\tiny, anchor=west] at (0.5,5.9) {Verifier: \texttt{verifier-01 (10.0.0.1)}};
+      \node[font=\tiny, anchor=west] at (0.5,5.6) {Registered: \texttt{2026-01-15 08:30:22}};
+
+      % Attestation Stats Card
+      \fill[cardwhite, rounded corners=2pt] (7.1,5.5) rectangle (13.7,7.1);
+      \node[font=\tiny\bfseries, anchor=west] at (7.3,6.85) {Attestation Statistics};
+      \node[font=\tiny, anchor=west] at (7.3,6.5) {Total Attestations: \textbf{45,231}};
+      \node[font=\tiny, anchor=west] at (7.3,6.2) {Last Successful: \textbf{2s ago}};
+      \node[font=\tiny, anchor=west] at (7.3,5.9) {Consecutive Failures: \textbf{0}};
+      \node[font=\tiny, anchor=west] at (7.3,5.6) {Boot Time: \texttt{2026-02-20 06:00:01}};
+
+      % Crypto Info
+      \fill[cardwhite, rounded corners=2pt] (0.3,3.5) rectangle (6.8,5.3);
+      \node[font=\tiny\bfseries, anchor=west] at (0.5,5.05) {Cryptographic Details};
+      \node[font=\tiny, anchor=west] at (0.5,4.7) {Hash Algorithm: \texttt{sha256}};
+      \node[font=\tiny, anchor=west] at (0.5,4.4) {Encryption: \texttt{rsa}};
+      \node[font=\tiny, anchor=west] at (0.5,4.1) {Signing: \texttt{rsassa}};
+      \node[font=\tiny, anchor=west] at (0.5,3.8) {IMA PCRs: \texttt{[10]}};
+
+      % Policy Assignment
+      \fill[cardwhite, rounded corners=2pt] (7.1,3.5) rectangle (13.7,5.3);
+      \node[font=\tiny\bfseries, anchor=west] at (7.3,5.05) {Policy Assignment};
+      \node[font=\tiny, anchor=west] at (7.3,4.7) {IMA Policy: \texttt{production-v2}};
+      \node[font=\tiny, anchor=west] at (7.3,4.4) {MB Policy: \texttt{uefi-secure-boot}};
+      \node[font=\tiny, anchor=west] at (7.3,4.1) {TPM Policy: \texttt{\{10: "sha256:a4f.."\}}};
+      \fill[keylimeblue, rounded corners=1pt] (7.3,3.65) rectangle (9.3,3.9);
+      \node[text=white, font=\tiny] at (8.3,3.775) {Change Policy};
+
+      % Action buttons
+      \fill[cardwhite, rounded corners=2pt] (0.3,2.3) rectangle (13.7,3.3);
+      \node[font=\tiny\bfseries, anchor=west] at (0.5,3.05) {Actions};
+      \fill[keylimeblue, rounded corners=1pt] (0.5,2.5) rectangle (2.5,2.85);
+      \node[text=white, font=\tiny] at (1.5,2.675) {Reactivate};
+      \fill[warningyellow, rounded corners=1pt] (2.8,2.5) rectangle (4.5,2.85);
+      \node[text=white, font=\tiny] at (3.65,2.675) {Stop};
+      \fill[dangered, rounded corners=1pt] (4.8,2.5) rectangle (6.5,2.85);
+      \node[text=white, font=\tiny] at (5.65,2.675) {Delete};
+      \fill[keylimegreen!80!black, rounded corners=1pt] (6.8,2.5) rectangle (9,2.85);
+      \node[text=white, font=\tiny] at (7.9,2.675) {Force Attest};
+      \fill[codepurple!70, rounded corners=1pt] (9.3,2.5) rectangle (11.5,2.85);
+      \node[text=white, font=\tiny] at (10.4,2.675) {View Quotes};
+      \fill[keylimegray, rounded corners=1pt] (11.8,2.5) rectangle (13.5,2.85);
+      \node[text=white, font=\tiny] at (12.65,2.675) {Export};
+
+      % Tabs for sub-views
+      \fill[cardwhite, rounded corners=2pt] (0.3,0.3) rectangle (13.7,2.1);
+      \fill[keylimeblue!15] (0.3,1.7) rectangle (13.7,2.1);
+      \node[font=\tiny\bfseries, keylimeblue] at (1.5,1.9) {Timeline};
+      \node[font=\tiny, keylimegray] at (3.5,1.9) {PCR Values};
+      \node[font=\tiny, keylimegray] at (5.5,1.9) {IMA Log};
+      \node[font=\tiny, keylimegray] at (7.5,1.9) {Boot Log};
+      \node[font=\tiny, keylimegray] at (9.5,1.9) {Certificates};
+      \node[font=\tiny, keylimegray] at (11.5,1.9) {Raw Data};
+      \node[font=\tiny, keylimegray] at (2,1.2) {Attestation timeline chart appears here...};
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Agent Detail - Tabs and Sub-Views (1/2)}
+  \begin{block}{Deep-Dive Tabs}
+    \scriptsize
+    Each agent detail page provides six specialized tabs for deep investigation.
+  \end{block}
+
+  \vspace{0.2cm}
+
+  \scriptsize
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{1. Timeline Tab:}
+      \begin{itemize}
+        \item Attestation success/failure history
+        \item State transition events
+        \item Timestamped event log
+        \item Zoomable time range
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{2. PCR Values Tab:}
+      \begin{itemize}
+        \item Current PCR bank values (SHA-256)
+        \item PCR change history with diffs
+        \item Expected vs. actual comparison
+        \item PCR policy violations highlighted
+      \end{itemize}
+    \end{column}
+  \end{columns}
+
+  \vspace{0.3cm}
+
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{3. IMA Log Tab:}
+      \begin{itemize}
+        \item IMA measurement list entries
+        \item File hash verification status
+        \item Policy match/mismatch indicators
+        \item Search by file path or hash
+        \item \texttt{next\_ima\_ml\_entry} progress
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{4. Boot Log Tab:}
+      \begin{itemize}
+        \item UEFI event log entries
+        \item Measured boot sequence validation
+        \item Boot policy compliance status
+        \item Secure Boot state indicators
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Agent Detail - Tabs and Sub-Views (2/2)}
+  \scriptsize
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{5. Certificates Tab:}
+      \begin{itemize}
+        \item EK certificate details and chain
+        \item AK/IAK/IDevID certificates
+        \item mTLS certificate status
+        \item Certificate expiry countdown
+        \item Issuer and subject information
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{6. Raw Data Tab:}
+      \begin{itemize}
+        \item JSON view of full agent record
+        \item API response from verifier
+        \item Registrar record cross-reference
+        \item Copy/export capability
+      \end{itemize}
+    \end{column}
+  \end{columns}
+
+  \vspace{0.3cm}
+
+  \begin{alertblock}{Cross-Tab Navigation}
+    \scriptsize
+    Tabs are interconnected -- clicking a PCR value in the \textbf{PCR Values} tab
+    can jump to the corresponding IMA entries in the \textbf{IMA Log} tab, and
+    certificate warnings link directly to the \textbf{Certificates} tab for renewal.
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{Agent Detail - PCR Values View}
+  \begin{block}{Platform Configuration Register Monitoring}
+    \scriptsize
+    PCR values represent the chain of trust from boot to runtime. Changes indicate
+    software or configuration modifications that must be validated.
+  \end{block}
+
+  \vspace{0.1cm}
+
+  \begin{center}
+    \scriptsize
+    \begin{tabular}{|c|l|c|c|}
+      \hline
+      \textbf{PCR} & \textbf{Description} & \textbf{Status} & \textbf{Last Changed} \\
+      \hline
+      \hline
+      0 & BIOS/UEFI firmware & \textcolor{successgreen}{Match} & 2026-02-20 \\
+      \hline
+      1 & Platform configuration & \textcolor{successgreen}{Match} & 2026-02-20 \\
+      \hline
+      2 & Option ROM code & \textcolor{successgreen}{Match} & 2026-02-20 \\
+      \hline
+      4 & MBR/Bootloader & \textcolor{successgreen}{Match} & 2026-02-20 \\
+      \hline
+      7 & Secure Boot state & \textcolor{successgreen}{Match} & 2026-02-20 \\
+      \hline
+      8 & Kernel/initramfs & \textcolor{warningyellow}{Changed} & 2026-02-25 \\
+      \hline
+      9 & Kernel command line & \textcolor{successgreen}{Match} & 2026-02-20 \\
+      \hline
+      10 & IMA measurements & \textcolor{successgreen}{Match} & 2s ago \\
+      \hline
+      14 & Shim/MOK & \textcolor{successgreen}{Match} & 2026-02-20 \\
+      \hline
+    \end{tabular}
+  \end{center}
+
+  \vspace{0.2cm}
+
+  \begin{alertblock}{PCR Change Detection}
+    \scriptsize
+    PCR 8 changed on 2026-02-25 -- likely due to a kernel update.
+    Dashboard highlights the change and allows the administrator to
+    \textbf{acknowledge} or \textbf{investigate} the PCR drift.
+    The policy must be updated if the change is legitimate.
+  \end{alertblock}
+\end{frame}

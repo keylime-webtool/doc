@@ -1,0 +1,169 @@
+\section{Security \& Audit}
+
+\begin{frame}{Security Audit - Event Log Dashboard}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.62, transform shape]
+      % Background
+      \fill[dashbg] (0,0) rectangle (14,8);
+
+      % Header
+      \fill[headerblue] (0,7.3) rectangle (14,8);
+      \node[text=white, font=\tiny\bfseries, anchor=west] at (0.3,7.65) {Security Audit Log};
+
+      % Filter bar
+      \fill[cardwhite, rounded corners=2pt] (0.3,6.5) rectangle (13.7,7.1);
+      \draw[keylimegray, rounded corners=2pt] (0.5,6.6) rectangle (3,7.0);
+      \node[font=\tiny, keylimegray] at (1.75,6.8) {Severity: All};
+      \draw[keylimegray, rounded corners=2pt] (3.3,6.6) rectangle (5.5,7.0);
+      \node[font=\tiny, keylimegray] at (4.4,6.8) {Category: All};
+      \draw[keylimegray, rounded corners=2pt] (5.8,6.6) rectangle (8.5,7.0);
+      \node[font=\tiny, keylimegray] at (7.15,6.8) {Date: Last 24h};
+      \fill[keylimeblue, rounded corners=1pt] (11,6.6) rectangle (13.5,7.0);
+      \node[text=white, font=\tiny\bfseries] at (12.25,6.8) {Export Audit};
+
+      % Event log entries
+      \fill[dangered!8] (0.3,5.7) rectangle (13.7,6.35);
+      \node[font=\tiny, dangered, anchor=west] at (0.5,6.15) {CRITICAL};
+      \node[font=\tiny, anchor=west] at (2.2,6.15) {2026-02-26 14:32:01};
+      \node[font=\tiny, anchor=west] at (5.5,6.15) {Agent a1b2c3d4 attestation FAILED - IMA policy violation};
+      \node[font=\tiny, anchor=west] at (0.5,5.85) {};
+      \node[font=\tiny, keylimegray, anchor=west] at (2.2,5.85) {Source: verifier-01 | Action: VERIFY\_EVIDENCE | User: system};
+
+      \fill[dangered!8] (0.3,5.0) rectangle (13.7,5.6);
+      \node[font=\tiny, dangered, anchor=west] at (0.5,5.4) {CRITICAL};
+      \node[font=\tiny, anchor=west] at (2.2,5.4) {2026-02-26 14:31:45};
+      \node[font=\tiny, anchor=west] at (5.5,5.4) {Revocation notification sent for agent a1b2c3d4};
+      \node[font=\tiny, keylimegray, anchor=west] at (2.2,5.1) {Source: verifier-01 | Action: REVOCATION | Channel: webhook+zmq};
+
+      \fill[warningyellow!8] (0.3,4.3) rectangle (13.7,4.9);
+      \node[font=\tiny, warningyellow!80!black, anchor=west] at (0.5,4.7) {WARNING};
+      \node[font=\tiny, anchor=west] at (2.2,4.7) {2026-02-26 13:15:22};
+      \node[font=\tiny, anchor=west] at (5.5,4.7) {Agent e5f6g7h8 re-registered (regcount: 3)};
+      \node[font=\tiny, keylimegray, anchor=west] at (2.2,4.4) {Source: registrar | Action: REGISTER\_AGENT | Identity: ek\_cert};
+
+      \fill[warningyellow!8] (0.3,3.6) rectangle (13.7,4.2);
+      \node[font=\tiny, warningyellow!80!black, anchor=west] at (0.5,4.0) {WARNING};
+      \node[font=\tiny, anchor=west] at (2.2,4.0) {2026-02-26 12:45:10};
+      \node[font=\tiny, anchor=west] at (5.5,4.0) {Session rate limit exceeded for IP 10.0.1.50};
+      \node[font=\tiny, keylimegray, anchor=west] at (2.2,3.7) {Source: verifier-01 | Action: SESSION\_RATE\_LIMIT | Limit: 50/60s};
+
+      \fill[infoblue!8] (0.3,2.9) rectangle (13.7,3.5);
+      \node[font=\tiny, infoblue, anchor=west] at (0.5,3.3) {INFO};
+      \node[font=\tiny, anchor=west] at (2.2,3.3) {2026-02-26 12:00:00};
+      \node[font=\tiny, anchor=west] at (5.5,3.3) {IMA policy 'production-v2' updated by admin};
+      \node[font=\tiny, keylimegray, anchor=west] at (2.2,3.0) {Source: verifier-01 | Action: UPDATE\_RUNTIME\_POLICY | User: admin};
+
+      \fill[infoblue!8] (0.3,2.2) rectangle (13.7,2.8);
+      \node[font=\tiny, infoblue, anchor=west] at (0.5,2.6) {INFO};
+      \node[font=\tiny, anchor=west] at (2.2,2.6) {2026-02-26 11:30:15};
+      \node[font=\tiny, anchor=west] at (5.5,2.6) {New agent m3n4o5p6 registered and activated};
+      \node[font=\tiny, keylimegray, anchor=west] at (2.2,2.3) {Source: registrar | Action: ACTIVATE\_AGENT | Identity: iak\_idevid};
+
+      % Footer
+      \node[font=\tiny, keylimegray] at (7,1.6) {Showing 6 of 1,247 events | Auto-refresh: ON};
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Security Audit - Authorization Tracking}
+  \begin{block}{RBAC and Authorization Monitoring}
+    \scriptsize
+    The dashboard tracks all authorization decisions made by Keylime's authorization provider,
+    enabling compliance auditing and anomaly detection.
+  \end{block}
+
+  \vspace{0.1cm}
+
+  \scriptsize
+  \begin{center}
+    \begin{tabular}{|l|l|l|}
+      \hline
+      \textbf{Action Category} & \textbf{Tracked Actions} & \textbf{Identity Types} \\
+      \hline
+      \hline
+      Agent Management & CREATE, READ, UPDATE, DELETE & admin (mTLS) \\
+      \hline
+      Attestation & SUBMIT, READ, LIST & agent (PoP token) \\
+      \hline
+      Policy Management & CREATE, READ, UPDATE, DELETE & admin (mTLS) \\
+      \hline
+      Sessions & CREATE, EXTEND & agent, anonymous \\
+      \hline
+      Verification & VERIFY\_IDENTITY, VERIFY\_EVIDENCE & admin (mTLS) \\
+      \hline
+      Registration & REGISTER, ACTIVATE, DELETE & agent, admin \\
+      \hline
+    \end{tabular}
+  \end{center}
+
+  \vspace{0.2cm}
+
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{Anomaly Detection:}
+      \begin{itemize}
+        \item Unusual authorization patterns
+        \item Failed authorization attempts
+        \item Privilege escalation attempts
+        \item Off-hours administrative actions
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{Compliance Reporting:}
+      \begin{itemize}
+        \item Exportable audit trails (CSV/JSON)
+        \item Tamper-evident logging
+        \item Retention policy configuration
+        \item SIEM integration support
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Security Audit - Identity Verification Events}
+  \begin{block}{TPM Identity Immutability}
+    \scriptsize
+    Monitoring re-registration attempts and TPM identity changes is critical for detecting
+    potential agent impersonation attacks.
+  \end{block}
+
+  \vspace{0.2cm}
+
+  \scriptsize
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{Registration Events:}
+      \begin{itemize}
+        \item New agent registration (with identity type)
+        \item Agent re-registration (regcount tracking)
+        \item Identity type used:
+        \begin{itemize}
+          \scriptsize
+          \item \texttt{ek\_cert} - EK certificate
+          \item \texttt{iak\_idevid} - IAK/IDevID
+          \item \texttt{default} - Basic TPM keys
+        \end{itemize}
+        \item EK certificate validation results
+        \item TPM key changes between registrations
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{Identity Alerts:}
+      \begin{itemize}
+        \item \textcolor{dangered}{CRITICAL}: TPM key changed on re-registration
+        \item \textcolor{dangered}{CRITICAL}: EK cert mismatch on re-registration
+        \item \textcolor{warningyellow}{WARNING}: High regcount (>3)
+        \item \textcolor{warningyellow}{WARNING}: Re-registration from different IP
+        \item \textcolor{infoblue}{INFO}: Normal re-registration after reboot
+      \end{itemize}
+
+      \vspace{0.2cm}
+
+      \begin{alertblock}{Key Principle}
+        \scriptsize
+        TPM identity keys should be \textbf{immutable}. Any change in EK/AK between
+        registrations indicates potential compromise.
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+\end{frame}
