@@ -1,0 +1,122 @@
+\section{Fleet Overview}
+
+\begin{frame}{Screen: Fleet Overview Dashboard}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.65, transform shape]
+      % Background
+      \fill[dashbg] (0,0) rectangle (14,8.5);
+
+      % Sidebar
+      \fill[sidebarblue] (0,0) rectangle (2.5,8.5);
+      \node[text=white, font=\tiny\bfseries] at (1.25,8) {KEYLIME};
+      \node[text=white, font=\tiny\bfseries] at (1.25,7.6) {MONITOR};
+      \draw[white, thick] (0.3,7.3) -- (2.2,7.3);
+
+      % Sidebar menu items
+      \foreach \y/\label/\icon in {6.8/Dashboard/\faIcon{tachometer-alt}, 6.3/Agents/\faServer, 5.8/Attestations/\faIcon{chart-line}, 5.3/Policies/\faIcon{shield-alt}, 4.8/Certificates/\faCertificate, 4.3/Alerts/\faBell, 3.8/Performance/\faIcon{tachometer-alt}, 3.3/Audit Log/\faIcon{clipboard-list}, 2.8/Compliance/\faIcon{file-contract}} {
+        \node[text=white!80, font=\tiny, anchor=west] at (0.4,\y) {\icon~\label};
+      }
+
+      % Header bar
+      \fill[headerblue] (2.5,7.8) rectangle (14,8.5);
+      \node[text=white, font=\tiny\bfseries, anchor=west] at (3,8.15) {\faIcon{tachometer-alt}~Fleet Overview Dashboard};
+      \node[text=white!80, font=\tiny, anchor=east] at (13.5,8.15) {\faUser~admin@company.com};
+
+      % KPI Cards Row
+      \fill[cardwhite, rounded corners=2pt] (3,6.8) rectangle (5.5,7.6);
+      \node[font=\tiny\bfseries, successgreen] at (4.25,7.35) {\faCheckCircle~247};
+      \node[font=\tiny, keylimegray] at (4.25,7.0) {Active Agents};
+
+      \fill[cardwhite, rounded corners=2pt] (5.8,6.8) rectangle (8.3,7.6);
+      \node[font=\tiny\bfseries, dangered] at (7.05,7.35) {\faExclamationTriangle~3};
+      \node[font=\tiny, keylimegray] at (7.05,7.0) {Failed Agents};
+
+      \fill[cardwhite, rounded corners=2pt] (8.6,6.8) rectangle (11.1,7.6);
+      \node[font=\tiny\bfseries, keylimeblue] at (9.85,7.35) {\faPercent~99.2};
+      \node[font=\tiny, keylimegray] at (9.85,7.0) {Attestation Rate};
+
+      \fill[cardwhite, rounded corners=2pt] (11.4,6.8) rectangle (13.8,7.6);
+      \node[font=\tiny\bfseries, warningyellow!80!black] at (12.6,7.35) {\faCertificate~5};
+      \node[font=\tiny, keylimegray] at (12.6,7.0) {Cert Warnings};
+
+      % Agent State Distribution (left chart area)
+      \fill[cardwhite, rounded corners=2pt] (3,3.5) rectangle (8.2,6.6);
+      \node[font=\tiny\bfseries, anchor=west] at (3.2,6.35) {Agent State Distribution};
+      % Pie chart simulation
+      \fill[successgreen] (5.6,5) circle (1);
+      \fill[dangered] (5.6,5) -- ++(90:1) arc(90:100:1) -- cycle;
+      \fill[warningyellow] (5.6,5) -- ++(100:1) arc(100:115:1) -- cycle;
+      \fill[keylimeblue] (5.6,5) -- ++(115:1) arc(115:130:1) -- cycle;
+      \node[font=\tiny, anchor=west] at (3.3,3.9) {\textcolor{successgreen}{$\blacksquare$} Healthy (94\%)};
+      \node[font=\tiny, anchor=west] at (5.8,3.9) {\textcolor{dangered}{$\blacksquare$} Failed (1.2\%)};
+      \node[font=\tiny, anchor=west] at (3.3,3.65) {\textcolor{warningyellow}{$\blacksquare$} Warning (2.4\%)};
+      \node[font=\tiny, anchor=west] at (5.8,3.65) {\textcolor{keylimeblue}{$\blacksquare$} Other (2.4\%)};
+
+      % Recent Alerts (right panel)
+      \fill[cardwhite, rounded corners=2pt] (8.5,3.5) rectangle (13.8,6.6);
+      \node[font=\tiny\bfseries, anchor=west] at (8.7,6.35) {\faBell~Recent Alerts};
+      \fill[dangered!10] (8.7,5.7) rectangle (13.6,6.1);
+      \node[font=\tiny, dangered, anchor=west] at (8.8,5.9) {\faExclamationCircle~agent-042 FAILED};
+      \fill[warningyellow!10] (8.7,5.2) rectangle (13.6,5.6);
+      \node[font=\tiny, warningyellow!80!black, anchor=west] at (8.8,5.4) {\faExclamationTriangle~cert expires in 7d};
+      \fill[warningyellow!10] (8.7,4.7) rectangle (13.6,5.1);
+      \node[font=\tiny, warningyellow!80!black, anchor=west] at (8.8,4.9) {\faExclamationTriangle~3 agents retrying};
+      \fill[infoblue!10] (8.7,4.2) rectangle (13.6,4.6);
+      \node[font=\tiny, infoblue, anchor=west] at (8.8,4.4) {\faInfoCircle~policy updated};
+      \fill[infoblue!10] (8.7,3.7) rectangle (13.6,4.1);
+      \node[font=\tiny, infoblue, anchor=west] at (8.8,3.9) {\faInfoCircle~2 agents registered};
+
+      % Attestation Timeline (bottom)
+      \fill[cardwhite, rounded corners=2pt] (3,0.3) rectangle (13.8,3.3);
+      \node[font=\tiny\bfseries, anchor=west] at (3.2,3.05) {\faIcon{chart-line}~Attestation Success Rate (24h)};
+      \draw[keylimegray, thin] (3.5,0.6) -- (3.5,2.8);
+      \draw[keylimegray, thin] (3.5,0.6) -- (13.5,0.6);
+      \draw[successgreen, thick] (3.5,2.6) -- (5,2.5) -- (6,2.55) -- (7,2.4) -- (8,2.45) -- (9,2.3) -- (10,2.5) -- (11,2.55) -- (12,2.6) -- (13.5,2.5);
+      \draw[dangered, thick, dashed] (3.5,0.8) -- (5,0.85) -- (6,0.8) -- (7,1.0) -- (8,0.9) -- (9,1.1) -- (10,0.85) -- (11,0.8) -- (12,0.75) -- (13.5,0.8);
+      \node[font=\tiny, anchor=west] at (4,2.85) {\textcolor{successgreen}{\rule{0.3cm}{1pt}} Success};
+      \node[font=\tiny, anchor=west] at (6.5,2.85) {\textcolor{dangered}{\rule{0.3cm}{1pt}} Failure};
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Fleet Overview -- What Administrators Gain}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Before: CLI-Based Workflow}
+        \scriptsize
+        \begin{itemize}
+          \item Query each agent individually
+          \item No aggregated health view
+          \item Failures discovered by accident
+          \item Manual correlation of logs
+          \item No historical trend data
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{exampleblock}{After: Dashboard Workflow}
+        \scriptsize
+        \begin{itemize}
+          \item \textbf{Instant overview} of entire fleet
+          \item \textbf{Color-coded} health at a glance
+          \item \textbf{Real-time alerts} on any failure
+          \item \textbf{Automatic correlation} of events
+          \item \textbf{24h/7d/30d trend analysis}
+        \end{itemize}
+      \end{exampleblock}
+    \end{column}
+  \end{columns}
+
+  \vspace{0.4cm}
+
+  \begin{center}
+    \begin{tikzpicture}[scale=0.8, transform shape]
+      \node[rectangle, draw, rounded corners, fill=successgreen!15, text width=10cm,
+            text centered, minimum height=1cm, font=\scriptsize, inner sep=0.3cm] {
+        \faIcon{lightbulb}~\textbf{Key Improvement:} Administrators go from
+        \textit{``Is everything OK?''} to \textit{``Everything is OK.''} --
+        in under 2 seconds, every time they open the dashboard.
+      };
+    \end{tikzpicture}
+  \end{center}
+\end{frame}

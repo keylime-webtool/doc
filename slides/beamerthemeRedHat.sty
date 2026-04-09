@@ -1,0 +1,470 @@
+%% Red Hat Beamer Theme
+%% Custom theme matching Red Hat branding
+
+\mode<presentation>
+
+%% Theme options
+\DeclareOptionBeamer{dark}{\def\beamer@redhat@style{dark}}
+\DeclareOptionBeamer{light}{\def\beamer@redhat@style{light}}
+\ExecuteOptionsBeamer{light}  % Set default to light
+\ProcessOptionsBeamer
+
+\RequirePackage{tikz}
+\usetikzlibrary{calc}
+\RequirePackage{graphicx}
+\RequirePackage{fontawesome5}
+
+%% Custom X (Twitter) logo using TikZ based on Font Awesome v7.1.0 SVG
+\newcommand{\faXLogo}{%
+  \raisebox{1.8ex}{\begin{tikzpicture}[x=0.0015em,y=-0.0015em,baseline=0ex,scale=1]
+    \fill[white] (453.2,112) -- (523.8,112) -- (369.6,288.2) -- (551,528) -- (409,528) -- (297.7,382.6) -- (170.5,528) -- (99.8,528) -- (264.7,339.5) -- (90.8,112) -- (236.4,112) -- (336.9,244.9) -- (453.2,112);
+    \fill[white] (428.4,485.8) -- (467.5,485.8) -- (215.1,152) -- (173.1,152) -- (428.4,485.8);
+  \end{tikzpicture}}%
+}
+
+%% Font setup - Red Hat Display via fontspec (requires XeLaTeX or LuaLaTeX)
+\RequirePackage{fontspec}
+\setsansfont{RedHatDisplay}[
+  Path = ./fonts/,
+  Extension = .otf,
+  UprightFont = *-Regular,
+  BoldFont = *-Bold,
+  ItalicFont = *-Italic,
+  BoldItalicFont = *-BoldItalic
+]
+\renewcommand{\familydefault}{\sfdefault}
+
+%% Define Red Hat colors
+\definecolor{redhatred}{HTML}{BD0000}      % RGB(189,0,0) or (74.1%,0,0)
+\definecolor{redhatgray}{HTML}{EBEBEB}     % RGB(235,235,235) or (92.2%,92.2%,92.2%)
+\definecolor{redhatdarkgray}{HTML}{333333} % Soft black for text
+\definecolor{redhatdarkbg}{HTML}{1b0d33}   % Dark purple/blue background for dark theme
+\definecolor{darktitlestrip}{HTML}{151515} % Very dark grey for dark theme title strip
+\definecolor{darkblockbg}{HTML}{2a1a45}    % Slightly lighter than main dark bg for blocks
+
+%% Set colors - same for both themes (only title/final pages differ)
+\def\beamer@redhat@style@dark{dark}
+\setbeamercolor{normal text}{fg=redhatdarkgray,bg=white}
+\setbeamercolor{frametitle}{fg=redhatred,bg=white}
+\setbeamercolor{title}{fg=white,bg=redhatred}
+
+%% Remove default navigation symbols
+\setbeamertemplate{navigation symbols}{}
+
+%% Frame-scoped options for hiding footer elements
+\RequirePackage{etoolbox}
+
+%% Define frame options for hiding page number and logo
+\define@key{beamerframe}{hidepagenumber}[true]{%
+  \beamer@hidepagenumbertrue%
+}
+\define@key{beamerframe}{hidelogo}[true]{%
+  \beamer@hidelogotrue%
+}
+
+%% Define proper conditionals
+\newif\ifbeamer@hidepagenumber
+\newif\ifbeamer@hidelogo
+
+%% Reset the flags at the beginning of each frame
+\BeforeBeginEnvironment{frame}{%
+  \beamer@hidepagenumberfalse%
+  \beamer@hidelogofalse%
+}
+
+%% Customize itemize bullets - use red colors and circles/squares
+\setbeamertemplate{itemize item}{\color{redhatred}$\bullet$}
+\setbeamertemplate{itemize subitem}{\color{redhatred}$\circ$}
+\setbeamertemplate{itemize subsubitem}{\color{redhatred}$\blacksquare$}
+\setbeamercolor{itemize item}{fg=redhatred}
+\setbeamercolor{itemize subitem}{fg=redhatred}
+\setbeamercolor{itemize subsubitem}{fg=redhatred}
+
+%% Red bullets for alert blocks (same as regular)
+\setbeamercolor{itemize item alerted}{fg=redhatred}
+\setbeamercolor{itemize subitem alerted}{fg=redhatred}
+\setbeamercolor{itemize subsubitem alerted}{fg=redhatred}
+
+%% Customize block colors to match Red Hat theme (same for both themes)
+\setbeamercolor{block title}{bg=redhatred,fg=white}
+\setbeamercolor{block body}{bg=redhatgray,fg=redhatdarkgray}
+\setbeamercolor{block title alerted}{bg=redhatdarkgray,fg=white}
+\setbeamercolor{block body alerted}{bg=redhatgray,fg=redhatdarkgray}
+\setbeamercolor{block title example}{bg=redhatgray,fg=redhatdarkgray}
+\setbeamercolor{block body example}{bg=white,fg=redhatdarkgray}
+
+%% Add rounded corners to blocks
+\setbeamertemplate{blocks}[rounded][shadow=false]
+
+%% Frame title with red vertical line from top
+\setbeamertemplate{frametitle}{
+  \vskip0pt
+  \nointerlineskip
+  \begin{tikzpicture}[remember picture,overlay]
+    % Vertical red line at top left - starts from absolute top, thinner line
+    \draw[redhatred, line width=0.5pt] ($(current page.north west)+(40pt,0)$) -- ($(current page.north west)+(40pt,-0.08\paperheight)$);
+    % Top marker text (lowercase), vertically centered with the line, closer to it
+    \node[anchor=west] at ($(current page.north west)+(48pt,-0.04\paperheight)$) {
+      {\fontsize{6}{7}\selectfont\MakeLowercase{\@slidedescription}}
+    };
+    % Confidential designator in top right corner
+    \ifx\@confidentialtext\@empty\else
+      \node[anchor=north east] at ($(current page.north east)+(-0.5cm,-0.2cm)$) {
+        {\fontsize{5}{7}\selectfont\color{redhatred}\@confidentialtext}
+      };
+    \fi
+  \end{tikzpicture}
+  \vskip0.8cm
+  % Actual slide title - centered and in black
+  \ifx\insertframetitle\@empty
+  \else
+    \begin{center}
+      {\fontsize{12}{14}\selectfont\bfseries\color{black}\insertframetitle\par}
+    \end{center}
+    \vskip-0.3cm
+  \fi
+}
+
+%% Footline for regular slides - just red line and small logo, NO gray strip
+\setbeamertemplate{footline}{
+  \ifnum\insertframenumber=1
+    % Skip footline on title page
+  \else
+    \begin{tikzpicture}[remember picture,overlay]
+      % Small vertical red line at bottom left - thinner line to match top
+      % Positioned exactly at the bottom of the page
+      \ifbeamer@hidepagenumber\else
+        \draw[redhatred, line width=0.5pt] ($(current page.south west)+(40pt,0)$) -- ($(current page.south west)+(40pt,0.015\paperheight)$);
+        % Page number above the line, centered on it
+        \node[anchor=south] at ($(current page.south west)+(40pt,0.015\paperheight)$) {
+          {\fontsize{4}{5}\selectfont\insertframenumber}
+        };
+      \fi
+      % Small logo at bottom right
+      \ifbeamer@hidelogo\else
+        \node[anchor=south east] at ($(current page.south east)+(-0.5cm,0.15cm)$) {
+          \ifx\@redhatlogo\@empty
+          \else
+            \includegraphics[height=0.03\paperheight]{\@redhatlogo}
+          \fi
+        };
+      \fi
+    \end{tikzpicture}
+  \fi
+}
+
+%% Font sizes matching original template (explicit pt sizes, scaled down for Overpass)
+\setbeamerfont{title}{size=\fontsize{22}{26}\selectfont}
+\setbeamerfont{subtitle}{size=\fontsize{11}{13}\selectfont}
+
+%% Title page template with integrated background
+\defbeamertemplate*{title page}{redhat}[1][]{%
+  \begin{tikzpicture}[remember picture,overlay]
+    % Calculate positions relative to current page
+    \coordinate (NW) at (current page.north west);
+    \coordinate (NE) at (current page.north east);
+    \coordinate (SW) at (current page.south west);
+    \coordinate (SE) at (current page.south east);
+
+    % Top strip (85% - red for light theme, dark grey for dark theme)
+    \ifx\beamer@redhat@style\beamer@redhat@style@dark
+      \fill[darktitlestrip] (NW) rectangle ($(SE)+(0,0.15\paperheight)$);
+    \else
+      \fill[redhatred] (NW) rectangle ($(SE)+(0,0.15\paperheight)$);
+    \fi
+
+    % Bottom strip (15% gray - same for both themes)
+    \fill[redhatgray] (SW) rectangle ($(SE)+(0,0.15\paperheight)$);
+
+    % Vertical red line in bottom strip (40pt from left, starting from bottom, thinner)
+    \ifbeamer@hidepagenumber\else
+      \draw[redhatred, line width=0.5pt] ($(SW)+(40pt,0)$) -- ($(SW)+(40pt,0.015\paperheight)$);
+
+      % Page number above the line, centered on it
+      \node[anchor=south] at ($(SW)+(40pt,0.015\paperheight)$) {
+        {\fontsize{4}{5}\selectfont\insertframenumber}
+      };
+    \fi
+
+    % Logo on right in bottom strip - centered vertically at 7.5% from bottom
+    \ifbeamer@hidelogo\else
+      \node[anchor=east] at ($(SE)+(-1cm,0.075\paperheight)$) {
+        \ifx\@redhatlogo\@empty
+        \else
+          \includegraphics[height=0.05\paperheight]{\@redhatlogo}
+        \fi
+      };
+    \fi
+
+    % Confidential designator in top right corner
+    \ifx\@confidentialtext\@empty\else
+      \node[anchor=north east] at ($(NE)+(-0.5cm,-0.3cm)$) {
+        {\fontsize{5}{7}\selectfont\color{white}\@confidentialtext}
+      };
+    \fi
+
+    % Content - left-justified within centered block, positioned lower in red strip
+    \node[text width=0.7\paperwidth, align=left, anchor=north] at ($(current page.north)+(0,-0.30\paperheight)$) {
+      {\fontsize{22}{26}\selectfont\color{white}\inserttitle\par}%
+      \ifx\insertsubtitle\@empty%
+      \else%
+        \vskip0.6em%
+        {\fontsize{11}{13}\selectfont\color{white}\insertsubtitle\par}%
+      \fi%
+      \vskip1.2em%
+      % Authors in horizontal blocks
+      {\fontsize{7}{9}\selectfont\color{white}%
+        % Check if single author (all others empty)
+        \ifx\@secondauthor\@empty%
+          \ifx\@thirdauthor\@empty%
+            \ifx\@fourthauthor\@empty%
+              % Single author - use wider box with more spacing
+              \parbox[t]{0.6\paperwidth}{\raggedright\insertauthor}%
+            \else%
+              \parbox[t]{0.15\paperwidth}{\raggedright\insertauthor}%
+              \hspace{1.5em}%
+            \fi%
+          \else%
+            \parbox[t]{0.15\paperwidth}{\raggedright\insertauthor}%
+            \hspace{1.5em}%
+          \fi%
+        \else%
+          \parbox[t]{0.15\paperwidth}{\raggedright\insertauthor}%
+          \hspace{1.5em}%
+        \fi%
+        \ifx\@secondauthor\@empty\else%
+          \parbox[t]{0.15\paperwidth}{\raggedright\@secondauthor}%
+          \hspace{1.5em}%
+        \fi%
+        \ifx\@thirdauthor\@empty\else%
+          \parbox[t]{0.15\paperwidth}{\raggedright\@thirdauthor}%
+          \hspace{1.5em}%
+        \fi%
+        \ifx\@fourthauthor\@empty\else%
+          \parbox[t]{0.15\paperwidth}{\raggedright\@fourthauthor}%
+        \fi%
+        \par%
+      }%
+    };
+
+    % Date - right-aligned near bottom of red strip (matching confidential text style)
+    \node[anchor=south east] at ($(SE)+(-0.5cm,0.18\paperheight)$) {
+      {\fontsize{5}{7}\selectfont\color{white}\insertdate}%
+    };
+  \end{tikzpicture}%
+}
+
+%% Final slide template (similar to title but with social media icons)
+\newcommand{\finalframe}[1][Thank You]{%
+  \def\@slidedescription{}% Reset slide description for final frame
+  \begin{frame}[plain]
+    \begin{tikzpicture}[remember picture,overlay]
+      % Calculate positions relative to current page
+      \coordinate (NW) at (current page.north west);
+      \coordinate (NE) at (current page.north east);
+      \coordinate (SW) at (current page.south west);
+      \coordinate (SE) at (current page.south east);
+
+      % Top strip (85% - red for light theme, dark grey for dark theme)
+      \ifx\beamer@redhat@style\beamer@redhat@style@dark
+        \fill[darktitlestrip] (NW) rectangle ($(SE)+(0,0.15\paperheight)$);
+      \else
+        \fill[redhatred] (NW) rectangle ($(SE)+(0,0.15\paperheight)$);
+      \fi
+
+      % Bottom strip (15% gray - same for both themes)
+      \fill[redhatgray] (SW) rectangle ($(SE)+(0,0.15\paperheight)$);
+
+      % Vertical red line in bottom strip (thinner to match)
+      \ifbeamer@hidepagenumber\else
+        \draw[redhatred, line width=0.5pt] ($(SW)+(40pt,0)$) -- ($(SW)+(40pt,0.015\paperheight)$);
+
+        % Page number above the line, centered on it
+        \node[anchor=south] at ($(SW)+(40pt,0.015\paperheight)$) {
+          {\fontsize{4}{5}\selectfont\insertframenumber}
+        };
+      \fi
+
+      % Logo on right in bottom strip
+      \ifbeamer@hidelogo\else
+        \node[anchor=east] at ($(SE)+(-1cm,0.075\paperheight)$) {
+          \ifx\@redhatlogo\@empty
+          \else
+            \includegraphics[height=0.05\paperheight]{\@redhatlogo}
+          \fi
+        };
+      \fi
+
+      % Confidential designator in top right corner
+      \ifx\@confidentialtext\@empty\else
+        \node[anchor=north east] at ($(NE)+(-0.5cm,-0.3cm)$) {
+          {\fontsize{5}{7}\selectfont\color{white}\@confidentialtext}
+        };
+      \fi
+
+      % Two column content - Thank You on left, social media links on right
+      % Left column - Thank You
+      \node[anchor=east, text width=0.40\paperwidth, align=right] at ($(current page.center)+(-0.01\paperwidth,0.075\paperheight)$) {
+        {\Huge\color{white}#1\par}%
+        \vskip1.5em%
+        \begin{minipage}[t]{0.40\paperwidth}
+        {\color{white}\redhatdescription\par}%
+        \ifx\@finaltext\@empty\else%
+          \vskip1em%
+          {\fontsize{8}{10}\selectfont\color{white}\@finaltext\par}%
+        \fi%
+        \end{minipage}
+      };
+
+      % Right column - Social media links
+      \node[anchor=west, text width=0.45\paperwidth, align=left] at ($(current page.center)+(0.01\paperwidth,0.075\paperheight)$) {
+        {\fontsize{8}{10}\selectfont\color{white}%
+          \makebox[1.5em][c]{\raisebox{-0.1ex}{\faLinkedin}}linkedin.com/company/red-hat\par%
+          \vskip1.2em%
+          \makebox[1.5em][c]{\raisebox{-0.1ex}{\faYoutube}}youtube.com/@redhat\par%
+          \vskip1.2em%
+          \makebox[1.5em][c]{\raisebox{-0.1ex}{\faFacebook}}facebook.com/RedHat\par%
+          \vskip1.2em%
+          \makebox[1.5em][c]{\raisebox{-0.1ex}{\faXLogo}}x.com/RedHat\par%
+        }%
+      };
+    \end{tikzpicture}%
+  \end{frame}%
+}
+
+%% Final slide template - Image variant (35/65 split with image on left)
+\newcommand{\finalframeimage}[2][Thank You]{%
+  \def\@slidedescription{}% Reset slide description for final frame
+  \begin{frame}[plain]
+    \begin{tikzpicture}[remember picture,overlay]
+      % Calculate positions
+      \coordinate (NW) at (current page.north west);
+      \coordinate (NE) at (current page.north east);
+      \coordinate (SW) at (current page.south west);
+      \coordinate (SE) at (current page.south east);
+
+      % Left side (35%) - background color based on theme
+      \ifx\beamer@redhat@style\beamer@redhat@style@dark
+        \fill[redhatdarkbg] (NW) rectangle ($(NW)+(0.35\paperwidth,-\paperheight)$);
+      \else
+        \fill[white] (NW) rectangle ($(NW)+(0.35\paperwidth,-\paperheight)$);
+      \fi
+
+      % Image on left side (from x offset to 35% boundary, full height)
+      \node[anchor=north west, inner sep=0pt] at ($(NW)+(0.08\paperwidth,0)$) {
+        \includegraphics[height=\paperheight]{#2}
+      };
+
+      % Bottom line and page number on left side (centered in x offset space)
+      \ifbeamer@hidepagenumber\else
+        \draw[redhatred, line width=0.5pt] ($(SW)+(0.04\paperwidth,0)$) -- ($(SW)+(0.04\paperwidth,0.015\paperheight)$);
+        \node[anchor=south] at ($(SW)+(0.04\paperwidth,0.015\paperheight)$) {
+          {\fontsize{4}{5}\selectfont\insertframenumber}
+        };
+      \fi
+
+      % Right side (65%) - white background
+      \fill[white] ($(NW)+(0.35\paperwidth,0)$) rectangle (SE);
+
+      % Logo on bottom right
+      \ifbeamer@hidelogo\else
+        \node[anchor=east] at ($(SE)+(-1cm,0.075\paperheight)$) {
+          \ifx\@redhatlogo\@empty
+          \else
+            \includegraphics[height=0.05\paperheight]{\@redhatlogo}
+          \fi
+        };
+      \fi
+
+      % Confidential designator in top right corner
+      \ifx\@confidentialtext\@empty\else
+        \node[anchor=north east] at ($(NE)+(-0.5cm,-0.3cm)$) {
+          {\fontsize{5}{7}\selectfont\color{redhatdarkgray}\@confidentialtext}
+        };
+      \fi
+
+      % Content on right side
+      \node[anchor=north west, text width=0.62\paperwidth, align=left] at ($(NW)+(0.36\paperwidth,-0.15\paperheight)$) {
+        {\Huge\color{redhatdarkgray}#1\par}%
+        \vskip1.5em%
+        {\color{redhatdarkgray}\redhatdescription\par}%
+        \ifx\@finaltext\@empty\else%
+          \vskip1em%
+          {\fontsize{8}{10}\selectfont\color{redhatdarkgray}\@finaltext\par}%
+        \fi%
+        \vskip2em%
+        % Social media links in 2x2 grid
+        {\fontsize{8}{10}\selectfont\color{redhatdarkgray}%
+          \begin{tabular}[t]{@{}l@{\hspace{2em}}l@{}}
+            \makebox[1.5em][c]{\raisebox{-0.1ex}{\faLinkedin}}linkedin.com/company/red-hat & \makebox[1.5em][c]{\raisebox{-0.1ex}{\faYoutube}}youtube.com/@redhat \\[1.2em]
+            \makebox[1.5em][c]{\raisebox{-0.1ex}{\faFacebook}}facebook.com/RedHat & \makebox[1.5em][c]{\raisebox{-0.1ex}{\faXLogo}}x.com/RedHat
+          \end{tabular}%
+        }%
+      };
+    \end{tikzpicture}%
+  \end{frame}%
+}
+
+%% Three pre-defined image variants for final slide
+\newcommand{\finalframeimageone}[1][Thank You]{%
+  \finalframeimage[#1]{redhat-final-image1.png}%
+}
+\newcommand{\finalframeimagetwo}[1][Thank You]{%
+  \finalframeimage[#1]{redhat-final-image2.png}%
+}
+\newcommand{\finalframeimagethree}[1][Thank You]{%
+  \finalframeimage[#1]{redhat-final-image3.png}%
+}
+
+%% Red Hat description text for final slides
+\newcommand{\redhatdescription}{%
+  \fontsize{5.5}{7}\selectfont Red Hat is the world's leading provider of enterprise\\open source software solutions. Award-winning\\support, training, and consulting services make\\Red Hat a trusted adviser to the Fortune 500.%
+}
+
+%% Confidential designator - three levels
+\def\@confidentialtext{}
+\newcommand{\confidentialassociates}{%
+  \def\@confidentialtext{CONFIDENTIAL Red Hat associates only}%
+}
+\newcommand{\confidentialnodist}{%
+  \def\@confidentialtext{CONFIDENTIAL Red Hat associates only, No further distribution}%
+}
+\newcommand{\confidentialnda}{%
+  \def\@confidentialtext{CONFIDENTIAL Red Hat associate and NDA partner use only, No further distribution}%
+}
+
+%% Commands to set logo, role, social media, and slide description
+\def\@redhatlogo{}
+\newcommand{\redhatlogo}[1]{\def\@redhatlogo{#1}}
+
+\def\@authorrole{}
+\newcommand{\authorrole}[1]{\def\@authorrole{#1}}
+
+\def\@slidedescription{}
+\newcommand{\slidedescription}[1]{\def\@slidedescription{#1}}
+
+\def\@secondauthor{}
+\newcommand{\secondauthor}[1]{\def\@secondauthor{#1}}
+
+\def\@secondauthorrole{}
+\newcommand{\secondauthorrole}[1]{\def\@secondauthorrole{#1}}
+
+\def\@thirdauthor{}
+\newcommand{\thirdauthor}[1]{\def\@thirdauthor{#1}}
+
+\def\@thirdauthorrole{}
+\newcommand{\thirdauthorrole}[1]{\def\@thirdauthorrole{#1}}
+
+\def\@fourthauthor{}
+\newcommand{\fourthauthor}[1]{\def\@fourthauthor{#1}}
+
+\def\@fourthauthorrole{}
+\newcommand{\fourthauthorrole}[1]{\def\@fourthauthorrole{#1}}
+
+\def\@socialmedia{}
+\newcommand{\socialmedia}[1]{\def\@socialmedia{#1}}
+
+\def\@finaltext{}
+\newcommand{\finaltext}[1]{\def\@finaltext{#1}}
+
+\mode<all>

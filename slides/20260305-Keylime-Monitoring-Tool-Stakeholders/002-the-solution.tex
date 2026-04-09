@@ -1,0 +1,60 @@
+\section{The Solution}
+
+\begin{frame}{Keylime Monitoring Dashboard -- The Vision}
+  \begin{block}{One Platform, Complete Visibility}
+    \scriptsize
+    A web-based monitoring and operations dashboard that transforms Keylime from a
+    CLI-driven security tool into a \textbf{security operations platform} --
+    giving administrators, security teams, and compliance officers the visibility
+    they need, when they need it.
+  \end{block}
+
+  \vspace{0.2cm}
+
+  \begin{center}
+    \begin{tikzpicture}[scale=0.65, transform shape,
+        box/.style={rectangle, draw, rounded corners, fill=keylimeblue!12,
+                    text width=2.5cm, text centered, minimum height=1.2cm, font=\tiny\bfseries},
+        bigbox/.style={rectangle, draw, thick, rounded corners, keylimeblue,
+                       inner sep=0.4cm}]
+
+      % Row 1
+      \node[box] (fleet) at (0,0) {\faServer\\[0.1cm]Fleet\\Overview};
+      \node[box] (agents) at (3.5,0) {\faDesktop\\[0.1cm]Agent\\Management};
+      \node[box] (alerts) at (7,0) {\faBell\\[0.1cm]Real-Time\\Alerts};
+      \node[box] (analytics) at (10.5,0) {\faIcon{chart-bar}\\[0.1cm]Attestation\\Analytics};
+
+      % Row 2
+      \node[box] (policies) at (0,-2) {\faIcon{shield-alt}\\[0.1cm]Policy\\Management};
+      \node[box] (certs) at (3.5,-2) {\faCertificate\\[0.1cm]Certificate\\Monitoring};
+      \node[box] (audit) at (7,-2) {\faIcon{clipboard-list}\\[0.1cm]Security\\Audit Trail};
+      \node[box] (compliance) at (10.5,-2) {\faIcon{file-contract}\\[0.1cm]Compliance\\Reports};
+
+      \node[bigbox, fit=(fleet)(analytics)(policies)(compliance),
+            label={[font=\small\bfseries,keylimeblue]above:Keylime Monitoring Dashboard}] {};
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.2cm}
+
+  \begin{columns}[T]
+    \begin{column}{0.32\textwidth}
+      \begin{exampleblock}{\scriptsize For SecOps}
+        \tiny
+        Detect threats in seconds, not hours. Correlated alerts reduce noise.
+      \end{exampleblock}
+    \end{column}
+    \begin{column}{0.32\textwidth}
+      \begin{exampleblock}{\scriptsize For Admins}
+        \tiny
+        Manage fleets from one screen. No more per-agent CLI queries.
+      \end{exampleblock}
+    \end{column}
+    \begin{column}{0.32\textwidth}
+      \begin{exampleblock}{\scriptsize For Compliance}
+        \tiny
+        One-click audit reports. Evidence ready for any framework.
+      \end{exampleblock}
+    \end{column}
+  \end{columns}
+\end{frame}

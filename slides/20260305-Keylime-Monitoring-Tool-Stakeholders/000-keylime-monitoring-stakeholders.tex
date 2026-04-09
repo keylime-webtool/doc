@@ -1,0 +1,75 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{caption}
+\usepackage{advdate}
+\usepackage{tikz}
+\usepackage{fontawesome5}
+\usepackage{hyperref}
+\usetikzlibrary{shapes,arrows,positioning,fit,calc,backgrounds,decorations.markings,patterns}
+
+% --- Color definitions ---
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{keylimegreen}{RGB}{50,150,50}
+\definecolor{keylimered}{RGB}{200,50,50}
+\definecolor{keylimeorange}{RGB}{230,150,30}
+\definecolor{keylimeblue}{RGB}{50,100,180}
+\definecolor{keylimegray}{RGB}{100,100,100}
+\definecolor{dashbg}{RGB}{240,242,245}
+\definecolor{cardwhite}{RGB}{255,255,255}
+\definecolor{sidebarblue}{RGB}{30,50,80}
+\definecolor{headerblue}{RGB}{40,60,100}
+\definecolor{successgreen}{RGB}{40,167,69}
+\definecolor{warningyellow}{RGB}{255,193,7}
+\definecolor{dangered}{RGB}{220,53,69}
+\definecolor{infoblue}{RGB}{0,123,255}
+\definecolor{rhred}{RGB}{204,0,0}
+
+% --- Presentation Theme ---
+\usetheme{Madrid}
+\usecolortheme{beaver}
+
+% --- Title Information ---
+\title{Keylime Monitoring Dashboard}
+\subtitle{A Single Pane of Glass for Trust Infrastructure Operations}
+\author{Sergio Arroutbi \& Claude}
+\institute[]{Security Special Projects}
+\date{March 5, 2026}
+
+\begin{document}
+
+% --- Title Slide ---
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% --- Index Slide ---
+\begin{frame}{Index}
+  \tiny
+  \tableofcontents
+\end{frame}
+
+\include{./001-the-problem}
+\include{./002-the-solution}
+\include{./003-screen-fleet-overview}
+\include{./004-screen-agent-management}
+\include{./005-screen-realtime-alerts}
+\include{./006-screen-attestation-analytics}
+\include{./007-screen-policy-management}
+\include{./008-screen-certificate-management}
+\include{./009-screen-security-audit}
+\include{./010-screen-system-performance}
+\include{./011-screen-compliance-reports}
+\include{./012-admin-benefits}
+\include{./013-security-by-design}
+\include{./014-extensibility-integration}
+\include{./015-business-value}
+\include{./016-roadmap}
+\include{./017-call-to-action}
+
+\end{document}

@@ -1,0 +1,106 @@
+\section{Security by Design}
+
+\begin{frame}{Security -- Built In, Not Bolted On}
+  \begin{block}{A Security Tool Must Be Secure Itself}
+    \scriptsize
+    The dashboard holds privileged access to the entire Keylime infrastructure.
+    Security is not a Phase 3 feature -- it is the \textbf{foundation from Day 1}.
+  \end{block}
+
+  \vspace{0.1cm}
+
+  \begin{center}
+    \begin{tikzpicture}[scale=0.6, transform shape,
+        layer/.style={rectangle, draw, rounded corners, text width=10cm,
+                      text centered, minimum height=0.9cm, font=\scriptsize, inner sep=0.15cm}]
+
+      \node[layer, fill=dangered!8] (l4) at (0,3.6) {
+        \faLock~\textbf{Authentication \& Authorization}\\
+        \tiny OIDC/SAML login with MFA | Three-tier RBAC (Viewer / Operator / Admin)
+      };
+
+      \node[layer, fill=warningyellow!8] (l3) at (0,2.2) {
+        \faIcon{shield-alt}~\textbf{Encrypted Communications}\\
+        \tiny TLS 1.3 for users | mTLS for Keylime API access | All hops encrypted
+      };
+
+      \node[layer, fill=keylimeblue!8] (l2) at (0,0.8) {
+        \faKey~\textbf{Secret Protection}\\
+        \tiny Private keys in HSM/Vault only, never on disk | Short-lived session tokens
+      };
+
+      \node[layer, fill=successgreen!8] (l1) at (0,-0.6) {
+        \faIcon{clipboard-check}~\textbf{Tamper-Evident Audit Trail}\\
+        \tiny Hash-chained logs | Every action recorded with user identity | Compliance-ready
+      };
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.1cm}
+
+  \begin{alertblock}{Defense in Depth}
+    \scriptsize
+    Even if one layer is compromised, the remaining layers limit the blast radius.
+    Two-person approval for policy changes prevents a single compromised admin session
+    from pushing malicious configurations.
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{Role-Based Access Control}
+  \begin{block}{Right Access for the Right People}
+    \scriptsize
+    Three roles ensure each team member sees only what they need and can do only
+    what they're authorized to do.
+  \end{block}
+
+  \vspace{0.2cm}
+
+  \begin{center}
+    \begin{tikzpicture}[scale=0.7, transform shape,
+        role/.style={rectangle, draw, rounded corners, text width=3.5cm,
+                     minimum height=4.5cm, font=\tiny, inner sep=0.2cm}]
+
+      \node[role, fill=keylimeblue!8] (viewer) at (0,0) {
+        \begin{center}\scriptsize\textbf{\faEye~Viewer}\end{center}
+        \vspace{0.1cm}
+        \textcolor{successgreen}{\faCheckCircle}~View fleet status\\
+        \textcolor{successgreen}{\faCheckCircle}~View attestation data\\
+        \textcolor{successgreen}{\faCheckCircle}~View audit log\\
+        \textcolor{successgreen}{\faCheckCircle}~View policies (read-only)\\
+        \textcolor{dangered}{\faTimesCircle}~Export reports\\
+        \textcolor{dangered}{\faTimesCircle}~Manage agents\\
+        \textcolor{dangered}{\faTimesCircle}~Change policies\\
+        \vspace{0.15cm}
+        \textit{SOC analysts, auditors}
+      };
+
+      \node[role, fill=warningyellow!8] (operator) at (5,0) {
+        \begin{center}\scriptsize\textbf{\faCog~Operator}\end{center}
+        \vspace{0.1cm}
+        \textcolor{successgreen}{\faCheckCircle}~Everything in Viewer\\
+        \textcolor{successgreen}{\faCheckCircle}~Export reports\\
+        \textcolor{successgreen}{\faCheckCircle}~Acknowledge alerts\\
+        \textcolor{successgreen}{\faCheckCircle}~Manage agent lifecycle\\
+        \textcolor{successgreen}{\faCheckCircle}~Reactivate/stop agents\\
+        \textcolor{dangered}{\faTimesCircle}~Change policies\\
+        \textcolor{dangered}{\faTimesCircle}~Delete agents\\
+        \vspace{0.15cm}
+        \textit{SysAdmins, DevSecOps}
+      };
+
+      \node[role, fill=dangered!8] (admin) at (10,0) {
+        \begin{center}\scriptsize\textbf{\faIcon{user-shield}~Admin}\end{center}
+        \vspace{0.1cm}
+        \textcolor{successgreen}{\faCheckCircle}~Everything in Operator\\
+        \textcolor{successgreen}{\faCheckCircle}~Create/edit/delete policies\\
+        \textcolor{successgreen}{\faCheckCircle}~Delete agents\\
+        \textcolor{successgreen}{\faCheckCircle}~Manage users and roles\\
+        \textcolor{successgreen}{\faCheckCircle}~Configure alert rules\\
+        \textcolor{successgreen}{\faCheckCircle}~View sensitive data\\
+        \textcolor{successgreen}{\faCheckCircle}~Approve policy changes\\
+        \vspace{0.15cm}
+        \textit{Security leads, managers}
+      };
+    \end{tikzpicture}
+  \end{center}
+\end{frame}

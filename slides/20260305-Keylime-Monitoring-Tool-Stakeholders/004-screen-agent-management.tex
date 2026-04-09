@@ -1,0 +1,148 @@
+\section{Agent Management}
+
+\begin{frame}{Screen: Agent Fleet Management}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.62, transform shape]
+      % Background
+      \fill[dashbg] (0,0) rectangle (14,8);
+
+      % Header
+      \fill[headerblue] (0,7.3) rectangle (14,8);
+      \node[text=white, font=\tiny\bfseries, anchor=west] at (0.3,7.65) {\faServer~Agent Fleet Management};
+      \node[text=white!80, font=\tiny, anchor=east] at (13.5,7.65) {250 agents across 3 datacenters};
+
+      % Filter bar
+      \fill[cardwhite, rounded corners=2pt] (0.3,6.5) rectangle (13.7,7.1);
+      \draw[keylimegray, rounded corners=2pt] (0.5,6.6) rectangle (3.5,7.0);
+      \node[font=\tiny, keylimegray] at (2,6.8) {\faSearch~Search agents...};
+      \draw[keylimegray, rounded corners=2pt] (3.8,6.6) rectangle (5.5,7.0);
+      \node[font=\tiny, keylimegray] at (4.65,6.8) {State: All};
+      \draw[keylimegray, rounded corners=2pt] (5.8,6.6) rectangle (7.8,7.0);
+      \node[font=\tiny, keylimegray] at (6.8,6.8) {Datacenter: All};
+      \fill[keylimeblue, rounded corners=2pt] (11.5,6.6) rectangle (13.5,7.0);
+      \node[text=white, font=\tiny\bfseries] at (12.5,6.8) {\faPlus~Add Agent};
+
+      % Table header
+      \fill[keylimeblue!10] (0.3,5.9) rectangle (13.7,6.4);
+      \node[font=\tiny\bfseries, anchor=west] at (0.5,6.15) {Agent};
+      \node[font=\tiny\bfseries] at (4.5,6.15) {Location};
+      \node[font=\tiny\bfseries] at (6.5,6.15) {Status};
+      \node[font=\tiny\bfseries] at (8.3,6.15) {Last Check};
+      \node[font=\tiny\bfseries] at (10,6.15) {Policy};
+      \node[font=\tiny\bfseries] at (11.5,6.15) {Health};
+      \node[font=\tiny\bfseries] at (13,6.15) {Actions};
+
+      % Row 1 - healthy
+      \fill[cardwhite] (0.3,5.3) rectangle (13.7,5.7);
+      \node[font=\tiny, anchor=west] at (0.5,5.5) {\faDesktop~web-server-01};
+      \node[font=\tiny] at (4.5,5.5) {DC-East};
+      \node[font=\tiny, successgreen] at (6.5,5.5) {\faCheckCircle~Healthy};
+      \node[font=\tiny] at (8.3,5.5) {2s ago};
+      \node[font=\tiny] at (10,5.5) {production};
+      \fill[successgreen] (11.3,5.5) circle (0.08); \fill[successgreen] (11.5,5.5) circle (0.08); \fill[successgreen] (11.7,5.5) circle (0.08);
+      \node[font=\tiny, keylimeblue] at (13,5.5) {\faEye};
+      % Row 2 - healthy
+      \fill[cardwhite] (0.3,4.8) rectangle (13.7,5.2);
+      \node[font=\tiny, anchor=west] at (0.5,5.0) {\faDesktop~db-primary-02};
+      \node[font=\tiny] at (4.5,5.0) {DC-West};
+      \node[font=\tiny, successgreen] at (6.5,5.0) {\faCheckCircle~Healthy};
+      \node[font=\tiny] at (8.3,5.0) {5s ago};
+      \node[font=\tiny] at (10,5.0) {strict};
+      \fill[successgreen] (11.3,5.0) circle (0.08); \fill[successgreen] (11.5,5.0) circle (0.08); \fill[successgreen] (11.7,5.0) circle (0.08);
+      \node[font=\tiny, keylimeblue] at (13,5.0) {\faEye};
+      % Row 3 - FAILED
+      \fill[dangered!5] (0.3,4.3) rectangle (13.7,4.7);
+      \node[font=\tiny, anchor=west] at (0.5,4.5) {\faDesktop~\textcolor{dangered}{edge-node-42}};
+      \node[font=\tiny] at (4.5,4.5) {DC-East};
+      \node[font=\tiny, dangered] at (6.5,4.5) {\faTimesCircle~Failed};
+      \node[font=\tiny] at (8.3,4.5) {10m ago};
+      \node[font=\tiny] at (10,4.5) {production};
+      \fill[dangered] (11.3,4.5) circle (0.08); \fill[dangered] (11.5,4.5) circle (0.08); \fill[dangered] (11.7,4.5) circle (0.08);
+      \node[font=\tiny, keylimeblue] at (13,4.5) {\faEye};
+      % Row 4
+      \fill[cardwhite] (0.3,3.8) rectangle (13.7,4.2);
+      \node[font=\tiny, anchor=west] at (0.5,4.0) {\faDesktop~api-gateway-03};
+      \node[font=\tiny] at (4.5,4.0) {DC-EU};
+      \node[font=\tiny, successgreen] at (6.5,4.0) {\faCheckCircle~Healthy};
+      \node[font=\tiny] at (8.3,4.0) {1s ago};
+      \node[font=\tiny] at (10,4.0) {minimal};
+      \fill[successgreen] (11.3,4.0) circle (0.08); \fill[successgreen] (11.5,4.0) circle (0.08); \fill[successgreen] (11.7,4.0) circle (0.08);
+      \node[font=\tiny, keylimeblue] at (13,4.0) {\faEye};
+      % Row 5 - WARNING
+      \fill[warningyellow!5] (0.3,3.3) rectangle (13.7,3.7);
+      \node[font=\tiny, anchor=west] at (0.5,3.5) {\faDesktop~\textcolor{warningyellow!80!black}{worker-node-17}};
+      \node[font=\tiny] at (4.5,3.5) {DC-West};
+      \node[font=\tiny, warningyellow!80!black] at (6.5,3.5) {\faExclamationTriangle~Retrying};
+      \node[font=\tiny] at (8.3,3.5) {45s ago};
+      \node[font=\tiny] at (10,3.5) {production};
+      \fill[warningyellow] (11.3,3.5) circle (0.08); \fill[warningyellow] (11.5,3.5) circle (0.08); \fill[keylimegray!30] (11.7,3.5) circle (0.08);
+      \node[font=\tiny, keylimeblue] at (13,3.5) {\faEye};
+
+      % Bulk action bar
+      \fill[cardwhite, rounded corners=2pt] (0.3,2.3) rectangle (13.7,3.1);
+      \node[font=\tiny\bfseries, anchor=west] at (0.5,2.7) {\faTasks~Bulk Actions:};
+      \fill[keylimeblue, rounded corners=1pt] (3.5,2.45) rectangle (5.3,2.85);
+      \node[text=white, font=\tiny] at (4.4,2.65) {\faPlay~Reactivate};
+      \fill[warningyellow, rounded corners=1pt] (5.6,2.45) rectangle (7.2,2.85);
+      \node[text=white, font=\tiny] at (6.4,2.65) {\faPause~Stop};
+      \fill[keylimegreen!80!black, rounded corners=1pt] (7.5,2.45) rectangle (9.5,2.85);
+      \node[text=white, font=\tiny] at (8.5,2.65) {\faIcon{exchange-alt}~Reassign};
+      \fill[codepurple!70, rounded corners=1pt] (9.8,2.45) rectangle (11.6,2.85);
+      \node[text=white, font=\tiny] at (10.7,2.65) {\faDownload~Export};
+
+      % Datacenter summary
+      \fill[cardwhite, rounded corners=2pt] (0.3,0.3) rectangle (13.7,2.1);
+      \node[font=\tiny\bfseries, anchor=west] at (0.5,1.85) {\faGlobe~Datacenter Distribution};
+
+      \fill[successgreen!15, rounded corners=1pt] (0.5,0.5) rectangle (4.2,1.6);
+      \node[font=\tiny\bfseries] at (2.35,1.35) {DC-East};
+      \node[font=\tiny] at (2.35,1.0) {120 agents};
+      \node[font=\tiny, dangered] at (2.35,0.7) {2 failed};
+
+      \fill[successgreen!15, rounded corners=1pt] (4.5,0.5) rectangle (8.2,1.6);
+      \node[font=\tiny\bfseries] at (6.35,1.35) {DC-West};
+      \node[font=\tiny] at (6.35,1.0) {85 agents};
+      \node[font=\tiny, successgreen] at (6.35,0.7) {all healthy};
+
+      \fill[successgreen!15, rounded corners=1pt] (8.5,0.5) rectangle (13.5,1.6);
+      \node[font=\tiny\bfseries] at (11,1.35) {DC-EU};
+      \node[font=\tiny] at (11,1.0) {45 agents};
+      \node[font=\tiny, dangered] at (11,0.7) {1 failed};
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Agent Management -- What Administrators Gain}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.75, transform shape,
+        benefit/.style={rectangle, draw, rounded corners, fill=successgreen!10,
+                        text width=4.5cm, minimum height=1.5cm, font=\scriptsize, inner sep=0.2cm}]
+
+      \node[benefit] (b1) at (0,2) {
+        \faSearch~\textbf{Search \& Filter}\\[0.1cm]
+        Find any agent instantly by name, IP, status, datacenter, or policy assignment
+      };
+      \node[benefit] (b2) at (6,2) {
+        \faTasks~\textbf{Bulk Operations}\\[0.1cm]
+        Select multiple agents and reactivate, stop, reassign policies, or export -- in one click
+      };
+      \node[benefit] (b3) at (0,-0.5) {
+        \faIcon{map-marked-alt}~\textbf{Datacenter View}\\[0.1cm]
+        See agent distribution across your infrastructure with drill-down per location
+      };
+      \node[benefit] (b4) at (6,-0.5) {
+        \faIcon{mouse-pointer}~\textbf{One-Click Detail}\\[0.1cm]
+        Click any agent to see its full history, certificates, policies, and attestation timeline
+      };
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.3cm}
+
+  \begin{alertblock}{Time Savings}
+    \scriptsize
+    Managing a 500-agent fleet goes from \textbf{hours of CLI work} to
+    \textbf{minutes in the dashboard}. Bulk operations alone eliminate
+    the need for custom scripts.
+  \end{alertblock}
+\end{frame}

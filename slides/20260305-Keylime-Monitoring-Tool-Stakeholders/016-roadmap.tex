@@ -1,0 +1,72 @@
+\section{Delivery Roadmap}
+
+\begin{frame}{Phased Delivery -- Immediate Value, Incremental Growth}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.68, transform shape,
+        phase/.style={rectangle, draw, rounded corners, text width=3.5cm,
+                      minimum height=4cm, font=\tiny, inner sep=0.2cm},
+        arrow/.style={->, >=stealth, thick, keylimeblue}]
+
+      \node[phase, fill=keylimeblue!10] (p1) at (0,0) {
+        \begin{center}\normalsize\textbf{Phase 1}\end{center}
+        \begin{center}\scriptsize\textbf{Foundation}\end{center}
+        \vspace{0.1cm}
+        \faCheckCircle~Fleet overview dashboard\\
+        \faCheckCircle~Agent list \& detail views\\
+        \faCheckCircle~Real-time state monitoring\\
+        \faCheckCircle~Authentication (OIDC)\\
+        \faCheckCircle~Role-based access control\\
+        \faCheckCircle~Tamper-evident audit log\\
+        \faCheckCircle~Basic alert notifications
+      };
+
+      \node[phase, fill=keylimegreen!10] (p2) at (5.5,0) {
+        \begin{center}\normalsize\textbf{Phase 2}\end{center}
+        \begin{center}\scriptsize\textbf{Operations}\end{center}
+        \vspace{0.1cm}
+        \faCheckCircle~Attestation analytics\\
+        \faCheckCircle~Policy management UI\\
+        \faCheckCircle~Impact analysis tool\\
+        \faCheckCircle~Certificate monitoring\\
+        \faCheckCircle~Smart alert correlation\\
+        \faCheckCircle~SIEM integration\\
+        \faCheckCircle~Push mode (v3 API)
+      };
+
+      \node[phase, fill=codepurple!10] (p3) at (11,0) {
+        \begin{center}\normalsize\textbf{Phase 3}\end{center}
+        \begin{center}\scriptsize\textbf{Enterprise}\end{center}
+        \vspace{0.1cm}
+        \faCheckCircle~Compliance reports\\
+        \faCheckCircle~Multi-tenancy\\
+        \faCheckCircle~Incident response integration\\
+        \faCheckCircle~High availability\\
+        \faCheckCircle~Air-gapped deployment\\
+        \faCheckCircle~Capacity projections\\
+        \faCheckCircle~Multi-cluster support
+      };
+
+      \draw[arrow] (p1) -- (p2);
+      \draw[arrow] (p2) -- (p3);
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.2cm}
+
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{alertblock}{Security from Day 1}
+        \scriptsize
+        Phase 1 includes RBAC and audit logging because the dashboard holds
+        privileged credentials. Security is never deferred.
+      \end{alertblock}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{exampleblock}{Value from Day 1}
+        \scriptsize
+        Phase 1 alone eliminates the most painful operational gaps:
+        no more blind CLI queries, no more missed failures.
+      \end{exampleblock}
+    \end{column}
+  \end{columns}
+\end{frame}

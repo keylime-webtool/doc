@@ -1,0 +1,68 @@
+\section{The Problem}
+
+\begin{frame}{The Challenge -- Managing Trust at Scale}
+  \begin{alertblock}{Today's Reality}
+    \scriptsize
+    Keylime secures your infrastructure by continuously verifying the integrity of every
+    machine. But as fleets grow to hundreds or thousands of nodes, \textbf{administrators
+    are flying blind}.
+  \end{alertblock}
+
+  \vspace{0.3cm}
+
+  \begin{center}
+    \begin{tikzpicture}[scale=0.72, transform shape,
+        pain/.style={rectangle, draw, rounded corners, fill=dangered!12, text width=3.5cm,
+                     text centered, minimum height=1.4cm, font=\scriptsize}]
+
+      \node[pain] (p1) at (0,0) {\faTerminal\\[0.1cm]\textbf{Manual CLI Queries}\\One agent at a time};
+      \node[pain] (p2) at (4.5,0) {\faIcon{eye-slash}\\[0.1cm]\textbf{No Fleet Visibility}\\Is everything OK?};
+      \node[pain] (p3) at (9,0) {\faClock\\[0.1cm]\textbf{Delayed Detection}\\Hours to find failures};
+
+      \node[pain] (p4) at (0,-2.8) {\faCertificate\\[0.1cm]\textbf{Surprise Outages}\\Expired certificates};
+      \node[pain] (p5) at (4.5,-2.8) {\faIcon{file-alt}\\[0.1cm]\textbf{Manual Compliance}\\Days of log parsing};
+      \node[pain] (p6) at (9,-2.8) {\faIcon{puzzle-piece}\\[0.1cm]\textbf{No Correlation}\\Alert fatigue};
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.2cm}
+
+  \begin{block}{The Cost of Inaction}
+    \scriptsize
+    A single undetected attestation failure means a \textbf{compromised machine remains trusted}
+    in your network. Without centralized monitoring, every failure is a race against time.
+  \end{block}
+\end{frame}
+
+\begin{frame}{What Administrators Are Telling Us}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.75, transform shape,
+        quote/.style={rectangle, draw, rounded corners, fill=keylimeblue!8, text width=10cm,
+                      minimum height=1cm, font=\scriptsize, inner sep=0.3cm}]
+
+      \node[quote] (q1) at (0,3.5) {
+        \textit{``I have 500 machines running Keylime. When something fails, I find out
+        by accident -- or worse, from the security team.''}
+        \hfill \textbf{-- Infrastructure Lead}
+      };
+
+      \node[quote] (q2) at (0,1.5) {
+        \textit{``Every compliance audit takes us a week of log parsing. We need
+        attestation evidence at the click of a button.''}
+        \hfill \textbf{-- Compliance Officer}
+      };
+
+      \node[quote] (q3) at (0,-0.5) {
+        \textit{``I changed a policy and 50 agents failed. I had no way to know
+        that would happen before I applied it.''}
+        \hfill \textbf{-- Security Engineer}
+      };
+
+      \node[quote] (q4) at (0,-2.5) {
+        \textit{``Our mTLS certificates expired at 3 AM. We had no warning. Our entire
+        attestation infrastructure went dark.''}
+        \hfill \textbf{-- System Administrator}
+      };
+    \end{tikzpicture}
+  \end{center}
+\end{frame}

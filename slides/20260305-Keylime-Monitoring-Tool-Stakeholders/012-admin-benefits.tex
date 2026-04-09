@@ -1,0 +1,96 @@
+\section{Administrator Benefits}
+
+\begin{frame}{What Changes for Administrators}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.72, transform shape]
+
+      % Before column
+      \node[font=\small\bfseries, dangered] at (3,5) {Without Dashboard};
+      \draw[dangered, thick] (0.5,4.7) -- (5.5,4.7);
+
+      \node[rectangle, draw, rounded corners, fill=dangered!8, text width=4.5cm,
+            minimum height=0.7cm, font=\scriptsize, inner sep=0.15cm, anchor=west] (b1) at (0.5,4) {
+        \faTerminal~Check each agent via CLI
+      };
+      \node[rectangle, draw, rounded corners, fill=dangered!8, text width=4.5cm,
+            minimum height=0.7cm, font=\scriptsize, inner sep=0.15cm, anchor=west] (b2) at (0.5,3) {
+        \faSearch~Parse logs to find failures
+      };
+      \node[rectangle, draw, rounded corners, fill=dangered!8, text width=4.5cm,
+            minimum height=0.7cm, font=\scriptsize, inner sep=0.15cm, anchor=west] (b3) at (0.5,2) {
+        \faIcon{dice}~Apply policies blindly
+      };
+      \node[rectangle, draw, rounded corners, fill=dangered!8, text width=4.5cm,
+            minimum height=0.7cm, font=\scriptsize, inner sep=0.15cm, anchor=west] (b4) at (0.5,1) {
+        \faIcon{bomb}~Discover expired certs at 3 AM
+      };
+      \node[rectangle, draw, rounded corners, fill=dangered!8, text width=4.5cm,
+            minimum height=0.7cm, font=\scriptsize, inner sep=0.15cm, anchor=west] (b5) at (0.5,0) {
+        \faIcon{file-alt}~Spend days on audit reports
+      };
+
+      % Arrow
+      \draw[->, >=stealth, very thick, keylimeblue] (6,2.5) -- (7.5,2.5);
+
+      % After column
+      \node[font=\small\bfseries, successgreen] at (11,5) {With Dashboard};
+      \draw[successgreen, thick] (8.5,4.7) -- (13.5,4.7);
+
+      \node[rectangle, draw, rounded corners, fill=successgreen!10, text width=4.5cm,
+            minimum height=0.7cm, font=\scriptsize, inner sep=0.15cm, anchor=west] (a1) at (8.5,4) {
+        \faEye~See all agents at a glance
+      };
+      \node[rectangle, draw, rounded corners, fill=successgreen!10, text width=4.5cm,
+            minimum height=0.7cm, font=\scriptsize, inner sep=0.15cm, anchor=west] (a2) at (8.5,3) {
+        \faBell~Get alerted immediately
+      };
+      \node[rectangle, draw, rounded corners, fill=successgreen!10, text width=4.5cm,
+            minimum height=0.7cm, font=\scriptsize, inner sep=0.15cm, anchor=west] (a3) at (8.5,2) {
+        \faIcon{search-plus}~Preview impact before applying
+      };
+      \node[rectangle, draw, rounded corners, fill=successgreen!10, text width=4.5cm,
+            minimum height=0.7cm, font=\scriptsize, inner sep=0.15cm, anchor=west] (a4) at (8.5,1) {
+        \faClock~Get warned 90 days in advance
+      };
+      \node[rectangle, draw, rounded corners, fill=successgreen!10, text width=4.5cm,
+            minimum height=0.7cm, font=\scriptsize, inner sep=0.15cm, anchor=west] (a5) at (8.5,0) {
+        \faIcon{mouse-pointer}~Generate reports in one click
+      };
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Measurable Improvements}
+  \begin{center}
+    \tiny
+    \begin{tabular}{|p{3.5cm}|c|c|c|}
+      \hline
+      \textbf{Metric} & \textbf{Without Dashboard} & \textbf{With Dashboard} & \textbf{Improvement} \\
+      \hline
+      \hline
+      Time to detect failure & Minutes to hours & \textbf{Seconds} & \textcolor{successgreen}{100x faster} \\
+      \hline
+      Fleet health assessment & Per-agent CLI queries & \textbf{Single view} & \textcolor{successgreen}{Instant} \\
+      \hline
+      Policy change impact & Unknown until applied & \textbf{Pre-analyzed} & \textcolor{successgreen}{Zero surprise} \\
+      \hline
+      Certificate expiry & Surprise outages & \textbf{90-day warning} & \textcolor{successgreen}{Prevented} \\
+      \hline
+      Compliance reporting & Days of manual work & \textbf{One-click export} & \textcolor{successgreen}{95\% faster} \\
+      \hline
+      Alert correlation & Manual, per-alert & \textbf{Automatic grouping} & \textcolor{successgreen}{90\% less noise} \\
+      \hline
+      Agent management & Individual commands & \textbf{Bulk operations} & \textcolor{successgreen}{10x faster} \\
+      \hline
+    \end{tabular}
+  \end{center}
+
+  \vspace{0.3cm}
+
+  \begin{exampleblock}{Bottom Line}
+    \scriptsize
+    The dashboard doesn't just add a UI -- it transforms how teams interact with their
+    trust infrastructure. Administrators move from \textbf{reactive firefighting} to
+    \textbf{proactive operations}.
+  \end{exampleblock}
+\end{frame}

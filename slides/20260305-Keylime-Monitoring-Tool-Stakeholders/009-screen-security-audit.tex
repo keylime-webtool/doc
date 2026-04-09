@@ -1,0 +1,108 @@
+\section{Security Audit Trail}
+
+\begin{frame}{Screen: Security Audit Log}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.62, transform shape]
+      % Background
+      \fill[dashbg] (0,0) rectangle (14,8);
+
+      % Header
+      \fill[headerblue] (0,7.3) rectangle (14,8);
+      \node[text=white, font=\tiny\bfseries, anchor=west] at (0.3,7.65) {\faIcon{clipboard-list}~Security Audit Log};
+
+      % Filter bar
+      \fill[cardwhite, rounded corners=2pt] (0.3,6.5) rectangle (13.7,7.1);
+      \draw[keylimegray, rounded corners=2pt] (0.5,6.6) rectangle (3,7.0);
+      \node[font=\tiny, keylimegray] at (1.75,6.8) {Severity: All};
+      \draw[keylimegray, rounded corners=2pt] (3.3,6.6) rectangle (5.5,7.0);
+      \node[font=\tiny, keylimegray] at (4.4,6.8) {Category: All};
+      \draw[keylimegray, rounded corners=2pt] (5.8,6.6) rectangle (8.5,7.0);
+      \node[font=\tiny, keylimegray] at (7.15,6.8) {Date: Last 24h};
+      \fill[keylimeblue, rounded corners=1pt] (11,6.6) rectangle (13.5,7.0);
+      \node[text=white, font=\tiny\bfseries] at (12.25,6.8) {\faDownload~Export Report};
+
+      % Event log entries
+      \fill[dangered!8] (0.3,5.7) rectangle (13.7,6.35);
+      \node[font=\tiny, dangered, anchor=west] at (0.5,6.15) {\faExclamationCircle~CRITICAL};
+      \node[font=\tiny, anchor=west] at (2.8,6.15) {14:32:01 -- Agent edge-node-42 attestation FAILED};
+      \node[font=\tiny, keylimegray, anchor=west] at (2.8,5.85) {Source: verifier-01 | User: system | Channel: webhook+zmq};
+
+      \fill[dangered!8] (0.3,5.0) rectangle (13.7,5.6);
+      \node[font=\tiny, dangered, anchor=west] at (0.5,5.4) {\faExclamationCircle~CRITICAL};
+      \node[font=\tiny, anchor=west] at (2.8,5.4) {14:31:45 -- Revocation notification sent for edge-node-42};
+      \node[font=\tiny, keylimegray, anchor=west] at (2.8,5.1) {Source: verifier-01 | Action: REVOCATION | Delivered: yes};
+
+      \fill[warningyellow!8] (0.3,4.3) rectangle (13.7,4.9);
+      \node[font=\tiny, warningyellow!80!black, anchor=west] at (0.5,4.7) {\faExclamationTriangle~WARNING};
+      \node[font=\tiny, anchor=west] at (2.8,4.7) {13:15:22 -- Agent worker-189 re-registered (3rd time)};
+      \node[font=\tiny, keylimegray, anchor=west] at (2.8,4.4) {Source: registrar | Identity: ek\_cert verified};
+
+      \fill[infoblue!8] (0.3,3.6) rectangle (13.7,4.2);
+      \node[font=\tiny, infoblue, anchor=west] at (0.5,4.0) {\faInfoCircle~INFO};
+      \node[font=\tiny, anchor=west] at (2.8,4.0) {12:00:00 -- Policy 'production-v2' updated by admin@company.com};
+      \node[font=\tiny, keylimegray, anchor=west] at (2.8,3.7) {Source: dashboard | Action: UPDATE\_POLICY | Approved by: security-lead};
+
+      \fill[infoblue!8] (0.3,2.9) rectangle (13.7,3.5);
+      \node[font=\tiny, infoblue, anchor=west] at (0.5,3.3) {\faInfoCircle~INFO};
+      \node[font=\tiny, anchor=west] at (2.8,3.3) {11:30:15 -- New agent api-gw-03 registered and activated};
+      \node[font=\tiny, keylimegray, anchor=west] at (2.8,3.0) {Source: registrar | Identity: iak\_idevid | Datacenter: DC-EU};
+
+      \fill[successgreen!8] (0.3,2.2) rectangle (13.7,2.8);
+      \node[font=\tiny, successgreen, anchor=west] at (0.5,2.6) {\faCheckCircle~RESOLVED};
+      \node[font=\tiny, anchor=west] at (2.8,2.6) {10:45:00 -- Agent batch-067 re-attested successfully after reactivation};
+      \node[font=\tiny, keylimegray, anchor=west] at (2.8,2.3) {Source: verifier-01 | Resolved by: ops-team | Duration: 15min};
+
+      % Footer
+      \node[font=\tiny, keylimegray] at (7,1.6) {Showing 6 of 1,247 events | Auto-refresh: ON | Tamper-evident: verified};
+
+      % Integrity badge
+      \fill[successgreen!15, rounded corners=2pt] (0.3,0.3) rectangle (13.7,1.3);
+      \node[font=\tiny\bfseries, successgreen, anchor=west] at (0.5,0.95) {\faLock~Audit Log Integrity: VERIFIED};
+      \node[font=\tiny, keylimegray, anchor=west] at (0.5,0.6) {Hash-chained entries | Last checkpoint: 14:30:00 | Chain length: 12,847 entries};
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Audit Trail -- Built for Compliance}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Every Action Is Recorded}
+        \scriptsize
+        The audit log captures \textbf{who} did \textbf{what},
+        \textbf{when}, and \textbf{why} -- across the entire
+        Keylime infrastructure.
+      \end{block}
+      \scriptsize
+      \begin{itemize}
+        \item Agent registration and lifecycle events
+        \item Policy changes with before/after diffs
+        \item Administrative actions with user identity
+        \item Attestation failures and resolutions
+        \item Certificate operations
+        \item Login and access events
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Tamper-Evident by Design}
+        \scriptsize
+        Logs are \textbf{hash-chained} -- any modification
+        or deletion is immediately detectable.
+      \end{block}
+      \scriptsize
+      \begin{itemize}
+        \item Each entry includes hash of previous entry
+        \item Periodic checkpoints for verification
+        \item Exportable for external auditing
+        \item Meets SOC 2 and FedRAMP requirements
+      \end{itemize}
+
+      \vspace{0.2cm}
+
+      \begin{exampleblock}{One-Click Export}
+        \scriptsize
+        Generate compliance-ready reports in CSV, JSON,
+        or PDF -- filtered by date, severity, or category.
+      \end{exampleblock}
+    \end{column}
+  \end{columns}
+\end{frame}

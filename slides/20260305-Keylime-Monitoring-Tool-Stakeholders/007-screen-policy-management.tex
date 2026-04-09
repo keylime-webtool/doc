@@ -1,0 +1,147 @@
+\section{Policy Management}
+
+\begin{frame}{Screen: Policy Management}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.62, transform shape]
+      % Background
+      \fill[dashbg] (0,0) rectangle (14,8);
+
+      % Header
+      \fill[headerblue] (0,7.3) rectangle (14,8);
+      \node[text=white, font=\tiny\bfseries, anchor=west] at (0.3,7.65) {\faIcon{shield-alt}~Policy Management};
+
+      % Action bar
+      \fill[cardwhite, rounded corners=2pt] (0.3,6.5) rectangle (13.7,7.1);
+      \fill[keylimeblue, rounded corners=1pt] (0.5,6.6) rectangle (2.8,7.0);
+      \node[text=white, font=\tiny\bfseries] at (1.65,6.8) {\faPlus~New Policy};
+      \fill[keylimegreen!80!black, rounded corners=1pt] (3.1,6.6) rectangle (5,7.0);
+      \node[text=white, font=\tiny\bfseries] at (4.05,6.8) {\faUpload~Import};
+      \draw[keylimegray, rounded corners=2pt] (8,6.6) rectangle (11,7.0);
+      \node[font=\tiny, keylimegray] at (9.5,6.8) {\faSearch~Search policies...};
+
+      % Policy list
+      \fill[keylimeblue!10] (0.3,5.9) rectangle (13.7,6.4);
+      \node[font=\tiny\bfseries, anchor=west] at (0.5,6.15) {Policy Name};
+      \node[font=\tiny\bfseries] at (5,6.15) {Agents};
+      \node[font=\tiny\bfseries] at (7.2,6.15) {Last Updated};
+      \node[font=\tiny\bfseries] at (9.5,6.15) {Status};
+      \node[font=\tiny\bfseries] at (12,6.15) {Actions};
+
+      % Row 1
+      \fill[cardwhite] (0.3,5.3) rectangle (13.7,5.7);
+      \node[font=\tiny, anchor=west] at (0.5,5.5) {\faIcon{shield-alt}~\texttt{production-v2}};
+      \node[font=\tiny] at (5,5.5) {185 agents};
+      \node[font=\tiny] at (7.2,5.5) {2026-02-20};
+      \node[font=\tiny, successgreen] at (9.5,5.5) {\faCheckCircle~Active};
+      \node[font=\tiny, keylimeblue] at (12,5.5) {Edit | Impact | History};
+      % Row 2
+      \fill[cardwhite] (0.3,4.8) rectangle (13.7,5.2);
+      \node[font=\tiny, anchor=west] at (0.5,5.0) {\faIcon{shield-alt}~\texttt{staging-v3}};
+      \node[font=\tiny] at (5,5.0) {35 agents};
+      \node[font=\tiny] at (7.2,5.0) {2026-02-24};
+      \node[font=\tiny, successgreen] at (9.5,5.0) {\faCheckCircle~Active};
+      \node[font=\tiny, keylimeblue] at (12,5.0) {Edit | Impact | History};
+      % Row 3
+      \fill[cardwhite] (0.3,4.3) rectangle (13.7,4.7);
+      \node[font=\tiny, anchor=west] at (0.5,4.5) {\faIcon{shield-alt}~\texttt{strict-compliance}};
+      \node[font=\tiny] at (5,4.5) {10 agents};
+      \node[font=\tiny] at (7.2,4.5) {2026-02-18};
+      \node[font=\tiny, successgreen] at (9.5,4.5) {\faCheckCircle~Active};
+      \node[font=\tiny, keylimeblue] at (12,4.5) {Edit | Impact | History};
+
+      % Impact analysis panel
+      \fill[cardwhite, rounded corners=3pt] (0.3,0.3) rectangle (13.7,4.1);
+      \draw[keylimeblue, thick, rounded corners=3pt] (0.3,0.3) rectangle (13.7,4.1);
+
+      \node[font=\small\bfseries, keylimeblue] at (7,3.75) {\faIcon{search-plus}~Impact Analysis: production-v2 $\rightarrow$ production-v3};
+      \draw[keylimegray] (0.5,3.5) -- (13.5,3.5);
+
+      \node[font=\tiny, anchor=west] at (0.5,3.2) {Changes: +45 new hashes, -12 removed hashes, 8 modified entries};
+
+      % Impact metrics
+      \fill[successgreen!10, rounded corners=2pt] (0.5,1.8) rectangle (4.2,2.9);
+      \node[font=\tiny\bfseries, successgreen] at (2.35,2.65) {\faCheckCircle~Unaffected};
+      \node[font=\scriptsize\bfseries, successgreen] at (2.35,2.3) {170 agents};
+      \node[font=\tiny, keylimegray] at (2.35,2.0) {No impact expected};
+
+      \fill[warningyellow!10, rounded corners=2pt] (4.5,1.8) rectangle (8.8,2.9);
+      \node[font=\tiny\bfseries, warningyellow!80!black] at (6.65,2.65) {\faExclamationTriangle~May Be Affected};
+      \node[font=\scriptsize\bfseries, warningyellow!80!black] at (6.65,2.3) {12 agents};
+      \node[font=\tiny, keylimegray] at (6.65,2.0) {Have modified files};
+
+      \fill[dangered!10, rounded corners=2pt] (9.1,1.8) rectangle (13.5,2.9);
+      \node[font=\tiny\bfseries, dangered] at (11.3,2.65) {\faTimesCircle~Will Fail};
+      \node[font=\scriptsize\bfseries, dangered] at (11.3,2.3) {3 agents};
+      \node[font=\tiny, keylimegray] at (11.3,2.0) {Removed hash in use};
+
+      % Action buttons
+      \fill[keylimeblue, rounded corners=1pt] (4.5,0.6) rectangle (7,1.2);
+      \node[text=white, font=\tiny\bfseries] at (5.75,0.9) {\faCheck~Apply with Approval};
+      \fill[warningyellow, rounded corners=1pt] (7.3,0.6) rectangle (9.5,1.2);
+      \node[text=white, font=\tiny\bfseries] at (8.4,0.9) {\faIcon{layer-group}~Staged Rollout};
+      \fill[keylimegray, rounded corners=1pt] (9.8,0.6) rectangle (11.5,1.2);
+      \node[text=white, font=\tiny\bfseries] at (10.65,0.9) {\faTimes~Cancel};
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Policy Management -- Eliminate Blind Changes}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{alertblock}{Before: Policy Changes Are Risky}
+        \scriptsize
+        \begin{itemize}
+          \item No way to preview impact
+          \item Changes are immediate and global
+          \item Mistakes affect entire fleet
+          \item No rollback capability
+          \item No audit trail of changes
+        \end{itemize}
+      \end{alertblock}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{exampleblock}{After: Safe, Controlled Changes}
+        \scriptsize
+        \begin{itemize}
+          \item \textbf{Impact analysis} before applying
+          \item \textbf{Staged rollout} to test groups first
+          \item \textbf{Two-person approval} for critical policies
+          \item \textbf{One-click rollback} if issues arise
+          \item \textbf{Full version history} with diffs
+        \end{itemize}
+      \end{exampleblock}
+    \end{column}
+  \end{columns}
+
+  \vspace{0.3cm}
+
+  \begin{center}
+    \begin{tikzpicture}[scale=0.68, transform shape,
+        state/.style={rectangle, draw, rounded corners, fill=keylimeblue!15,
+                      text width=2cm, align=center, minimum height=0.9cm, font=\tiny\bfseries},
+        arrow/.style={->, >=stealth, thick, font=\tiny}]
+
+      \node[state, fill=infoblue!15] (draft) at (0,0) {Draft\\(Admin A)};
+      \node[state, fill=warningyellow!20] (impact) at (3.5,0) {Impact\\Analysis};
+      \node[state, fill=keylimegreen!20] (approved) at (7,0) {Approved\\(Admin B)};
+      \node[state, fill=successgreen!20] (applied) at (10.5,0) {Applied};
+
+      \draw[arrow] (draft) -- node[above] {submit} (impact);
+      \draw[arrow] (impact) -- node[above] {approve} (approved);
+      \draw[arrow] (approved) -- node[above] {deploy} (applied);
+      \draw[arrow, dashed, dangered] (impact) to[bend right=30] node[below] {reject} (draft);
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.1cm}
+
+  \begin{center}
+    \begin{tikzpicture}[scale=0.8, transform shape]
+      \node[rectangle, draw, rounded corners, fill=successgreen!15, text width=10cm,
+            text centered, minimum height=0.8cm, font=\scriptsize, inner sep=0.2cm] {
+        \faIcon{lightbulb}~\textbf{Key Improvement:} Administrators \textit{know} the impact
+        of every change \textit{before} it affects a single agent.
+      };
+    \end{tikzpicture}
+  \end{center}
+\end{frame}

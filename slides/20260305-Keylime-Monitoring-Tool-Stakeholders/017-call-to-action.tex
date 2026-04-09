@@ -1,0 +1,86 @@
+\section{Conclusion}
+
+\begin{frame}{Summary -- Why the Dashboard, Why Now}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.72, transform shape,
+        point/.style={rectangle, draw, rounded corners, fill=keylimeblue!8,
+                      text width=4.5cm, minimum height=1.4cm, font=\scriptsize, inner sep=0.2cm}]
+
+      \node[point] (p1) at (0,2.5) {
+        \faIcon{shield-alt}~\textbf{Security}\\[0.05cm]
+        \tiny Detect compromised machines in seconds, not hours.
+        Defense-in-depth with RBAC, MFA, and encrypted communications.
+      };
+      \node[point] (p2) at (6,2.5) {
+        \faIcon{tachometer-alt}~\textbf{Performance}\\[0.05cm]
+        \tiny Real-time monitoring of 100K+ agents.
+        Proactive capacity planning prevents outages.
+      };
+      \node[point] (p3) at (0,0) {
+        \faIcon{puzzle-piece}~\textbf{Extensibility}\\[0.05cm]
+        \tiny API-first design. Integrates with Prometheus, Splunk, PagerDuty,
+        ServiceNow, and more out of the box.
+      };
+      \node[point] (p4) at (6,0) {
+        \faIcon{file-contract}~\textbf{Compliance}\\[0.05cm]
+        \tiny One-click reports for NIST, PCI DSS, SOC 2, FedRAMP.
+        Tamper-evident audit trails for auditors.
+      };
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.3cm}
+
+  \begin{block}{The Dashboard Transforms Keylime}
+    \scriptsize
+    \begin{center}
+    From a \textit{CLI-driven security tool} that requires expert knowledge\\
+    to a \textit{\textbf{security operations platform}} that empowers the entire organization.
+    \end{center}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Next Steps}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.75, transform shape,
+        stepbox/.style={rectangle, draw, rounded corners, fill=keylimeblue!10,
+                     text width=8cm, minimum height=1.2cm, font=\scriptsize, inner sep=0.3cm}]
+
+      \node[stepbox] (s1) at (0,4) {
+        \textbf{1. Approve budget} for Phase 1 development\\
+        \tiny Foundation: fleet monitoring, RBAC, audit log, basic alerts
+      };
+      \node[stepbox] (s2) at (0,2.2) {
+        \textbf{2. Assign development team}\\
+        \tiny Full technical study available for handoff (see: 20260226-Keylime-Monitoring-Tool)
+      };
+      \node[stepbox] (s3) at (0,0.4) {
+        \textbf{3. Phase 1 delivery} -- immediate operational value\\
+        \tiny Administrators gain fleet visibility and real-time alerts from Day 1
+      };
+      \node[stepbox] (s4) at (0,-1.4) {
+        \textbf{4. Iterate} through Phases 2 and 3 based on user feedback\\
+        \tiny Analytics, policy management, compliance, and enterprise features
+      };
+
+      \draw[->, >=stealth, thick, keylimeblue] (s1) -- (s2);
+      \draw[->, >=stealth, thick, keylimeblue] (s2) -- (s3);
+      \draw[->, >=stealth, thick, keylimeblue] (s3) -- (s4);
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.3cm}
+
+  \begin{center}
+    \Large{\textbf{Questions?}}
+  \end{center}
+
+  \vspace{0.2cm}
+
+  \begin{center}
+    \scriptsize
+    \textit{Contact: sec-eng-special@redhat.com | Security Special Projects}\\
+    \vspace{0.1cm}
+    \tiny Full technical study: \texttt{20260226-Keylime-Monitoring-Tool/Keylime-Monitoring-Dashboard.pdf}
+  \end{center}
+\end{frame}

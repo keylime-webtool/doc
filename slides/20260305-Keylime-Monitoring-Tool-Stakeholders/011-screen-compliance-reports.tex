@@ -1,0 +1,140 @@
+\section{Compliance Reports}
+
+\begin{frame}{Screen: Compliance Reporting}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.62, transform shape]
+      % Background
+      \fill[dashbg] (0,0) rectangle (14,8);
+
+      % Header
+      \fill[headerblue] (0,7.3) rectangle (14,8);
+      \node[text=white, font=\tiny\bfseries, anchor=west] at (0.3,7.65) {\faIcon{file-contract}~Compliance Reports};
+
+      % Framework selector cards
+      \fill[cardwhite, rounded corners=2pt] (0.3,5.5) rectangle (3.3,7.1);
+      \node[font=\tiny\bfseries, keylimeblue] at (1.8,6.85) {NIST 800-155};
+      \node[font=\tiny, keylimegray] at (1.8,6.5) {BIOS Integrity};
+      \node[font=\tiny, successgreen] at (1.8,6.1) {\faCheckCircle~98\% compliant};
+      \fill[keylimeblue, rounded corners=1pt] (0.8,5.65) rectangle (2.8,5.95);
+      \node[text=white, font=\tiny] at (1.8,5.8) {\faDownload~Generate};
+
+      \fill[cardwhite, rounded corners=2pt] (3.6,5.5) rectangle (6.6,7.1);
+      \node[font=\tiny\bfseries, keylimeblue] at (5.1,6.85) {PCI DSS 4.0};
+      \node[font=\tiny, keylimegray] at (5.1,6.5) {File Integrity};
+      \node[font=\tiny, successgreen] at (5.1,6.1) {\faCheckCircle~100\% compliant};
+      \fill[keylimeblue, rounded corners=1pt] (4.1,5.65) rectangle (6.1,5.95);
+      \node[text=white, font=\tiny] at (5.1,5.8) {\faDownload~Generate};
+
+      \fill[cardwhite, rounded corners=2pt] (6.9,5.5) rectangle (9.9,7.1);
+      \node[font=\tiny\bfseries, keylimeblue] at (8.4,6.85) {SOC 2 Type II};
+      \node[font=\tiny, keylimegray] at (8.4,6.5) {Monitoring \& Access};
+      \node[font=\tiny, successgreen] at (8.4,6.1) {\faCheckCircle~100\% compliant};
+      \fill[keylimeblue, rounded corners=1pt] (7.4,5.65) rectangle (9.4,5.95);
+      \node[text=white, font=\tiny] at (8.4,5.8) {\faDownload~Generate};
+
+      \fill[cardwhite, rounded corners=2pt] (10.2,5.5) rectangle (13.7,7.1);
+      \node[font=\tiny\bfseries, keylimeblue] at (11.95,6.85) {FedRAMP};
+      \node[font=\tiny, keylimegray] at (11.95,6.5) {Continuous Monitoring};
+      \node[font=\tiny, warningyellow!80!black] at (11.95,6.1) {\faExclamationTriangle~95\% compliant};
+      \fill[keylimeblue, rounded corners=1pt] (10.7,5.65) rectangle (13.2,5.95);
+      \node[text=white, font=\tiny] at (11.95,5.8) {\faDownload~Generate};
+
+      % Sample report preview
+      \fill[cardwhite, rounded corners=3pt] (0.3,0.3) rectangle (13.7,5.3);
+      \draw[keylimeblue, thick, rounded corners=3pt] (0.3,0.3) rectangle (13.7,5.3);
+      \node[font=\small\bfseries, keylimeblue] at (7,5.0) {\faIcon{file-alt}~Report Preview: PCI DSS 4.0 -- File Integrity Monitoring};
+      \draw[keylimegray] (0.5,4.7) -- (13.5,4.7);
+
+      % Control mapping table
+      \fill[keylimeblue!10] (0.5,4.1) rectangle (13.5,4.5);
+      \node[font=\tiny\bfseries, anchor=west] at (0.7,4.3) {Control};
+      \node[font=\tiny\bfseries] at (5.5,4.3) {Requirement};
+      \node[font=\tiny\bfseries] at (9,4.3) {Evidence};
+      \node[font=\tiny\bfseries] at (12,4.3) {Status};
+
+      \fill[cardwhite] (0.5,3.6) rectangle (13.5,4.0);
+      \node[font=\tiny, anchor=west] at (0.7,3.8) {Req 11.5.1};
+      \node[font=\tiny] at (5.5,3.8) {File integrity monitoring};
+      \node[font=\tiny] at (9,3.8) {IMA attestation (250 agents)};
+      \node[font=\tiny, successgreen] at (12,3.8) {\faCheckCircle~Pass};
+
+      \fill[cardwhite] (0.5,3.1) rectangle (13.5,3.5);
+      \node[font=\tiny, anchor=west] at (0.7,3.3) {Req 10.2};
+      \node[font=\tiny] at (5.5,3.3) {Audit trail};
+      \node[font=\tiny] at (9,3.3) {Hash-chained log (12,847 entries)};
+      \node[font=\tiny, successgreen] at (12,3.3) {\faCheckCircle~Pass};
+
+      \fill[cardwhite] (0.5,2.6) rectangle (13.5,3.0);
+      \node[font=\tiny, anchor=west] at (0.7,2.8) {Req 10.3};
+      \node[font=\tiny] at (5.5,2.8) {Event recording};
+      \node[font=\tiny] at (9,2.8) {All actions logged with identity};
+      \node[font=\tiny, successgreen] at (12,2.8) {\faCheckCircle~Pass};
+
+      \fill[cardwhite] (0.5,2.1) rectangle (13.5,2.5);
+      \node[font=\tiny, anchor=west] at (0.7,2.3) {Req 7.1};
+      \node[font=\tiny] at (5.5,2.3) {Access controls};
+      \node[font=\tiny] at (9,2.3) {RBAC with 3-tier roles};
+      \node[font=\tiny, successgreen] at (12,2.3) {\faCheckCircle~Pass};
+
+      % Export buttons
+      \fill[keylimeblue, rounded corners=1pt] (3.5,0.6) rectangle (5.5,1.1);
+      \node[text=white, font=\tiny\bfseries] at (4.5,0.85) {\faIcon{file-pdf}~Export PDF};
+      \fill[keylimegreen!80!black, rounded corners=1pt] (5.8,0.6) rectangle (8,1.1);
+      \node[text=white, font=\tiny\bfseries] at (6.9,0.85) {\faIcon{file-excel}~Export CSV};
+      \fill[codepurple!70, rounded corners=1pt] (8.3,0.6) rectangle (10.5,1.1);
+      \node[text=white, font=\tiny\bfseries] at (9.4,0.85) {\faIcon{file-code}~Export JSON};
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Compliance -- From Days to Minutes}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{alertblock}{Before: Manual Compliance}
+        \scriptsize
+        \begin{itemize}
+          \item Days of log parsing per audit
+          \item Manual evidence collection
+          \item Spreadsheet-based tracking
+          \item Risk of missing controls
+          \item Auditor back-and-forth
+        \end{itemize}
+      \end{alertblock}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{exampleblock}{After: Automated Compliance}
+        \scriptsize
+        \begin{itemize}
+          \item \textbf{One-click} report generation
+          \item Automatic evidence mapping
+          \item Control-to-capability alignment
+          \item Exportable audit packages
+          \item Auditor self-service portal
+        \end{itemize}
+      \end{exampleblock}
+    \end{column}
+  \end{columns}
+
+  \vspace{0.3cm}
+
+  \begin{block}{Supported Frameworks}
+    \scriptsize
+    \begin{columns}[T]
+      \begin{column}{0.48\textwidth}
+        \begin{itemize}
+          \item \textbf{NIST SP 800-155}: BIOS integrity
+          \item \textbf{NIST SP 800-193}: Platform firmware
+          \item \textbf{PCI DSS 4.0}: File integrity monitoring
+          \item \textbf{CIS Controls v8}: Software allowlisting
+        \end{itemize}
+      \end{column}
+      \begin{column}{0.48\textwidth}
+        \begin{itemize}
+          \item \textbf{SOC 2 Type II}: Monitoring \& access
+          \item \textbf{FedRAMP}: Continuous monitoring
+          \item \textbf{Custom frameworks}: Configurable
+        \end{itemize}
+      \end{column}
+    \end{columns}
+  \end{block}
+\end{frame}

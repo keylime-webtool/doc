@@ -1,0 +1,99 @@
+\section{Business Value}
+
+\begin{frame}{The Cost of Not Doing This}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.72, transform shape,
+        risk/.style={rectangle, draw, rounded corners, fill=dangered!10,
+                     text width=4.5cm, minimum height=1.8cm, font=\scriptsize, inner sep=0.2cm}]
+
+      \node[risk] (r1) at (0,2) {
+        \faExclamationTriangle~\textbf{Undetected Compromise}\\[0.1cm]
+        \tiny A failed attestation goes unnoticed for hours. A compromised machine
+        remains trusted in your network, potentially exfiltrating data.
+      };
+      \node[risk] (r2) at (6,2) {
+        \faClock~\textbf{Operational Downtime}\\[0.1cm]
+        \tiny An expired certificate silently breaks all attestation at 3 AM.
+        The team scrambles for hours to diagnose what went wrong.
+      };
+      \node[risk] (r3) at (0,-1) {
+        \faIcon{file-alt}~\textbf{Compliance Failure}\\[0.1cm]
+        \tiny An audit requires attestation evidence. The team spends days
+        manually extracting and formatting logs -- and still misses controls.
+      };
+      \node[risk] (r4) at (6,-1) {
+        \faIcon{burn}~\textbf{Staff Burnout}\\[0.1cm]
+        \tiny Managing Keylime via CLI at scale requires custom scripts,
+        tribal knowledge, and constant firefighting. Key staff leave.
+      };
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.3cm}
+
+  \begin{alertblock}{Each of These Scenarios Is Preventable}
+    \scriptsize
+    The Keylime Monitoring Dashboard addresses every one of these risks:
+    real-time detection, proactive certificate alerts, one-click compliance reports,
+    and an intuitive interface that reduces the operational burden.
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{Enterprise Adoption Enabler}
+  \begin{block}{The Dashboard Makes Keylime Enterprise-Ready}
+    \scriptsize
+    Without a dashboard, Keylime is a powerful security tool that only CLI experts
+    can operate. With the dashboard, it becomes a \textbf{security operations platform}
+    accessible to the entire security organization.
+  \end{block}
+
+  \vspace{0.2cm}
+
+  \begin{center}
+    \begin{tikzpicture}[scale=0.72, transform shape,
+        val/.style={rectangle, draw, rounded corners, fill=successgreen!10,
+                    text width=3cm, text centered, minimum height=2cm, font=\scriptsize, inner sep=0.2cm}]
+
+      \node[val] (v1) at (0,0) {
+        \faUsers\\[0.1cm]
+        \textbf{Wider Adoption}\\
+        \tiny More teams can use Keylime without CLI expertise
+      };
+      \node[val] (v2) at (4,0) {
+        \faIcon{chart-line}\\[0.1cm]
+        \textbf{Faster Growth}\\
+        \tiny Easier to justify scaling from 50 to 5,000 agents
+      };
+      \node[val] (v3) at (8,0) {
+        \faIcon{award}\\[0.1cm]
+        \textbf{Compliance Ready}\\
+        \tiny Meet audit requirements that block deployment today
+      };
+      \node[val] (v4) at (12,0) {
+        \faIcon{handshake}\\[0.1cm]
+        \textbf{Customer Value}\\
+        \tiny Differentiated offering for enterprise customers
+      };
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.3cm}
+
+  \begin{exampleblock}{Who Benefits}
+    \scriptsize
+    \begin{columns}[T]
+      \begin{column}{0.32\textwidth}
+        \textbf{Security Operations}\\
+        \tiny Detect and respond to threats faster with centralized visibility
+      \end{column}
+      \begin{column}{0.32\textwidth}
+        \textbf{System Administrators}\\
+        \tiny Manage fleet operations efficiently without custom scripts
+      \end{column}
+      \begin{column}{0.32\textwidth}
+        \textbf{Compliance Officers}\\
+        \tiny Generate audit evidence on demand for any framework
+      \end{column}
+    \end{columns}
+  \end{exampleblock}
+\end{frame}

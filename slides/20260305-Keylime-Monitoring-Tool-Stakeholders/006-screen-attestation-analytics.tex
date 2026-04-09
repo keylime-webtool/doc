@@ -1,0 +1,113 @@
+\section{Attestation Analytics}
+
+\begin{frame}{Screen: Attestation Analytics}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.62, transform shape]
+      % Background
+      \fill[dashbg] (0,0) rectangle (14,8);
+
+      % Header
+      \fill[headerblue] (0,7.3) rectangle (14,8);
+      \node[text=white, font=\tiny\bfseries, anchor=west] at (0.3,7.65) {\faIcon{chart-bar}~Attestation Analytics -- Last 24 Hours};
+
+      % KPI row
+      \fill[cardwhite, rounded corners=2pt] (0.3,6.3) rectangle (3.3,7.1);
+      \node[font=\tiny\bfseries, successgreen] at (1.8,6.85) {\faCheckCircle~12,450};
+      \node[font=\tiny, keylimegray] at (1.8,6.5) {Successful};
+
+      \fill[cardwhite, rounded corners=2pt] (3.6,6.3) rectangle (6.6,7.1);
+      \node[font=\tiny\bfseries, dangered] at (5.1,6.85) {\faTimesCircle~38};
+      \node[font=\tiny, keylimegray] at (5.1,6.5) {Failed};
+
+      \fill[cardwhite, rounded corners=2pt] (6.9,6.3) rectangle (9.9,7.1);
+      \node[font=\tiny\bfseries, keylimeblue] at (8.4,6.85) {\faClock~245ms};
+      \node[font=\tiny, keylimegray] at (8.4,6.5) {Avg Latency};
+
+      \fill[cardwhite, rounded corners=2pt] (10.2,6.3) rectangle (13.7,7.1);
+      \node[font=\tiny\bfseries, successgreen] at (11.95,6.85) {\faPercent~99.7};
+      \node[font=\tiny, keylimegray] at (11.95,6.5) {Success Rate};
+
+      % Attestation volume chart
+      \fill[cardwhite, rounded corners=2pt] (0.3,3.3) rectangle (9,6.1);
+      \node[font=\tiny\bfseries, anchor=west] at (0.5,5.85) {\faIcon{chart-bar}~Attestation Volume (hourly)};
+      \foreach \x/\h in {1/1.5,1.6/1.8,2.2/2,2.8/1.6,3.4/1.9,4/2.1,4.6/1.7,5.2/2.2,5.8/1.4,6.4/1.8,7/2,7.6/1.6,8.2/1.9} {
+        \fill[successgreen!70] (\x,3.6) rectangle (\x+0.4,3.6+\h);
+        \fill[dangered!70] (\x,3.6) rectangle (\x+0.4,3.65);
+      }
+      \draw[keylimegray, thin] (0.8,3.6) -- (0.8,5.8);
+      \draw[keylimegray, thin] (0.8,3.6) -- (8.6,3.6);
+
+      % Failure breakdown
+      \fill[cardwhite, rounded corners=2pt] (9.3,3.3) rectangle (13.7,6.1);
+      \node[font=\tiny\bfseries, anchor=west] at (9.5,5.85) {\faIcon{chart-pie}~Failure Breakdown};
+      \fill[dangered] (11.5,4.7) circle (0.8);
+      \fill[warningyellow] (11.5,4.7) -- ++(0:0.8) arc(0:120:0.8) -- cycle;
+      \fill[keylimeblue] (11.5,4.7) -- ++(120:0.8) arc(120:180:0.8) -- cycle;
+      \fill[cardwhite] (11.5,4.7) circle (0.4);
+      \node[font=\tiny, anchor=west] at (9.5,3.85) {\textcolor{dangered}{$\blacksquare$} Integrity issue (42\%)};
+      \node[font=\tiny, anchor=west] at (9.5,3.6) {\textcolor{warningyellow}{$\blacksquare$} Policy mismatch (33\%)};
+      \node[font=\tiny, anchor=west] at (9.5,3.35) {\textcolor{keylimeblue}{$\blacksquare$} Timeout (25\%)};
+
+      % Latency distribution
+      \fill[cardwhite, rounded corners=2pt] (0.3,0.3) rectangle (6.8,3.1);
+      \node[font=\tiny\bfseries, anchor=west] at (0.5,2.85) {\faClock~Latency Distribution};
+      \foreach \x/\h in {1/0.3,1.5/0.8,2/1.5,2.5/2,3/1.8,3.5/1.2,4/0.7,4.5/0.4,5/0.2,5.5/0.1} {
+        \fill[keylimeblue!60] (\x,0.5) rectangle (\x+0.4,0.5+\h);
+      }
+      \node[font=\tiny, keylimegray] at (3.5,0.35) {Response Time (ms)};
+
+      % Top failing agents
+      \fill[cardwhite, rounded corners=2pt] (7.1,0.3) rectangle (13.7,3.1);
+      \node[font=\tiny\bfseries, anchor=west] at (7.3,2.85) {\faExclamationTriangle~Top Failing Agents};
+      \node[font=\tiny, anchor=west] at (7.3,2.5) {\textcolor{dangered}{\faTimesCircle}~edge-node-42: 12 failures};
+      \node[font=\tiny, anchor=west] at (7.3,2.2) {\textcolor{dangered}{\faTimesCircle}~worker-189: 8 failures};
+      \node[font=\tiny, anchor=west] at (7.3,1.9) {\textcolor{warningyellow}{\faExclamationTriangle}~batch-067: 5 failures};
+      \node[font=\tiny, anchor=west] at (7.3,1.6) {\textcolor{warningyellow}{\faExclamationTriangle}~api-gw-215: 4 failures};
+      \node[font=\tiny, anchor=west] at (7.3,1.3) {\textcolor{warningyellow}{\faExclamationTriangle}~compute-033: 3 failures};
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Analytics -- Understand Your Fleet's Behavior}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Trend Analysis}
+        \scriptsize
+        Spot problems before they become incidents.
+      \end{block}
+      \scriptsize
+      \begin{itemize}
+        \item Track success rate over time
+        \item Identify agents with increasing failures
+        \item Detect latency degradation patterns
+        \item Correlate failures with events
+      \end{itemize}
+
+      \vspace{0.2cm}
+
+      \begin{block}{Root Cause Visibility}
+        \scriptsize
+        Every failure is categorized and explained.
+      \end{block}
+      \scriptsize
+      \begin{itemize}
+        \item Integrity violations highlighted
+        \item Policy mismatches traced to source
+        \item Network timeouts isolated
+        \item Actionable recommendations provided
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{center}
+        \begin{tikzpicture}[scale=0.7, transform shape,
+            insight/.style={rectangle, draw, rounded corners, fill=infoblue!10,
+                           text width=4cm, minimum height=1cm, font=\tiny, inner sep=0.2cm}]
+
+          \node[insight] at (0,3) {\faIcon{lightbulb}~\textbf{Automated Insight:}\\``Agent failures spiked after policy update at 14:32. Consider rollback.''};
+          \node[insight] at (0,1.2) {\faIcon{lightbulb}~\textbf{Automated Insight:}\\``3 agents in DC-East share failure pattern -- likely network segment issue.''};
+          \node[insight] at (0,-0.6) {\faIcon{lightbulb}~\textbf{Automated Insight:}\\``Attestation latency increased 40\% -- verifier may need scaling.''};
+        \end{tikzpicture}
+      \end{center}
+    \end{column}
+  \end{columns}
+\end{frame}

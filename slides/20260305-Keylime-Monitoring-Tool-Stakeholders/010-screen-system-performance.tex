@@ -1,0 +1,123 @@
+\section{System Performance}
+
+\begin{frame}{Screen: Infrastructure Health}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.62, transform shape]
+      % Background
+      \fill[dashbg] (0,0) rectangle (14,8);
+
+      % Header
+      \fill[headerblue] (0,7.3) rectangle (14,8);
+      \node[text=white, font=\tiny\bfseries, anchor=west] at (0.3,7.65) {\faIcon{tachometer-alt}~Infrastructure Health};
+
+      % Service health cards
+      \fill[cardwhite, rounded corners=2pt] (0.3,5.0) rectangle (3.5,7.1);
+      \node[font=\tiny\bfseries, anchor=west] at (0.5,6.85) {\faServer~Verifier-01};
+      \draw[keylimegray, thick] (1.9,5.8) circle (0.6);
+      \fill[successgreen] (1.9,5.8) -- ++(90:0.6) arc(90:-90:0.6) -- cycle;
+      \fill[dashbg] (1.9,5.8) circle (0.35);
+      \node[font=\tiny\bfseries] at (1.9,5.8) {45\%};
+      \node[font=\tiny, keylimegray] at (1.9,5.1) {CPU};
+
+      \fill[cardwhite, rounded corners=2pt] (3.8,5.0) rectangle (7.0,7.1);
+      \node[font=\tiny\bfseries, anchor=west] at (4.0,6.85) {\faServer~Verifier-02};
+      \draw[keylimegray, thick] (5.4,5.8) circle (0.6);
+      \fill[warningyellow] (5.4,5.8) -- ++(90:0.6) arc(90:-162:0.6) -- cycle;
+      \fill[dashbg] (5.4,5.8) circle (0.35);
+      \node[font=\tiny\bfseries] at (5.4,5.8) {72\%};
+      \node[font=\tiny, keylimegray] at (5.4,5.1) {CPU};
+
+      \fill[cardwhite, rounded corners=2pt] (7.3,5.0) rectangle (10.5,7.1);
+      \node[font=\tiny\bfseries, anchor=west] at (7.5,6.85) {\faDatabase~Registrar};
+      \draw[keylimegray, thick] (8.9,5.8) circle (0.6);
+      \fill[successgreen] (8.9,5.8) -- ++(90:0.6) arc(90:0:0.6) -- cycle;
+      \fill[dashbg] (8.9,5.8) circle (0.35);
+      \node[font=\tiny\bfseries] at (8.9,5.8) {25\%};
+      \node[font=\tiny, keylimegray] at (8.9,5.1) {CPU};
+
+      \fill[cardwhite, rounded corners=2pt] (10.8,5.0) rectangle (13.7,7.1);
+      \node[font=\tiny\bfseries, anchor=west] at (11.0,6.85) {\faDatabase~Database};
+      \draw[keylimegray, thick] (12.25,5.8) circle (0.6);
+      \fill[successgreen] (12.25,5.8) -- ++(90:0.6) arc(90:-36:0.6) -- cycle;
+      \fill[dashbg] (12.25,5.8) circle (0.35);
+      \node[font=\tiny\bfseries] at (12.25,5.8) {35\%};
+      \node[font=\tiny, keylimegray] at (12.25,5.1) {CPU};
+
+      % Backend connectivity
+      \fill[cardwhite, rounded corners=2pt] (0.3,2.5) rectangle (7,4.8);
+      \node[font=\tiny\bfseries, anchor=west] at (0.5,4.55) {\faPlug~Service Connectivity};
+      \fill[successgreen!15, rounded corners=1pt] (0.5,3.9) rectangle (6.8,4.3);
+      \node[font=\tiny, anchor=west] at (0.7,4.1) {\textcolor{successgreen}{\faCheckCircle}~Verifier API -- UP -- 45d uptime};
+      \fill[successgreen!15, rounded corners=1pt] (0.5,3.4) rectangle (6.8,3.8);
+      \node[font=\tiny, anchor=west] at (0.7,3.6) {\textcolor{successgreen}{\faCheckCircle}~Registrar API -- UP -- 45d uptime};
+      \fill[warningyellow!15, rounded corners=1pt] (0.5,2.9) rectangle (6.8,3.3);
+      \node[font=\tiny, anchor=west] at (0.7,3.1) {\textcolor{warningyellow}{\faExclamationTriangle}~Verifier-02 -- HIGH LOAD (72\%)};
+
+      % Response times
+      \fill[cardwhite, rounded corners=2pt] (7.3,2.5) rectangle (13.7,4.8);
+      \node[font=\tiny\bfseries, anchor=west] at (7.5,4.55) {\faClock~API Response Times};
+      \node[font=\tiny, anchor=west] at (7.5,4.1) {Agent list: \textcolor{successgreen}{15ms} avg};
+      \node[font=\tiny, anchor=west] at (7.5,3.7) {Agent detail: \textcolor{successgreen}{8ms} avg};
+      \node[font=\tiny, anchor=west] at (7.5,3.3) {Attestation: \textcolor{successgreen}{12ms} avg};
+      \node[font=\tiny, anchor=west] at (7.5,2.9) {Database: \textcolor{successgreen}{12ms} avg query};
+
+      % Capacity projection
+      \fill[cardwhite, rounded corners=2pt] (0.3,0.3) rectangle (13.7,2.3);
+      \node[font=\tiny\bfseries, anchor=west] at (0.5,2.05) {\faIcon{chart-line}~Capacity Projection};
+      \draw[keylimegray, thin] (1,0.6) -- (1,1.8);
+      \draw[keylimegray, thin] (1,0.6) -- (13,0.6);
+      \draw[keylimeblue, thick] (1,0.8) -- (3,0.9) -- (5,1.0) -- (7,1.15) -- (9,1.3) -- (11,1.5);
+      \draw[dangered, thick, dashed] (1,1.7) -- (13,1.7);
+      \node[font=\tiny, dangered, anchor=west] at (11.2,1.8) {Capacity limit};
+      \node[font=\tiny, keylimeblue, anchor=west] at (11.2,1.5) {Current trend};
+      \node[font=\tiny, keylimegray] at (3,0.45) {Now};
+      \node[font=\tiny, keylimegray] at (7,0.45) {+3 months};
+      \node[font=\tiny, keylimegray] at (11,0.45) {+6 months};
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Performance -- Proactive Capacity Planning}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Know Before It Breaks}
+        \scriptsize
+        The dashboard monitors the health of every Keylime component
+        and \textbf{predicts when you'll need to scale}.
+      \end{block}
+      \scriptsize
+      \begin{itemize}
+        \item CPU, memory, and connection tracking
+        \item Verifier load balancing visibility
+        \item Database query performance
+        \item API response time monitoring
+        \item Configuration drift detection
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{exampleblock}{Capacity Projections}
+        \scriptsize
+        Based on current attestation rates and agent growth:
+      \end{exampleblock}
+      \scriptsize
+      \begin{itemize}
+        \item \textbf{When} will the verifier need scaling?
+        \item \textbf{Where} are bottlenecks forming?
+        \item \textbf{Which} components need attention?
+        \item \textbf{How} is performance trending?
+      \end{itemize}
+
+      \vspace{0.2cm}
+
+      \begin{center}
+        \begin{tikzpicture}[scale=0.7, transform shape]
+          \node[rectangle, draw, rounded corners, fill=infoblue!10,
+                text width=4cm, text centered, minimum height=1cm,
+                font=\scriptsize, inner sep=0.2cm] {
+            \faIcon{lightbulb}~Plan infrastructure investments \textbf{months ahead}, not after an outage
+          };
+        \end{tikzpicture}
+      \end{center}
+    \end{column}
+  \end{columns}
+\end{frame}

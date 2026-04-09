@@ -1,0 +1,112 @@
+\section{Extensibility \& Integration}
+
+\begin{frame}{Integrates with Your Existing Tools}
+  \begin{block}{Fits Into Your Ecosystem, Not the Other Way Around}
+    \scriptsize
+    The dashboard connects with your existing monitoring, alerting, and incident
+    response infrastructure through standard protocols.
+  \end{block}
+
+  \vspace{0.2cm}
+
+  \begin{center}
+    \begin{tikzpicture}[scale=0.65, transform shape,
+        tool/.style={rectangle, draw, rounded corners, fill=keylimeblue!10,
+                     text width=2.2cm, text centered, minimum height=1cm, font=\tiny\bfseries},
+        dashbox/.style={rectangle, draw, rounded corners, fill=headerblue,
+                     text width=3cm, text centered, minimum height=1.5cm, font=\small\bfseries, text=white},
+        arrow/.style={<->, >=stealth, thick, keylimeblue}]
+
+      \node[dashbox] (center) at (6,2) {Keylime\\Dashboard};
+
+      % Monitoring
+      \node[tool] (prometheus) at (0,4.5) {\faIcon{tachometer-alt}\\Prometheus};
+      \node[tool] (grafana) at (3,4.5) {\faIcon{chart-area}\\Grafana};
+      % SIEM
+      \node[tool] (splunk) at (6,4.5) {\faDatabase\\Splunk / ELK};
+      % Alerting
+      \node[tool] (pager) at (9,4.5) {\faPhone\\PagerDuty};
+      \node[tool] (slack) at (12,4.5) {\faSlack\\Slack / Teams};
+      % Incident
+      \node[tool] (snow) at (0,-0.5) {\faIcon{ticket-alt}\\ServiceNow};
+      \node[tool] (jira) at (3,-0.5) {\faTasks\\Jira};
+      % Identity
+      \node[tool] (oidc) at (6,-0.5) {\faKey\\Keycloak / Okta};
+      % Deployment
+      \node[tool] (k8s) at (9,-0.5) {\faCloud\\Kubernetes};
+      \node[tool] (podman) at (12,-0.5) {\faCube\\Podman / Docker};
+
+      \draw[arrow] (center) -- (prometheus);
+      \draw[arrow] (center) -- (grafana);
+      \draw[arrow] (center) -- (splunk);
+      \draw[arrow] (center) -- (pager);
+      \draw[arrow] (center) -- (slack);
+      \draw[arrow] (center) -- (snow);
+      \draw[arrow] (center) -- (jira);
+      \draw[arrow] (center) -- (oidc);
+      \draw[arrow] (center) -- (k8s);
+      \draw[arrow] (center) -- (podman);
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Built to Scale, Built to Extend}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Scalability}
+        \tiny
+        Designed to grow with your infrastructure.
+      \end{block}
+      \tiny
+      \begin{itemize}
+        \item Supports \textbf{both pull and push} attestation modes
+        \item Scales from 10 to \textbf{100,000+ agents}
+        \item High availability deployment options
+        \item Multi-datacenter and multi-cluster support
+        \item Event-driven architecture minimizes load
+      \end{itemize}
+
+      \vspace{0.1cm}
+
+      \begin{block}{Deployment Flexibility}
+        \tiny
+        Runs anywhere your infrastructure runs.
+      \end{block}
+      \tiny
+      \begin{itemize}
+        \item Container images (Podman/Docker)
+        \item Kubernetes via Helm chart
+        \item RPM package for bare metal
+        \item \textbf{Air-gapped environments} supported
+        \item Self-contained, no CDN dependencies
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Extensibility}
+        \tiny
+        Open architecture that welcomes additions.
+      \end{block}
+      \tiny
+      \begin{itemize}
+        \item \textbf{API-first} design -- all features accessible via REST
+        \item Non-invasive: \textbf{zero changes} to Keylime itself
+        \item Configurable alert thresholds and rules
+        \item Custom compliance framework definitions
+        \item Webhook integrations for any service
+        \item Multi-tenancy for shared environments
+      \end{itemize}
+
+      \vspace{0.1cm}
+
+      \begin{exampleblock}{Future-Proof}
+        \tiny
+        \begin{itemize}
+          \item Supports Keylime API v2 and v3
+          \item Graceful handling of API version changes
+          \item Mobile app path via shared React codebase
+          \item WCAG 2.1 AA accessibility compliance
+        \end{itemize}
+      \end{exampleblock}
+    \end{column}
+  \end{columns}
+\end{frame}

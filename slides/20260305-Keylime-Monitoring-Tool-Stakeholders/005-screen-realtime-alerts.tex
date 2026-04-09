@@ -1,0 +1,129 @@
+\section{Real-Time Alerts}
+
+\begin{frame}{Screen: Real-Time Alert Management}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.62, transform shape]
+      % Background
+      \fill[dashbg] (0,0) rectangle (14,8);
+
+      % Header
+      \fill[headerblue] (0,7.3) rectangle (14,8);
+      \node[text=white, font=\tiny\bfseries, anchor=west] at (0.3,7.65) {\faBell~Alert Center};
+
+      % Active alerts summary
+      \fill[dangered!15, rounded corners=2pt] (0.3,6.0) rectangle (4.5,7.1);
+      \node[font=\tiny\bfseries, dangered] at (2.4,6.85) {\faExclamationCircle~Critical: 2};
+      \node[font=\tiny, keylimegray] at (2.4,6.35) {Requires immediate action};
+
+      \fill[warningyellow!15, rounded corners=2pt] (4.8,6.0) rectangle (9,7.1);
+      \node[font=\tiny\bfseries, warningyellow!80!black] at (6.9,6.85) {\faExclamationTriangle~Warnings: 5};
+      \node[font=\tiny, keylimegray] at (6.9,6.35) {Under investigation};
+
+      \fill[successgreen!10, rounded corners=2pt] (9.3,6.0) rectangle (13.7,7.1);
+      \node[font=\tiny\bfseries, successgreen] at (11.5,6.85) {\faCheckCircle~Resolved (24h): 12};
+      \node[font=\tiny, keylimegray] at (11.5,6.35) {Automatically + manually};
+
+      % Alert timeline
+      \fill[cardwhite, rounded corners=2pt] (0.3,3.0) rectangle (13.7,5.8);
+      \node[font=\tiny\bfseries, anchor=west] at (0.5,5.55) {\faIcon{chart-line}~Alert Timeline (Last 7 Days)};
+      \draw[keylimegray, thin] (1,3.3) -- (13,3.3);
+      \draw[keylimegray, thin] (1,3.3) -- (1,5.3);
+      \node[circle, fill=dangered, inner sep=2pt] at (2,4.8) {};
+      \node[circle, fill=dangered, inner sep=2pt] at (2.3,4.2) {};
+      \node[circle, fill=warningyellow, inner sep=1.5pt] at (4,3.8) {};
+      \node[circle, fill=warningyellow, inner sep=1.5pt] at (5.5,4.0) {};
+      \node[circle, fill=dangered, inner sep=2pt] at (7,4.5) {};
+      \node[circle, fill=warningyellow, inner sep=1.5pt] at (8,3.6) {};
+      \node[circle, fill=warningyellow, inner sep=1.5pt] at (9,3.9) {};
+      \node[circle, fill=dangered, inner sep=2pt] at (10.5,4.7) {};
+      \node[circle, fill=dangered, inner sep=2pt] at (11,4.3) {};
+      \node[circle, fill=warningyellow, inner sep=1.5pt] at (12,3.7) {};
+      \node[font=\tiny, keylimegray] at (1.5,3.1) {Mon};
+      \node[font=\tiny, keylimegray] at (4,3.1) {Tue};
+      \node[font=\tiny, keylimegray] at (6.5,3.1) {Wed};
+      \node[font=\tiny, keylimegray] at (9,3.1) {Thu};
+      \node[font=\tiny, keylimegray] at (11.5,3.1) {Fri};
+
+      % Alert list with workflow actions
+      \fill[cardwhite, rounded corners=2pt] (0.3,0.3) rectangle (13.7,2.8);
+      \node[font=\tiny\bfseries, anchor=west] at (0.5,2.55) {\faList~Active Alerts};
+
+      \fill[dangered!8] (0.5,1.9) rectangle (13.5,2.35);
+      \node[font=\tiny, anchor=west] at (0.7,2.15) {\textcolor{dangered}{\faExclamationCircle}~edge-node-42 -- Integrity violation detected};
+      \fill[keylimeblue, rounded corners=1pt] (11.5,1.95) rectangle (13.3,2.3);
+      \node[text=white, font=\tiny] at (12.4,2.125) {Investigate};
+
+      \fill[warningyellow!8] (0.5,1.35) rectangle (13.5,1.8);
+      \node[font=\tiny, anchor=west] at (0.7,1.6) {\textcolor{warningyellow!80!black}{\faExclamationTriangle}~verifier-01 certificate expires in 7 days};
+      \fill[keylimeblue, rounded corners=1pt] (11.5,1.4) rectangle (13.3,1.75);
+      \node[text=white, font=\tiny] at (12.4,1.575) {Renew};
+
+      \fill[warningyellow!8] (0.5,0.8) rectangle (13.5,1.25);
+      \node[font=\tiny, anchor=west] at (0.7,1.05) {\textcolor{warningyellow!80!black}{\faExclamationTriangle}~3 agents stuck in retry state > 5 minutes};
+      \fill[keylimeblue, rounded corners=1pt] (11.5,0.85) rectangle (13.3,1.2);
+      \node[text=white, font=\tiny] at (12.4,1.025) {View All};
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Alerts -- Never Miss a Security Event}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Multi-Channel Notifications}
+        \scriptsize
+        Alerts reach the right person through the right channel, every time.
+      \end{block}
+
+      \vspace{0.1cm}
+
+      \begin{center}
+        \begin{tikzpicture}[scale=0.65, transform shape,
+            ch/.style={rectangle, draw, rounded corners, fill=keylimeblue!10,
+                       text width=2.8cm, text centered, minimum height=0.8cm, font=\tiny}]
+
+          \node[ch] (email) at (0,2.5) {\faEnvelope~Email Notifications};
+          \node[ch] (slack) at (0,1.5) {\faSlack~Slack / Teams};
+          \node[ch] (pager) at (0,0.5) {\faPhone~PagerDuty / OpsGenie};
+          \node[ch] (siem) at (0,-0.5) {\faDatabase~SIEM Integration};
+        \end{tikzpicture}
+      \end{center}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Smart Alert Correlation}
+        \scriptsize
+        The dashboard groups related failures into a single incident.
+      \end{block}
+
+      \vspace{0.1cm}
+      \scriptsize
+
+      \textbf{Example:}
+      \begin{itemize}
+        \item 15 agents fail within 2 minutes
+        \item All share the same policy
+        \item Policy was updated 3 minutes ago
+      \end{itemize}
+
+      \vspace{0.1cm}
+
+      \begin{exampleblock}{\scriptsize Result}
+        \tiny
+        Instead of 15 separate alerts, administrators see \textbf{1 correlated incident}
+        with root cause: ``Policy update introduced missing hash entry'' --
+        with a \textbf{one-click rollback} option.
+      \end{exampleblock}
+    \end{column}
+  \end{columns}
+
+  \vspace{0.3cm}
+
+  \begin{center}
+    \begin{tikzpicture}[scale=0.8, transform shape]
+      \node[rectangle, draw, rounded corners, fill=successgreen!15, text width=10cm,
+            text centered, minimum height=0.8cm, font=\scriptsize, inner sep=0.2cm] {
+        \faIcon{lightbulb}~\textbf{Key Improvement:} Alert fatigue drops dramatically.
+        15 alerts become 1 actionable incident with root cause analysis.
+      };
+    \end{tikzpicture}
+  \end{center}
+\end{frame}

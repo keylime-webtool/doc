@@ -1,0 +1,137 @@
+\section{Certificate Monitoring}
+
+\begin{frame}{Screen: Certificate Expiry Dashboard}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.62, transform shape]
+      % Background
+      \fill[dashbg] (0,0) rectangle (14,8);
+
+      % Header
+      \fill[headerblue] (0,7.3) rectangle (14,8);
+      \node[text=white, font=\tiny\bfseries, anchor=west] at (0.3,7.65) {\faCertificate~Certificate Management};
+
+      % Summary cards
+      \fill[dangered!15, rounded corners=2pt] (0.3,6.3) rectangle (3.5,7.1);
+      \node[font=\tiny\bfseries, dangered] at (1.9,6.85) {\faTimesCircle~Expired: 1};
+      \node[font=\tiny, keylimegray] at (1.9,6.5) {Action needed now};
+
+      \fill[warningyellow!15, rounded corners=2pt] (3.8,6.3) rectangle (7,7.1);
+      \node[font=\tiny\bfseries, warningyellow!80!black] at (5.4,6.85) {\faClock~Expiring <30d: 5};
+      \node[font=\tiny, keylimegray] at (5.4,6.5) {Plan renewal};
+
+      \fill[successgreen!10, rounded corners=2pt] (7.3,6.3) rectangle (10.5,7.1);
+      \node[font=\tiny\bfseries, successgreen] at (8.9,6.85) {\faCheckCircle~Valid: 244};
+      \node[font=\tiny, keylimegray] at (8.9,6.5) {No action needed};
+
+      \fill[keylimeblue!10, rounded corners=2pt] (10.8,6.3) rectangle (13.7,7.1);
+      \node[font=\tiny\bfseries, keylimeblue] at (12.25,6.85) {\faIcon{list-alt}~Total: 250};
+      \node[font=\tiny, keylimegray] at (12.25,6.5) {All certificates};
+
+      % Certificate list
+      \fill[cardwhite, rounded corners=2pt] (0.3,1.8) rectangle (13.7,6.1);
+      \node[font=\tiny\bfseries, anchor=west] at (0.5,5.85) {\faExclamationTriangle~Certificates Requiring Attention};
+
+      \fill[keylimeblue!10] (0.5,5.2) rectangle (13.5,5.6);
+      \node[font=\tiny\bfseries, anchor=west] at (0.7,5.4) {Service / Agent};
+      \node[font=\tiny\bfseries] at (5.5,5.4) {Type};
+      \node[font=\tiny\bfseries] at (7.5,5.4) {Expires};
+      \node[font=\tiny\bfseries] at (9.5,5.4) {Days Left};
+      \node[font=\tiny\bfseries] at (12,5.4) {Action};
+
+      % Expired cert
+      \fill[dangered!8] (0.5,4.7) rectangle (13.5,5.1);
+      \node[font=\tiny, anchor=west] at (0.7,4.9) {\textcolor{dangered}{\faTimesCircle~agent-099}};
+      \node[font=\tiny] at (5.5,4.9) {mTLS};
+      \node[font=\tiny] at (7.5,4.9) {2026-02-24};
+      \node[font=\tiny\bfseries, dangered] at (9.5,4.9) {EXPIRED};
+      \fill[dangered, rounded corners=1pt] (10.8,4.75) rectangle (13.2,5.05);
+      \node[text=white, font=\tiny] at (12,4.9) {\faIcon{sync-alt}~Renew Now};
+
+      % Warning certs
+      \foreach \y/\agent/\expires/\days in {
+        4.2/verifier-01/2026-03-05/7,
+        3.7/agent-015/2026-03-12/14,
+        3.2/registrar/2026-03-18/20,
+        2.7/agent-078/2026-03-22/24,
+        2.2/agent-201/2026-03-25/27
+      } {
+        \fill[warningyellow!5] (0.5,\y-0.2) rectangle (13.5,\y+0.2);
+        \node[font=\tiny, anchor=west] at (0.7,\y) {\textcolor{warningyellow!80!black}{\faClock~\agent}};
+        \node[font=\tiny] at (5.5,\y) {mTLS};
+        \node[font=\tiny] at (7.5,\y) {\expires};
+        \node[font=\tiny, warningyellow!80!black] at (9.5,\y) {\days~days};
+        \fill[keylimeblue, rounded corners=1pt] (10.8,\y-0.15) rectangle (13.2,\y+0.15);
+        \node[text=white, font=\tiny] at (12,\y) {\faIcon{calendar-check}~Schedule};
+      }
+
+      % Expiry timeline
+      \fill[cardwhite, rounded corners=2pt] (0.3,0.3) rectangle (13.7,1.6);
+      \node[font=\tiny\bfseries, anchor=west] at (0.5,1.35) {\faCalendar~Expiry Timeline (Next 90 Days)};
+      \draw[keylimegray, thin] (1,0.65) -- (13,0.65);
+      \node[font=\tiny] at (2,0.5) {Mar};
+      \node[font=\tiny] at (5,0.5) {Apr};
+      \node[font=\tiny] at (8,0.5) {May};
+      \node[font=\tiny] at (11,0.5) {Jun};
+      \node[circle, fill=dangered, inner sep=1.5pt] at (1.5,0.8) {};
+      \node[circle, fill=warningyellow, inner sep=1.5pt] at (2.2,0.8) {};
+      \node[circle, fill=warningyellow, inner sep=1.5pt] at (2.8,0.8) {};
+      \node[circle, fill=warningyellow, inner sep=1.5pt] at (3.2,0.8) {};
+      \node[circle, fill=warningyellow, inner sep=1.5pt] at (3.5,0.8) {};
+      \node[circle, fill=warningyellow, inner sep=1.5pt] at (3.8,0.8) {};
+      \node[circle, fill=successgreen, inner sep=1.5pt] at (5.5,0.8) {};
+      \node[circle, fill=successgreen, inner sep=1.5pt] at (7,0.8) {};
+      \node[circle, fill=successgreen, inner sep=1.5pt] at (9,0.8) {};
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Certificates -- Prevent 3 AM Outages}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{alertblock}{The \#1 Preventable Outage}
+        \scriptsize
+        Expired certificates silently break the entire attestation infrastructure.
+        Agents appear ``unreachable'' with no clear error message. This is
+        the \textbf{most common} Keylime operational issue.
+      \end{alertblock}
+
+      \vspace{0.2cm}
+
+      \begin{block}{Proactive Alerts}
+        \scriptsize
+        \begin{itemize}
+          \item \textbf{90 days}: Informational notice
+          \item \textbf{30 days}: Plan renewal
+          \item \textbf{7 days}: Critical alert
+          \item \textbf{1 day}: Emergency escalation
+          \item \textbf{Expired}: Immediate action
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{exampleblock}{Renewal Made Easy}
+        \scriptsize
+        \begin{itemize}
+          \item Visual timeline of all expirations
+          \item One-click renewal for Keylime CA certs
+          \item Batch renewal scheduling
+          \item Automatic validation after renewal
+          \item Certificate chain inspection
+        \end{itemize}
+      \end{exampleblock}
+
+      \vspace{0.2cm}
+
+      \begin{center}
+        \begin{tikzpicture}[scale=0.7, transform shape]
+          \node[rectangle, draw, rounded corners, fill=successgreen!15,
+                text width=4cm, text centered, minimum height=1.2cm,
+                font=\scriptsize, inner sep=0.2cm] {
+            \faIcon{shield-alt}\\[0.1cm]
+            \textbf{Zero surprise outages}\\from expired certificates
+          };
+        \end{tikzpicture}
+      \end{center}
+    \end{column}
+  \end{columns}
+\end{frame}
