@@ -5,13 +5,15 @@ name: build
   push:
     branches:
       - main
-    ignore-paths:
+    paths-ignore:
       - '**.md'
       - '**.sh'
+      - '**.yaml'
   pull_request:
-    ignore-paths:
+    paths-ignore:
       - '**.md'
       - '**.sh'
+      - '**.yaml'
 
 jobs:
   build:
