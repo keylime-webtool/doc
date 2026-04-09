@@ -1,0 +1,163 @@
+\section{Dashboard Authentication \& RBAC}
+
+\begin{frame}{Dashboard Authentication - User Identity}
+  \begin{block}{Authentication Architecture}
+    \scriptsize
+    The dashboard implements its own authentication layer, independent of Keylime's
+    mTLS-based API authentication. Users authenticate to the dashboard; the dashboard
+    authenticates to Keylime on their behalf.
+  \end{block}
+
+  \vspace{0.1cm}
+
+  \begin{center}
+    \begin{tikzpicture}[scale=0.7, transform shape,
+        comp/.style={rectangle, draw, rounded corners, fill=keylimeblue!15, text width=2cm, align=center, minimum height=0.9cm, font=\tiny\bfseries},
+        arrow/.style={->, >=stealth, thick}]
+
+      \node[comp, fill=infoblue!15] (user) at (0,0) {User\\(Browser)};
+      \node[comp, fill=keylimegreen!15] (idp) at (4,1.5) {Identity Provider\\(OIDC/SAML)};
+      \node[comp, fill=warningyellow!15] (dash) at (5,0) {Dashboard\\Backend};
+      \node[comp] (keylime) at (10,0) {Keylime\\API};
+
+      \draw[arrow] (user) -- node[above, font=\tiny] {1. OIDC login} (idp);
+      \draw[arrow, dashed] (idp) -- node[right, font=\tiny] {2. ID token} (dash);
+      \draw[arrow] (user) -- node[below, font=\tiny] {3. Bearer token} (dash);
+      \draw[arrow, keylimeblue] (dash) -- node[above, font=\tiny] {4. mTLS (admin cert)} (keylime);
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.1cm}
+
+  \scriptsize
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{Supported Identity Providers:}
+      \begin{itemize}
+        \item OpenID Connect (Keycloak, Okta, Azure AD)
+        \item SAML 2.0 (ADFS, Shibboleth)
+        \item LDAP/Active Directory (fallback)
+        \item Local accounts (development only)
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{Session Management:}
+      \begin{itemize}
+        \item Short-lived JWT tokens (15 min)
+        \item Refresh token rotation
+        \item Server-side session revocation
+        \item Mandatory MFA for admin role
+        \item Idle timeout (configurable)
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Dashboard RBAC - Role Definitions}
+  \begin{block}{Three-Tier Role Model}
+    \scriptsize
+    Dashboard RBAC is enforced at the dashboard backend layer. Since Keylime's built-in
+    authorization has no read-only admin role, the dashboard \textbf{proxies and restricts}
+    operations based on the user's dashboard role.
+  \end{block}
+
+  \vspace{0.1cm}
+
+  \tiny
+  \begin{center}
+    \begin{tabular}{|l|c|c|c|}
+      \hline
+      \textbf{Operation} & \textbf{Viewer} & \textbf{Operator} & \textbf{Admin} \\
+      \hline
+      \hline
+      View agent fleet and details & \textcolor{successgreen}{\checkmark} & \textcolor{successgreen}{\checkmark} & \textcolor{successgreen}{\checkmark} \\
+      \hline
+      View attestation analytics & \textcolor{successgreen}{\checkmark} & \textcolor{successgreen}{\checkmark} & \textcolor{successgreen}{\checkmark} \\
+      \hline
+      View policies (read-only) & \textcolor{successgreen}{\checkmark} & \textcolor{successgreen}{\checkmark} & \textcolor{successgreen}{\checkmark} \\
+      \hline
+      View audit log & \textcolor{successgreen}{\checkmark} & \textcolor{successgreen}{\checkmark} & \textcolor{successgreen}{\checkmark} \\
+      \hline
+      Export reports (CSV/PDF) & \textcolor{dangered}{\texttimes} & \textcolor{successgreen}{\checkmark} & \textcolor{successgreen}{\checkmark} \\
+      \hline
+      Acknowledge/manage alerts & \textcolor{dangered}{\texttimes} & \textcolor{successgreen}{\checkmark} & \textcolor{successgreen}{\checkmark} \\
+      \hline
+      Reactivate/stop agents & \textcolor{dangered}{\texttimes} & \textcolor{successgreen}{\checkmark} & \textcolor{successgreen}{\checkmark} \\
+      \hline
+      Create/edit/delete policies & \textcolor{dangered}{\texttimes} & \textcolor{dangered}{\texttimes} & \textcolor{successgreen}{\checkmark} \\
+      \hline
+      Delete agents from verifier & \textcolor{dangered}{\texttimes} & \textcolor{dangered}{\texttimes} & \textcolor{successgreen}{\checkmark} \\
+      \hline
+      Manage dashboard users/roles & \textcolor{dangered}{\texttimes} & \textcolor{dangered}{\texttimes} & \textcolor{successgreen}{\checkmark} \\
+      \hline
+      Configure alert thresholds & \textcolor{dangered}{\texttimes} & \textcolor{dangered}{\texttimes} & \textcolor{successgreen}{\checkmark} \\
+      \hline
+      View/export TPM key material & \textcolor{dangered}{\texttimes} & \textcolor{dangered}{\texttimes} & \textcolor{successgreen}{\checkmark} \\
+      \hline
+    \end{tabular}
+  \end{center}
+
+  \vspace{0.1cm}
+
+  \begin{alertblock}{Least-Privilege Enforcement}
+    \scriptsize
+    All write operations to Keylime are blocked at the dashboard proxy layer for
+    non-admin roles. Optionally, a read-only reverse proxy (e.g., Envoy with method
+    filtering) can be deployed in front of the verifier to enforce GET-only access
+    at the network level, as defense-in-depth.
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{Dashboard RBAC - Multi-Tenancy}
+  \begin{block}{Tenant-Scoped Visibility}
+    \scriptsize
+    Enterprise deployments require per-team isolation. The dashboard supports
+    scoping agent visibility by organizational labels.
+  \end{block}
+
+  \vspace{0.2cm}
+
+  \scriptsize
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{Tenant Scoping Dimensions:}
+      \begin{itemize}
+        \item Agent labels/tags (user-defined)
+        \item IP subnet / CIDR range
+        \item Verifier instance assignment
+        \item Organizational unit (from IdP)
+        \item Policy assignment group
+      \end{itemize}
+
+      \vspace{0.15cm}
+
+      \textbf{Isolation Guarantees:}
+      \begin{itemize}
+        \item Viewer/Operator sees only their tenant
+        \item Cross-tenant data never mixed in UI
+        \item Export limited to tenant scope
+        \item Alerts filtered per tenant
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{Admin Capabilities:}
+      \begin{itemize}
+        \item Global admin sees all tenants
+        \item Tenant admin manages own scope
+        \item Tenant creation/modification
+        \item Agent-to-tenant assignment
+        \item Cross-tenant analytics (global admin)
+      \end{itemize}
+
+      \vspace{0.15cm}
+
+      \textbf{IdP Integration:}
+      \begin{itemize}
+        \item OIDC claims map to tenant ID
+        \item SAML attributes map to role+tenant
+        \item Group membership drives scope
+        \item SSO across tenants for global admins
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}

@@ -1,0 +1,182 @@
+\section{Implementation Roadmap}
+
+\begin{frame}{Roadmap - Phased Implementation}
+  \begin{block}{Three-Phase Rollout (Security-First)}
+    \scriptsize
+    The dashboard is delivered incrementally with security built in from Phase 1,
+    not bolted on later. Each phase provides immediate value while building toward
+    full operational capability.
+  \end{block}
+
+  \vspace{0.1cm}
+
+  \begin{center}
+    \begin{tikzpicture}[scale=0.68, transform shape,
+        phase/.style={rectangle, draw, rounded corners, text width=3.2cm, minimum height=3.2cm, font=\tiny, inner sep=0.2cm},
+        arrow/.style={->, >=stealth, thick, keylimeblue}]
+
+      \node[phase, fill=keylimeblue!10] (p1) at (0,0) {
+        \textbf{\normalsize Phase 1}\\
+        \textbf{Secure Foundation}\\[0.15cm]
+        $\bullet$ Agent fleet list view\\
+        $\bullet$ Agent state monitoring\\
+        $\bullet$ OIDC/SAML authentication\\
+        $\bullet$ RBAC (3-tier roles)\\
+        $\bullet$ Tamper-evident audit log\\
+        $\bullet$ mTLS to Keylime APIs
+      };
+
+      \node[phase, fill=keylimegreen!10] (p2) at (5,0) {
+        \textbf{\normalsize Phase 2}\\
+        \textbf{Operations}\\[0.15cm]
+        $\bullet$ Attestation analytics\\
+        $\bullet$ Policy management UI\\
+        $\bullet$ Certificate monitoring\\
+        $\bullet$ Alert notifications\\
+        $\bullet$ Push mode (v3 API)\\
+        $\bullet$ SIEM integration
+      };
+
+      \node[phase, fill=codepurple!10] (p3) at (10,0) {
+        \textbf{\normalsize Phase 3}\\
+        \textbf{Enterprise Scale}\\[0.15cm]
+        $\bullet$ Multi-tenancy\\
+        $\bullet$ Compliance reports\\
+        $\bullet$ Incident response integration\\
+        $\bullet$ HA deployment\\
+        $\bullet$ Air-gapped packaging\\
+        $\bullet$ Multi-cluster support
+      };
+
+      \draw[arrow] (p1) -- (p2);
+      \draw[arrow] (p2) -- (p3);
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.1cm}
+
+  \begin{alertblock}{Security from Day 1}
+    \scriptsize
+    Phase 1 includes RBAC and audit logging because the dashboard holds an admin mTLS
+    certificate. Deploying without access controls would create an unacceptable
+    privilege escalation risk.
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{Roadmap - Phase 1: Secure Foundation}
+  \begin{block}{Phase 1: Secure Foundation}
+    \scriptsize
+    Core monitoring with security controls built in from the start. Read-only
+    access to Keylime APIs with authenticated, role-based dashboard access.
+  \end{block}
+
+  \vspace{0.1cm}
+
+  \scriptsize
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{Security Infrastructure:}
+      \begin{itemize}
+        \setlength{\itemsep}{0pt}
+        \item OIDC/SAML identity provider integration
+        \item Three-tier RBAC (Viewer/Operator/Admin)
+        \item mTLS client for Keylime API access
+        \item HSM/Vault-backed private key storage
+        \item Hash-chained tamper-evident audit log
+        \item CSP headers, input sanitization
+        \item Short-lived JWT session tokens (15 min)
+      \end{itemize}
+
+      \vspace{0.1cm}
+
+      \textbf{Monitoring Core:}
+      \begin{itemize}
+        \setlength{\itemsep}{0pt}
+        \item Agent fleet list with pagination
+        \item Agent state monitoring and badges
+        \item Agent detail view (6 tabs)
+        \item Basic KPI dashboard
+        \item API v2 (pull mode) support
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{Deployment:}
+      \begin{itemize}
+        \setlength{\itemsep}{0pt}
+        \item Container image (Podman/Docker)
+        \item Helm chart for Kubernetes
+        \item RPM packaging
+        \item Deployment and hardening guide
+        \item API compatibility test suite
+      \end{itemize}
+
+      \vspace{0.1cm}
+
+      \textbf{Phase 1 Exit Criteria:}
+      \begin{itemize}
+        \setlength{\itemsep}{0pt}
+        \item All API access authenticated via OIDC
+        \item RBAC enforced on every endpoint
+        \item Audit log captures all actions
+        \item mTLS key never on disk in cleartext
+        \item Threat model reviewed and documented
+        \item Penetration test passed
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Roadmap - Phase 2 \& 3 Details}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Phase 2: Operations}
+        \scriptsize
+        Advanced analytics, policy management, and operational capabilities.
+      \end{block}
+
+      \vspace{0.1cm}
+      \scriptsize
+
+      \textbf{Key Deliverables:}
+      \begin{itemize}
+        \setlength{\itemsep}{0pt}
+        \item Attestation success/failure analytics
+        \item Failure categorization and correlation
+        \item IMA/MB policy CRUD operations
+        \item Policy impact analysis tool
+        \item Certificate expiry dashboard
+        \item Push mode (v3 API) support
+        \item WebSocket real-time updates
+        \item Alert notifications (multi-channel)
+        \item SSRF-validated webhook configuration
+        \item SIEM export (Splunk, ELK, CEF)
+        \item Prometheus metrics endpoint
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Phase 3: Enterprise Scale}
+        \scriptsize
+        Multi-tenancy, compliance, HA, and air-gapped support.
+      \end{block}
+
+      \vspace{0.1cm}
+      \scriptsize
+
+      \textbf{Key Deliverables:}
+      \begin{itemize}
+        \setlength{\itemsep}{0pt}
+        \item Multi-tenant scoped visibility
+        \item Compliance framework reports (NIST, PCI DSS, SOC 2, FedRAMP)
+        \item Incident response integration (ServiceNow, Jira, PagerDuty)
+        \item Evidence preservation packages
+        \item Active/passive HA deployment
+        \item Adaptive polling and backpressure
+        \item Cache invalidation strategies
+        \item Air-gapped packaging (RPM, container, Helm)
+        \item Offline update process (signed, SBOM)
+        \item Multi-verifier/multi-cluster views
+        \item WCAG 2.1 AA accessibility
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}

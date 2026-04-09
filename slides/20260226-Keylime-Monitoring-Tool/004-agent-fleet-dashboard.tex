@@ -1,0 +1,244 @@
+\section{Agent Fleet Management}
+
+\begin{frame}{Agent Fleet - List View}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.62, transform shape]
+      % Background
+      \fill[dashbg] (0,0) rectangle (14,8);
+
+      % Header
+      \fill[headerblue] (0,7.3) rectangle (14,8);
+      \node[text=white, font=\tiny\bfseries, anchor=west] at (0.3,7.65) {Agent Fleet Management};
+
+      % Filter bar
+      \fill[cardwhite, rounded corners=2pt] (0.3,6.5) rectangle (13.7,7.1);
+      \draw[keylimegray, rounded corners=2pt] (0.5,6.6) rectangle (3.5,7.0);
+      \node[font=\tiny, keylimegray] at (2,6.8) {Search agents...};
+      \draw[keylimegray, rounded corners=2pt] (3.8,6.6) rectangle (5.5,7.0);
+      \node[font=\tiny, keylimegray] at (4.65,6.8) {State: All};
+      \draw[keylimegray, rounded corners=2pt] (5.8,6.6) rectangle (7.5,7.0);
+      \node[font=\tiny, keylimegray] at (6.65,6.8) {Verifier: All};
+      \fill[keylimeblue, rounded corners=2pt] (11.5,6.6) rectangle (13.5,7.0);
+      \node[text=white, font=\tiny\bfseries] at (12.5,6.8) {+ Add Agent};
+
+      % Table header
+      \fill[keylimeblue!10] (0.3,5.9) rectangle (13.7,6.4);
+      \node[font=\tiny\bfseries, anchor=west] at (0.5,6.15) {Agent ID};
+      \node[font=\tiny\bfseries] at (4.5,6.15) {IP Address};
+      \node[font=\tiny\bfseries] at (6.5,6.15) {State};
+      \node[font=\tiny\bfseries] at (8.3,6.15) {Last Attest};
+      \node[font=\tiny\bfseries] at (10,6.15) {Policy};
+      \node[font=\tiny\bfseries] at (11.5,6.15) {Failures};
+      \node[font=\tiny\bfseries] at (13,6.15) {Actions};
+
+      % Table rows - Row 1
+      \fill[cardwhite] (0.3,5.3) rectangle (13.7,5.7);
+      \draw[dashbg] (0.3,5.3) -- (13.7,5.3);
+      \node[font=\tiny, anchor=west] at (0.5,5.5) {\texttt{a1b2c3d4\ldots}};
+      \node[font=\tiny] at (4.5,5.5) {\texttt{192.168.1.10}};
+      \node[font=\tiny, successgreen] at (6.5,5.5) {GET\_QUOTE};
+      \node[font=\tiny] at (8.3,5.5) {2s ago};
+      \node[font=\tiny] at (10,5.5) {default};
+      \node[font=\tiny] at (11.5,5.5) {0};
+      \node[font=\tiny, keylimeblue] at (13,5.5) {View};
+      % Row 2
+      \fill[cardwhite] (0.3,4.8) rectangle (13.7,5.2);
+      \draw[dashbg] (0.3,4.8) -- (13.7,4.8);
+      \node[font=\tiny, anchor=west] at (0.5,5.0) {\texttt{e5f6g7h8\ldots}};
+      \node[font=\tiny] at (4.5,5.0) {\texttt{192.168.1.11}};
+      \node[font=\tiny, successgreen] at (6.5,5.0) {GET\_QUOTE};
+      \node[font=\tiny] at (8.3,5.0) {5s ago};
+      \node[font=\tiny] at (10,5.0) {strict};
+      \node[font=\tiny] at (11.5,5.0) {0};
+      \node[font=\tiny, keylimeblue] at (13,5.0) {View};
+      % Row 3 (FAILED)
+      \fill[dangered!5] (0.3,4.3) rectangle (13.7,4.7);
+      \draw[dashbg] (0.3,4.3) -- (13.7,4.3);
+      \node[font=\tiny, anchor=west] at (0.5,4.5) {\texttt{i9j0k1l2\ldots}};
+      \node[font=\tiny] at (4.5,4.5) {\texttt{192.168.1.12}};
+      \node[font=\tiny, dangered] at (6.5,4.5) {FAILED};
+      \node[font=\tiny] at (8.3,4.5) {10m ago};
+      \node[font=\tiny] at (10,4.5) {default};
+      \node[font=\tiny] at (11.5,4.5) {3};
+      \node[font=\tiny, keylimeblue] at (13,4.5) {View};
+      % Row 4
+      \fill[cardwhite] (0.3,3.8) rectangle (13.7,4.2);
+      \draw[dashbg] (0.3,3.8) -- (13.7,3.8);
+      \node[font=\tiny, anchor=west] at (0.5,4.0) {\texttt{m3n4o5p6\ldots}};
+      \node[font=\tiny] at (4.5,4.0) {\texttt{192.168.1.13}};
+      \node[font=\tiny, successgreen] at (6.5,4.0) {GET\_QUOTE};
+      \node[font=\tiny] at (8.3,4.0) {1s ago};
+      \node[font=\tiny] at (10,4.0) {minimal};
+      \node[font=\tiny] at (11.5,4.0) {0};
+      \node[font=\tiny, keylimeblue] at (13,4.0) {View};
+      % Row 5 (RETRY)
+      \fill[warningyellow!5] (0.3,3.3) rectangle (13.7,3.7);
+      \draw[dashbg] (0.3,3.3) -- (13.7,3.3);
+      \node[font=\tiny, anchor=west] at (0.5,3.5) {\texttt{q7r8s9t0\ldots}};
+      \node[font=\tiny] at (4.5,3.5) {\texttt{192.168.1.14}};
+      \node[font=\tiny, warningyellow!80!black] at (6.5,3.5) {RETRY};
+      \node[font=\tiny] at (8.3,3.5) {45s ago};
+      \node[font=\tiny] at (10,3.5) {default};
+      \node[font=\tiny] at (11.5,3.5) {1};
+      \node[font=\tiny, keylimeblue] at (13,3.5) {View};
+      % Row 6
+      \fill[cardwhite] (0.3,2.8) rectangle (13.7,3.2);
+      \draw[dashbg] (0.3,2.8) -- (13.7,2.8);
+      \node[font=\tiny, anchor=west] at (0.5,3.0) {\texttt{u1v2w3x4\ldots}};
+      \node[font=\tiny] at (4.5,3.0) {\texttt{192.168.1.15}};
+      \node[font=\tiny, successgreen] at (6.5,3.0) {GET\_QUOTE};
+      \node[font=\tiny] at (8.3,3.0) {3s ago};
+      \node[font=\tiny] at (10,3.0) {default};
+      \node[font=\tiny] at (11.5,3.0) {0};
+      \node[font=\tiny, keylimeblue] at (13,3.0) {View};
+      % Row 7 (INVALID)
+      \fill[dangered!5] (0.3,2.3) rectangle (13.7,2.7);
+      \draw[dashbg] (0.3,2.3) -- (13.7,2.3);
+      \node[font=\tiny, anchor=west] at (0.5,2.5) {\texttt{y5z6a7b8\ldots}};
+      \node[font=\tiny] at (4.5,2.5) {\texttt{192.168.1.16}};
+      \node[font=\tiny, dangered] at (6.5,2.5) {INVALID\_Q};
+      \node[font=\tiny] at (8.3,2.5) {5m ago};
+      \node[font=\tiny] at (10,2.5) {strict};
+      \node[font=\tiny] at (11.5,2.5) {2};
+      \node[font=\tiny, keylimeblue] at (13,2.5) {View};
+      % Row 8
+      \fill[cardwhite] (0.3,1.8) rectangle (13.7,2.2);
+      \draw[dashbg] (0.3,1.8) -- (13.7,1.8);
+      \node[font=\tiny, anchor=west] at (0.5,2.0) {\texttt{c9d0e1f2\ldots}};
+      \node[font=\tiny] at (4.5,2.0) {\texttt{192.168.1.17}};
+      \node[font=\tiny, successgreen] at (6.5,2.0) {GET\_QUOTE};
+      \node[font=\tiny] at (8.3,2.0) {2s ago};
+      \node[font=\tiny] at (10,2.0) {default};
+      \node[font=\tiny] at (11.5,2.0) {0};
+      \node[font=\tiny, keylimeblue] at (13,2.0) {View};
+
+      % Pagination
+      \node[font=\tiny, keylimegray] at (7,1.4) {Showing 1-8 of 250 agents | Page 1 of 32};
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Agent Fleet - Filtering and Search}
+  \begin{block}{Advanced Filtering Capabilities}
+    \scriptsize
+    Administrators can filter the agent fleet using multiple criteria simultaneously.
+  \end{block}
+
+  \vspace{0.2cm}
+
+  \scriptsize
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{Filter Criteria:}
+      \begin{itemize}
+        \item \textbf{Agent UUID}: Exact or partial match
+        \item \textbf{IP Address}: CIDR range support
+        \item \textbf{Operational State}: Multi-select dropdown
+        \item \textbf{Verifier Assignment}: Which verifier instance
+        \item \textbf{IMA Policy}: Filter by assigned policy
+        \item \textbf{MB Policy}: Filter by boot policy
+        \item \textbf{Last Attestation}: Time range filter
+        \item \textbf{Failure Count}: Min/max threshold
+        \item \textbf{Registration Date}: Date range
+        \item \textbf{API Version}: Agent-supported version
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{Bulk Operations:}
+      \begin{itemize}
+        \item Select multiple agents (checkbox)
+        \item \textbf{Reactivate}: Resume monitoring for selected
+        \item \textbf{Stop}: Pause monitoring for selected
+        \item \textbf{Delete}: Remove from verifier
+        \item \textbf{Reassign Policy}: Change IMA/MB policy
+        \item \textbf{Export}: Download agent data as CSV
+      \end{itemize}
+
+      \vspace{0.2cm}
+
+      \textbf{Sort Options:}
+      \begin{itemize}
+        \item By state (failures first)
+        \item By last attestation time
+        \item By failure count (descending)
+        \item By registration date
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Agent Fleet - Map and Topology View}
+  \begin{block}{Geographic and Logical Distribution}
+    \scriptsize
+    Optional views for visualizing agent distribution across infrastructure.
+  \end{block}
+
+  \vspace{0.1cm}
+
+  \begin{center}
+    \begin{tikzpicture}[scale=0.7, transform shape,
+        dc/.style={rectangle, draw, rounded corners, fill=keylimeblue!10, text width=2.5cm, text centered, minimum height=1.5cm, font=\tiny},
+        agent/.style={circle, fill=successgreen, inner sep=1.5pt},
+        failagent/.style={circle, fill=dangered, inner sep=1.5pt},
+        arrow/.style={<->, dashed, keylimegray}]
+
+      \node[dc] (dc1) at (0,0) {\textbf{DC-East}\\120 agents\\2 failed};
+      \node[dc] (dc2) at (5,0) {\textbf{DC-West}\\85 agents\\0 failed};
+      \node[dc] (dc3) at (10,0) {\textbf{DC-EU}\\45 agents\\1 failed};
+
+      % Agent dots
+      \foreach \x in {-0.6,-0.3,0,0.3,0.6} {
+        \foreach \y in {-1.3,-1.5,-1.7} {
+          \node[agent] at (\x,\y) {};
+        }
+      }
+      \node[failagent] at (-0.6,-1.3) {};
+      \node[failagent] at (0.3,-1.7) {};
+
+      \foreach \x in {4.4,4.7,5,5.3,5.6} {
+        \foreach \y in {-1.3,-1.5} {
+          \node[agent] at (\x,\y) {};
+        }
+      }
+
+      \foreach \x in {9.7,10,10.3} {
+        \foreach \y in {-1.3,-1.5} {
+          \node[agent] at (\x,\y) {};
+        }
+      }
+      \node[failagent] at (9.7,-1.5) {};
+
+      % Connections
+      \draw[arrow] (dc1) -- (dc2);
+      \draw[arrow] (dc2) -- (dc3);
+
+      % Legend
+      \node[font=\tiny, anchor=west] at (0,-2.5) {\textcolor{successgreen}{$\bullet$} Healthy};
+      \node[font=\tiny, anchor=west] at (2.5,-2.5) {\textcolor{dangered}{$\bullet$} Failed};
+      \node[font=\tiny, anchor=west] at (5,-2.5) {\textcolor{warningyellow}{$\bullet$} Warning};
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.1cm}
+
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \scriptsize
+      \textbf{Topology View Features:}
+      \begin{itemize}
+        \item Group agents by datacenter/rack/subnet
+        \item Verifier-to-agent assignment mapping
+        \item Registrar connection status
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \scriptsize
+      \textbf{Interactive Features:}
+      \begin{itemize}
+        \item Click on datacenter to drill down
+        \item Hover for quick agent summary
+        \item Color-coded health indicators
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}

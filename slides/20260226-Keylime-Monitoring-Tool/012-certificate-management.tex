@@ -1,0 +1,194 @@
+\section{Certificate Management}
+
+\begin{frame}{Certificate Management - Overview}
+  \begin{block}{Certificate Landscape in Keylime}
+    \scriptsize
+    Keylime relies on multiple certificate types for identity, authentication, and secure
+    communication. The dashboard provides a unified view of all certificates.
+  \end{block}
+
+  \vspace{0.1cm}
+
+  \begin{center}
+    \begin{tikzpicture}[scale=0.7, transform shape,
+        cert/.style={rectangle, draw, rounded corners, fill=keylimeblue!15, text width=2.5cm, text centered, minimum height=1.2cm, font=\tiny},
+        arrow/.style={->, >=stealth, thick, dashed, keylimegray}]
+
+      % Certificate types
+      \node[cert] (ek) at (0,2.5) {\textbf{EK Certificate}\\Endorsement Key\\(TPM Vendor)};
+      \node[cert] (ak) at (4,2.5) {\textbf{AK Certificate}\\Attestation Key\\(Keylime CA)};
+      \node[cert] (mtls) at (8,2.5) {\textbf{mTLS Certificate}\\Agent $\leftrightarrow$ Verifier\\(Keylime CA)};
+      \node[cert] (iak) at (0,0) {\textbf{IAK Certificate}\\Initial Attestation\\(Manufacturer)};
+      \node[cert] (idevid) at (4,0) {\textbf{IDevID Certificate}\\Device Identity\\(Manufacturer)};
+      \node[cert] (server) at (8,0) {\textbf{Server Certificates}\\Verifier/Registrar\\(Org CA)};
+
+      % Trust arrows
+      \draw[arrow] (ek) -- node[above, font=\tiny] {binds} (ak);
+      \draw[arrow] (ak) -- node[above, font=\tiny] {enables} (mtls);
+      \draw[arrow] (iak) -- node[above, font=\tiny] {alternative} (idevid);
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.1cm}
+
+  \begin{alertblock}{Certificate Expiry is a Common Outage Cause}
+    \scriptsize
+    Expired certificates silently break mTLS connections, causing agents to appear as
+    ``unreachable'' rather than reporting clear certificate errors. Proactive monitoring
+    prevents these outages.
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{Certificate Management - Expiry Dashboard}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.62, transform shape]
+      % Background
+      \fill[dashbg] (0,0) rectangle (14,8);
+
+      % Header
+      \fill[headerblue] (0,7.3) rectangle (14,8);
+      \node[text=white, font=\tiny\bfseries, anchor=west] at (0.3,7.65) {Certificate Expiry Dashboard};
+
+      % Summary cards
+      \fill[dangered!15, rounded corners=2pt] (0.3,6.3) rectangle (3.5,7.1);
+      \node[font=\tiny\bfseries, dangered] at (1.9,6.85) {Expired: 1};
+      \node[font=\tiny, keylimegray] at (1.9,6.5) {Action needed};
+
+      \fill[warningyellow!15, rounded corners=2pt] (3.8,6.3) rectangle (7,7.1);
+      \node[font=\tiny\bfseries, warningyellow!80!black] at (5.4,6.85) {Expiring <30d: 5};
+      \node[font=\tiny, keylimegray] at (5.4,6.5) {Plan renewal};
+
+      \fill[successgreen!10, rounded corners=2pt] (7.3,6.3) rectangle (10.5,7.1);
+      \node[font=\tiny\bfseries, successgreen] at (8.9,6.85) {Valid: 244};
+      \node[font=\tiny, keylimegray] at (8.9,6.5) {No action needed};
+
+      \fill[keylimeblue!10, rounded corners=2pt] (10.8,6.3) rectangle (13.7,7.1);
+      \node[font=\tiny\bfseries, keylimeblue] at (12.25,6.85) {Total: 250};
+      \node[font=\tiny, keylimegray] at (12.25,6.5) {All certificates};
+
+      % Certificate list
+      \fill[cardwhite, rounded corners=2pt] (0.3,1.5) rectangle (13.7,6.1);
+      \node[font=\tiny\bfseries, anchor=west] at (0.5,5.85) {Certificates Requiring Attention};
+
+      % Table header
+      \fill[keylimeblue!10] (0.5,5.2) rectangle (13.5,5.6);
+      \node[font=\tiny\bfseries, anchor=west] at (0.7,5.4) {Agent/Service};
+      \node[font=\tiny\bfseries] at (4.5,5.4) {Cert Type};
+      \node[font=\tiny\bfseries] at (6.5,5.4) {Issuer};
+      \node[font=\tiny\bfseries] at (8.5,5.4) {Expires};
+      \node[font=\tiny\bfseries] at (10.5,5.4) {Days Left};
+      \node[font=\tiny\bfseries] at (12.5,5.4) {Action};
+
+      % Expired cert
+      \fill[dangered!8] (0.5,4.7) rectangle (13.5,5.1);
+      \node[font=\tiny, anchor=west] at (0.7,4.9) {\textcolor{dangered}{agent-099}};
+      \node[font=\tiny] at (4.5,4.9) {mTLS};
+      \node[font=\tiny] at (6.5,4.9) {Keylime CA};
+      \node[font=\tiny] at (8.5,4.9) {2026-02-24};
+      \node[font=\tiny\bfseries, dangered] at (10.5,4.9) {EXPIRED};
+      \node[font=\tiny, keylimeblue] at (12.5,4.9) {Renew};
+
+      % Warning certs
+      \foreach \y/\agent/\type/\issuer/\expires/\days in {
+        4.2/agent-015/mTLS/Keylime CA/2026-03-05/7,
+        3.7/verifier-01/Server/Org CA/2026-03-12/14,
+        3.2/agent-078/mTLS/Keylime CA/2026-03-18/20,
+        2.7/registrar/Server/Org CA/2026-03-22/24,
+        2.2/agent-201/mTLS/Keylime CA/2026-03-25/27
+      } {
+        \fill[warningyellow!5] (0.5,\y-0.2) rectangle (13.5,\y+0.2);
+        \node[font=\tiny, anchor=west] at (0.7,\y) {\textcolor{warningyellow!80!black}{\agent}};
+        \node[font=\tiny] at (4.5,\y) {\type};
+        \node[font=\tiny] at (6.5,\y) {\issuer};
+        \node[font=\tiny] at (8.5,\y) {\expires};
+        \node[font=\tiny, warningyellow!80!black] at (10.5,\y) {\days};
+        \node[font=\tiny, keylimeblue] at (12.5,\y) {Renew};
+      }
+
+      % Expiry timeline
+      \fill[cardwhite, rounded corners=2pt] (0.3,0.3) rectangle (13.7,1.3);
+      \node[font=\tiny\bfseries, anchor=west] at (0.5,1.05) {Certificate Expiry Timeline (Next 90 Days)};
+      \draw[keylimegray, thin] (1,0.6) -- (13,0.6);
+      \node[font=\tiny] at (2,0.45) {Mar};
+      \node[font=\tiny] at (5,0.45) {Apr};
+      \node[font=\tiny] at (8,0.45) {May};
+      \node[font=\tiny] at (11,0.45) {Jun};
+      % Cert expiry dots
+      \node[circle, fill=dangered, inner sep=1.5pt] at (1.5,0.75) {};
+      \node[circle, fill=warningyellow, inner sep=1.5pt] at (2.2,0.75) {};
+      \node[circle, fill=warningyellow, inner sep=1.5pt] at (2.8,0.75) {};
+      \node[circle, fill=warningyellow, inner sep=1.5pt] at (3.2,0.75) {};
+      \node[circle, fill=warningyellow, inner sep=1.5pt] at (3.5,0.75) {};
+      \node[circle, fill=warningyellow, inner sep=1.5pt] at (3.8,0.75) {};
+      \node[circle, fill=successgreen, inner sep=1.5pt] at (5.5,0.75) {};
+      \node[circle, fill=successgreen, inner sep=1.5pt] at (7,0.75) {};
+      \node[circle, fill=successgreen, inner sep=1.5pt] at (9,0.75) {};
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Certificate Management - Operations}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Certificate Inspection}
+        \scriptsize
+        Deep-dive into any certificate's details.
+      \end{block}
+
+      \vspace{0.1cm}
+      \scriptsize
+
+      \textbf{Certificate Detail View:}
+      \begin{itemize}
+        \item Subject and Issuer DN
+        \item Serial number
+        \item Validity period (Not Before/After)
+        \item Public key algorithm and size
+        \item Signature algorithm
+        \item Subject Alternative Names (SANs)
+        \item Key Usage / Extended Key Usage
+        \item Certificate chain visualization
+        \item PEM/DER export options
+      \end{itemize}
+
+      \vspace{0.1cm}
+
+      \textbf{EK Certificate Validation:}
+      \begin{itemize}
+        \item TPM vendor verification
+        \item Chain validation against known CAs
+        \item TCG EK credential profile check
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Automated Management}
+        \scriptsize
+        Proactive certificate lifecycle management.
+      \end{block}
+
+      \vspace{0.1cm}
+      \scriptsize
+
+      \textbf{Renewal Automation:}
+      \begin{itemize}
+        \item Auto-renewal for Keylime CA certs
+        \item Renewal workflow with approval
+        \item Batch renewal scheduling
+        \item Pre-renewal validation
+        \item Rollback on renewal failure
+      \end{itemize}
+
+      \vspace{0.1cm}
+
+      \textbf{Alert Configuration:}
+      \begin{itemize}
+        \item 90-day warning (informational)
+        \item 30-day warning (action required)
+        \item 7-day critical alert
+        \item 1-day emergency alert
+        \item Expired certificate alert
+        \item Custom threshold per cert type
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}

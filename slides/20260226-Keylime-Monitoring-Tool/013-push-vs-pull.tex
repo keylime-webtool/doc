@@ -1,0 +1,164 @@
+\section{Push vs. Pull Mode Monitoring}
+
+\begin{frame}{Attestation Modes - Pull Mode Monitoring}
+  \begin{block}{Pull Mode (Verifier-Initiated, v2 API)}
+    \scriptsize
+    In pull mode, the verifier periodically requests quotes from agents.
+    The dashboard monitors the polling cycle and its health.
+  \end{block}
+
+  \vspace{0.1cm}
+
+  \begin{center}
+    \begin{tikzpicture}[scale=0.72, transform shape,
+        component/.style={rectangle, draw, rounded corners, fill=keylimeblue!15, text width=2cm, text centered, minimum height=1cm, font=\tiny\bfseries},
+        arrow/.style={->, >=stealth, thick}]
+
+      \node[component] (verifier) at (0,0) {Verifier};
+      \node[component] (agent) at (6,0) {Agent};
+
+      \draw[arrow, keylimeblue] (verifier) to[bend left=15] node[above, font=\tiny] {1. Request quote (quote\_interval)} (agent);
+      \draw[arrow, keylimegreen!70!black] (agent) to[bend left=15] node[below, font=\tiny] {2. TPM quote + IMA log + boot log} (verifier);
+
+      \node[font=\tiny, keylimegray, text width=4cm, text centered] at (3,-1.5) {Repeats every \texttt{quote\_interval} seconds\\(default: 2s)};
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.1cm}
+
+  \scriptsize
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{Pull Mode Dashboard Metrics:}
+      \begin{itemize}
+        \item Quote polling frequency compliance
+        \item Agent response time distribution
+        \item State transition timeline
+        \item Retry count and backoff status
+        \item V-key delivery tracking
+        \item Concurrent agent polling load
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{Pull Mode Specific Alerts:}
+      \begin{itemize}
+        \item Agent unresponsive (timeout)
+        \item Quote interval drift detected
+        \item Exponential backoff triggered
+        \item Max retries exceeded
+        \item Verifier overloaded (queue growing)
+        \item Agent state stuck in RETRY
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Attestation Modes - Push Mode Monitoring}
+  \begin{block}{Push Mode (Agent-Initiated, v3 API)}
+    \scriptsize
+    In push mode, agents initiate attestation by submitting capabilities and evidence.
+    The verifier issues challenges with configurable lifetimes.
+  \end{block}
+
+  \vspace{0.1cm}
+
+  \begin{center}
+    \begin{tikzpicture}[scale=0.62, transform shape,
+        component/.style={rectangle, draw, rounded corners, fill=keylimeblue!15, text width=2.2cm, text centered, minimum height=0.9cm, font=\tiny\bfseries},
+        arrow/.style={->, >=stealth, thick}]
+
+      \node[component] (agent) at (0,0) {Agent};
+      \node[component] (verifier) at (7,0) {Verifier};
+
+      \draw[arrow] (agent) to[bend left=8] node[above, font=\tiny] {1. POST /attestations (capabilities)} (verifier);
+      \draw[arrow, dashed] (verifier) to[bend left=8] node[below, font=\tiny] {2. nonce + challenge (challenge\_lifetime)} (agent);
+      \draw[arrow] (agent) to[bend left=25] node[above, font=\tiny] {3. PATCH /attestations/:idx (evidence)} (verifier);
+      \draw[arrow, dashed, keylimegreen] (verifier) to[bend left=25] node[below, font=\tiny] {4. evaluation result (pass/fail)} (agent);
+
+      % Session management
+      \node[component, fill=codepurple!10] (session) at (7,-2.5) {Session\\Management};
+      \draw[arrow, dashed] (agent) -- node[left, font=\tiny] {POST /sessions} (session);
+      \draw[arrow, dashed] (session) -- node[right, font=\tiny] {PoP token} (verifier);
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.1cm}
+
+  \scriptsize
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{Push Mode Dashboard Metrics:}
+      \begin{itemize}
+        \item Agent submission frequency
+        \item Nonce expiry rate (expired before use)
+        \item Evidence evaluation time
+        \item Session token lifecycle
+        \item Challenge lifetime utilization
+        \item Capabilities negotiation outcomes
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{Push Mode Specific Alerts:}
+      \begin{itemize}
+        \item Agent silent (no attestations)
+        \item High nonce expiry rate
+        \item Rate limit violations
+        \item Session creation failures
+        \item Verification timeout exceeded
+        \item Evidence chain broken
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Attestation Modes - Comparative View}
+  \begin{block}{Side-by-Side Mode Comparison}
+    \scriptsize
+    The dashboard adapts its displays based on the configured attestation mode, highlighting
+    mode-specific metrics and concerns.
+  \end{block}
+
+  \vspace{0.1cm}
+
+  \scriptsize
+  \begin{center}
+    \begin{tabular}{|p{3cm}|p{3.5cm}|p{3.5cm}|}
+      \hline
+      \textbf{Monitoring Aspect} & \textbf{Pull Mode} & \textbf{Push Mode} \\
+      \hline
+      \hline
+      Attestation Trigger & Verifier polls agents & Agent submits evidence \\
+      \hline
+      Freshness Control & \texttt{quote\_interval} & \texttt{challenge\_lifetime} \\
+      \hline
+      State Machine & 10 states (complex) & 3 stages (simple) \\
+      \hline
+      Authentication & mTLS only & Session tokens (PoP) \\
+      \hline
+      Rate Limiting & N/A (verifier controls) & Per-IP and per-agent limits \\
+      \hline
+      Failure Recovery & Exponential backoff & Agent-driven retry \\
+      \hline
+      Scalability Concern & Verifier polling capacity & Session management load \\
+      \hline
+      Key Dashboard Widget & Agent state distribution & Attestation submission rate \\
+      \hline
+    \end{tabular}
+  \end{center}
+
+  \vspace{0.2cm}
+
+  \begin{exampleblock}{Mixed Mode Support}
+    \scriptsize
+    In deployments with both pull and push agents, the dashboard provides unified views
+    that normalize metrics across modes, while also offering mode-specific drill-down views.
+  \end{exampleblock}
+
+  \begin{alertblock}{Push Mode Security Note}
+    \scriptsize
+    PoP (Proof-of-Possession) token hashes are stored in the verifier database. The dashboard
+    must \textbf{never} display or cache raw PoP tokens. Only session metadata (creation time,
+    expiry, agent UUID) is shown. Rate limiting applies to session creation only, not
+    management API endpoints --- the dashboard must implement its own rate limiting.
+  \end{alertblock}
+\end{frame}

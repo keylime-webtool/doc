@@ -1,0 +1,175 @@
+\section{Verification Pipeline}
+
+\begin{frame}{Verification Pipeline - Flow Visualization}
+  \begin{block}{Multi-Stage Verification}
+    \scriptsize
+    Keylime's verification pipeline processes evidence through multiple independent stages.
+    The dashboard visualizes each stage's status and timing.
+  \end{block}
+
+  \vspace{0.1cm}
+
+  \begin{center}
+    \begin{tikzpicture}[scale=0.68, transform shape,
+        stage/.style={rectangle, draw, rounded corners, fill=keylimeblue!15, text width=2cm, text centered, minimum height=1.4cm, font=\tiny},
+        check/.style={diamond, draw, fill=warningyellow!20, aspect=2, font=\tiny, inner sep=1pt},
+        arrow/.style={->, >=stealth, thick},
+        result/.style={rectangle, draw, rounded corners, font=\tiny, text width=1.2cm, text centered, minimum height=0.6cm}]
+
+      % Stages
+      \node[stage] (recv) at (0,0) {\textbf{Receive}\\Quote\\+ Logs};
+      \node[stage] (quote) at (3.2,0) {\textbf{Validate}\\TPM\\Quote};
+      \node[stage] (pcr) at (6.4,0) {\textbf{Check}\\PCR\\Values};
+      \node[stage] (ima) at (9.6,0) {\textbf{Verify}\\IMA\\Log};
+      \node[stage] (mb) at (12.8,0) {\textbf{Verify}\\Measured\\Boot};
+
+      % Flow
+      \draw[arrow] (recv) -- (quote);
+      \draw[arrow] (quote) -- (pcr);
+      \draw[arrow] (pcr) -- (ima);
+      \draw[arrow] (ima) -- (mb);
+
+      % Pass/Fail indicators
+      \node[result, fill=successgreen!20] (pass) at (12.8,-2) {PASS};
+      \node[result, fill=dangered!20] (fail) at (6.4,-2) {FAIL};
+
+      \draw[arrow, successgreen] (mb) -- (pass);
+      \draw[arrow, dangered, dashed] (quote) -- (fail);
+      \draw[arrow, dangered, dashed] (pcr) -- (fail);
+      \draw[arrow, dangered, dashed] (ima) -- (fail);
+      \draw[arrow, dangered, dashed] (mb.south) to[bend right=15] (fail);
+
+      % Timing labels
+      \node[font=\tiny, keylimegray] at (1.6,0.9) {5ms};
+      \node[font=\tiny, keylimegray] at (4.8,0.9) {45ms};
+      \node[font=\tiny, keylimegray] at (8,0.9) {120ms};
+      \node[font=\tiny, keylimegray] at (11.2,0.9) {75ms};
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.1cm}
+
+  \scriptsize
+  \begin{center}
+    \begin{tabular}{|l|p{4.5cm}|c|c|}
+      \hline
+      \textbf{Stage} & \textbf{What It Checks} & \textbf{Avg Time} & \textbf{Can Fail} \\
+      \hline
+      Quote Validation & TPM signature, nonce, freshness & 45ms & Yes \\
+      \hline
+      PCR Check & Expected vs actual PCR values & 5ms & Yes \\
+      \hline
+      IMA Verification & File hashes against allowlist policy & 120ms & Yes \\
+      \hline
+      Measured Boot & UEFI event log against boot policy & 75ms & Yes \\
+      \hline
+      Clock Check & TPM clock consistency, anti-rollback & 2ms & Yes \\
+      \hline
+    \end{tabular}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Verification Pipeline - Stage Metrics}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Per-Stage Monitoring}
+        \scriptsize
+        The dashboard tracks timing and success rates for each verification stage independently.
+      \end{block}
+
+      \vspace{0.1cm}
+      \scriptsize
+
+      \textbf{Quote Validation Metrics:}
+      \begin{itemize}
+        \item Signature verification time
+        \item Nonce freshness check
+        \item Quote format errors
+        \item AK binding verification
+      \end{itemize}
+
+      \vspace{0.15cm}
+
+      \textbf{PCR Verification Metrics:}
+      \begin{itemize}
+        \item PCR replay time
+        \item PCR bank coverage (SHA-1/256/384/512)
+        \item PCR drift events
+        \item Policy match rate
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{IMA Verification Depth}
+        \scriptsize
+        IMA verification is typically the longest stage and deserves detailed monitoring.
+      \end{block}
+
+      \vspace{0.1cm}
+      \scriptsize
+
+      \textbf{IMA Processing Metrics:}
+      \begin{itemize}
+        \item Entries processed per attestation
+        \item \texttt{next\_ima\_ml\_entry} progress
+        \item Allowlist hit/miss ratio
+        \item Excludelist matches
+        \item Signature verification counts
+        \item IMA keyring updates
+        \item TOMTOU error occurrences
+      \end{itemize}
+
+      \vspace{0.15cm}
+
+      \textbf{Measured Boot Metrics:}
+      \begin{itemize}
+        \item Event log entries parsed
+        \item Policy compliance rate
+        \item Secure Boot state changes
+        \item Firmware update detections
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Verification Pipeline - Quote Progress Tracking}
+  \begin{block}{Detecting Attestation Lag}
+    \scriptsize
+    The dashboard monitors quote progress to detect agents that are falling behind
+    in their IMA measurement processing -- a sign of potential issues.
+  \end{block}
+
+  \vspace{0.2cm}
+
+  \begin{center}
+    \begin{tikzpicture}[scale=0.75, transform shape]
+      % Timeline visualization
+      \draw[keylimegray, thick, ->] (0,0) -- (12,0) node[right, font=\tiny] {Time};
+      \draw[keylimegray, thick, ->] (0,0) -- (0,4) node[above, font=\tiny] {IMA Entries};
+
+      % IMA log growth (actual)
+      \draw[keylimeblue, thick] (0,0.5) -- (2,1) -- (4,1.8) -- (6,2.3) -- (8,2.8) -- (10,3.2) -- (11.5,3.5);
+      \node[font=\tiny, keylimeblue, anchor=west] at (11.6,3.5) {Total entries};
+
+      % Verified entries (healthy agent)
+      \draw[successgreen, thick] (0,0.5) -- (2,0.95) -- (4,1.7) -- (6,2.2) -- (8,2.7) -- (10,3.1) -- (11.5,3.4);
+      \node[font=\tiny, successgreen, anchor=west] at (11.6,3.0) {Verified (healthy)};
+
+      % Verified entries (lagging agent)
+      \draw[dangered, thick, dashed] (0,0.5) -- (2,0.8) -- (4,1.2) -- (6,1.5) -- (8,1.7) -- (10,1.9) -- (11.5,2.0);
+      \node[font=\tiny, dangered, anchor=west] at (11.6,2.0) {Verified (lagging)};
+
+      % Gap annotation
+      \draw[<->, warningyellow, thick] (10,1.9) -- (10,3.1);
+      \node[font=\tiny, warningyellow!80!black, anchor=west] at (10.2,2.5) {Gap!};
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.1cm}
+
+  \begin{alertblock}{Alert Condition}
+    \scriptsize
+    If the gap between total IMA entries and verified entries exceeds a configurable threshold
+    (e.g., 1000 entries or 5 minutes of growth), the dashboard raises an alert.
+    This can indicate network issues, agent overload, or intentional evasion.
+  \end{alertblock}
+\end{frame}

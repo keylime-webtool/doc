@@ -1,0 +1,239 @@
+\section{High Availability \& Scalability}
+
+\begin{frame}{Scalability - Ingestion Model Comparison}
+  \begin{block}{Why Polling Alone Cannot Scale}
+    \scriptsize
+    Periodic HTTP polling competes with attestation traffic on the Verifier.
+    The dashboard prioritizes event-driven ingestion, with polling as fallback only.
+  \end{block}
+
+  \vspace{0.1cm}
+
+  \scriptsize
+  \begin{center}
+    \begin{tabular}{|l|p{4cm}|p{4cm}|}
+      \hline
+      \textbf{Aspect} & \textbf{Polling (Fallback)} & \textbf{Event-Driven (Primary)} \\
+      \hline
+      \hline
+      Verifier load & 2K--20K req/min (1K--10K agents) & Zero additional load \\
+      \hline
+      Latency & 10--30s stale window & $<$1s real-time \\
+      \hline
+      Split-brain risk & High (parallel state in TSDB) & Low (event sequence numbers) \\
+      \hline
+      Scale limit & $\sim$1,000 agents & 100K+ agents \\
+      \hline
+      Requirement & None (works today) & Upstream webhook/AMQP \\
+      \hline
+    \end{tabular}
+  \end{center}
+
+  \vspace{0.1cm}
+
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{alertblock}{Event-Driven Path}
+        \scriptsize
+        \begin{itemize}
+          \setlength{\itemsep}{0pt}
+          \item Consume ZeroMQ revocation events (exists today)
+          \item Propose upstream: state-change AMQP/webhook emit
+          \item Message broker (RabbitMQ/Kafka) decouples load
+          \item Reconciliation sweep every 5 min to detect gaps
+        \end{itemize}
+      \end{alertblock}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{exampleblock}{Polling Fallback Safeguards}
+        \scriptsize
+        \begin{itemize}
+          \setlength{\itemsep}{0pt}
+          \item List poll: 30s with ETag/If-Modified-Since
+          \item Detail poll: on-demand only (user click)
+          \item Backpressure: double interval if p95 $>$ 500ms
+          \item Circuit breaker: pause if p95 $>$ 2s
+          \item Alert operator of degraded mode
+        \end{itemize}
+      \end{exampleblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Scalability - Cache Invalidation}
+  \begin{block}{Cache Consistency Strategy}
+    \scriptsize
+    Stale cache data in a security monitoring tool is a security gap. The dashboard
+    implements strict cache invalidation to minimize the window of inconsistency.
+  \end{block}
+
+  \vspace{0.1cm}
+
+  \scriptsize
+  \begin{center}
+    \begin{tabular}{|l|c|l|l|}
+      \hline
+      \textbf{Data Type} & \textbf{TTL} & \textbf{Invalidation Trigger} & \textbf{Staleness Risk} \\
+      \hline
+      \hline
+      Agent list & 10s & Next poll cycle & Agent deletion missed \\
+      \hline
+      Agent detail & 30s & Next poll cycle & State change delayed \\
+      \hline
+      IMA policies & 60s & On dashboard write & CLI-side edit missed \\
+      \hline
+      Registrar data & 30s & Next poll cycle & Re-registration missed \\
+      \hline
+      Cert metadata & 300s & On renewal event & Expiry window \\
+      \hline
+    \end{tabular}
+  \end{center}
+
+  \vspace{0.1cm}
+
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{Invalidation Mechanisms:}
+      \scriptsize
+      \begin{itemize}
+        \item Write-through: dashboard writes invalidate cache immediately
+        \item Poll-based: TTL expiry triggers re-fetch
+        \item Manual: operator ``force refresh'' button
+        \item Checksum comparison: detect out-of-band policy changes via checksum field
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{Out-of-Band Change Detection:}
+      \scriptsize
+      \begin{itemize}
+        \item Compare cached agent count vs. API agent count
+        \item Monitor policy checksums for CLI-side edits
+        \item Track registrar \texttt{regcount} for re-registrations
+        \item Alert on detected cache/API divergence
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{High Availability - Architecture}
+  \begin{block}{Dashboard HA Design}
+    \scriptsize
+    As the single pane of glass for security operations, the dashboard must be
+    highly available. Downtime means no alerts, no visibility, and no historical data collection.
+  \end{block}
+
+  \vspace{0.1cm}
+
+  \scriptsize
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{Active/Passive (Recommended):}
+      \begin{itemize}
+        \item Primary handles all traffic
+        \item Standby monitors primary health
+        \item Shared TimescaleDB (replicated)
+        \item Shared Redis Sentinel cluster
+        \item Automatic failover ($<$30s RTO)
+        \item RPO: 0 (shared storage)
+      \end{itemize}
+
+      \vspace{0.1cm}
+
+      \textbf{Active/Active (Large Scale):}
+      \begin{itemize}
+        \item Load balancer distributes traffic
+        \item Each instance polls a subset of agents
+        \item Shared storage for all instances
+        \item Requires agent-to-instance affinity
+        \item Horizontal scaling for 5K+ agents
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{Component HA Matrix:}
+      \begin{center}
+        \tiny
+        \begin{tabular}{|l|l|}
+          \hline
+          \textbf{Component} & \textbf{HA Method} \\
+          \hline
+          API Server & Active/passive or LB \\
+          \hline
+          apalis Workers & Multiple instances \\
+          \hline
+          Redis & Sentinel (3 nodes) \\
+          \hline
+          TimescaleDB & Streaming replication \\
+          \hline
+          Load Balancer & Keepalived VIP \\
+          \hline
+        \end{tabular}
+      \end{center}
+
+      \vspace{0.1cm}
+
+      \textbf{Graceful Degradation:}
+      \begin{itemize}
+        \item If TimescaleDB down: live data only, no history
+        \item If Redis down: direct API calls, no cache
+        \item If apalis down: manual refresh only
+        \item If Keylime API down: show cached state + alert
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Deployment - Offline \& Air-Gapped}
+  \begin{block}{Air-Gapped Environment Support}
+    \scriptsize
+    High-security Keylime deployments often run in air-gapped or restricted networks.
+    The dashboard must be fully self-contained with no external dependencies.
+  \end{block}
+
+  \vspace{0.2cm}
+
+  \scriptsize
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{Self-Contained Packaging:}
+      \begin{itemize}
+        \setlength{\itemsep}{0pt}
+        \item All frontend assets bundled (no CDN)
+        \item Pre-built container images with all layers
+        \item Single Rust binary (no runtime deps)
+        \item Helm chart with embedded images
+        \item No runtime internet access required
+        \item Fonts and icons embedded in binary
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{Offline EK Certificate Cache:}
+      \begin{itemize}
+        \setlength{\itemsep}{0pt}
+        \item Pre-load TPM vendor CA certificates
+        \item Offline EK cert validation (no network)
+        \item Import EK certs via USB/sneakernet
+        \item Periodic bundle refresh procedure
+      \end{itemize}
+
+      \vspace{0.1cm}
+
+      \textbf{Offline Update Process:}
+      \begin{itemize}
+        \setlength{\itemsep}{0pt}
+        \item Signed update packages (GPG)
+        \item USB/sneakernet transfer support
+        \item Version compatibility matrix + rollback
+        \item Integrity verification, SBOM included
+      \end{itemize}
+    \end{column}
+  \end{columns}
+
+  \vspace{0.2cm}
+
+  \begin{alertblock}{WCAG 2.1 AA Accessibility}
+    \scriptsize
+    Dashboard UI conforms to WCAG 2.1 Level AA: keyboard navigation, screen reader
+    support, color-contrast compliance, and ARIA labels on all interactive elements.
+    Required for government procurement.
+  \end{alertblock}
+\end{frame}

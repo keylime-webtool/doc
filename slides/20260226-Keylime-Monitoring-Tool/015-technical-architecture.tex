@@ -1,0 +1,418 @@
+\section{Dashboard Technical Architecture}
+
+\begin{frame}{Technical Architecture - System Design}
+  \begin{block}{Component Overview}
+    \scriptsize
+    The dashboard follows an API-first, non-invasive architecture that
+    consumes Keylime's existing REST APIs without requiring any
+    modifications to Keylime components.
+  \end{block}
+
+  \vspace{0.1cm}
+
+  \begin{center}
+    \scriptsize
+    \begin{tabular}{|l|l|p{5cm}|}
+      \hline
+      \textbf{Layer} & \textbf{Component} & \textbf{Technology} \\
+      \hline
+      \hline
+      Frontend & Web UI (SPA) & React.js + TypeScript + D3.js \\
+      \hline
+      Frontend & WebSocket Client & Real-time updates from backend \\
+      \hline
+      Backend & API Server & Rust (Axum) + apalis workers \\
+      \hline
+      Backend & Data Collector & Periodic polling of Keylime APIs \\
+      \hline
+      Storage & Time-Series DB & TimescaleDB or InfluxDB \\
+      \hline
+      Storage & Cache & Redis for real-time data \\
+      \hline
+      Auth & mTLS Client & Admin certificate for Keylime access \\
+      \hline
+    \end{tabular}
+  \end{center}
+
+  \vspace{0.2cm}
+
+  \begin{alertblock}{Key Design Decisions}
+    \scriptsize
+    \begin{itemize}
+      \item \textbf{API-First}: No direct database access -- only public REST APIs
+      \item \textbf{Non-Invasive}: Zero modification to Keylime components
+      \item \textbf{Secure}: Rust backend + mTLS + rustls (pure-Rust TLS)
+      \item \textbf{Scalable}: Stateless frontend, async Rust backend
+    \end{itemize}
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{Technical Architecture - Data Flow}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.72, transform shape,
+        comp/.style={rectangle, draw, rounded corners, fill=keylimeblue!15, text width=2cm, align=center, minimum height=1cm, font=\tiny\bfseries},
+        arrow/.style={->, >=stealth, thick}]
+
+      \node[comp, fill=infoblue!15] (browser) at (0,0) {Browser\\(Web UI)};
+      \node[comp, fill=warningyellow!15] (backend) at (4.5,0) {Dashboard\\Backend};
+      \node[comp] (verifier) at (9,1) {Keylime\\Verifier};
+      \node[comp] (registrar) at (9,-1) {Keylime\\Registrar};
+
+      \draw[arrow] (browser) -- node[above, font=\tiny] {REST/WS} (backend);
+      \draw[arrow] (backend) -- node[above, font=\tiny] {mTLS} (verifier);
+      \draw[arrow] (backend) -- node[below, font=\tiny] {mTLS} (registrar);
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.2cm}
+
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Frontend Stack (React.js)}
+        \scriptsize
+        \begin{itemize}
+          \setlength{\itemsep}{0pt}
+          \item React.js 18+ (SPA)
+          \item TypeScript for type safety
+          \item D3.js / Recharts for charts
+          \item WebSocket real-time updates
+          \item Material UI components
+          \item React Native path to mobile apps
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Backend Stack (Rust/Axum)}
+        \scriptsize
+        \begin{itemize}
+          \setlength{\itemsep}{0pt}
+          \item Axum 0.8 (Tokio-native) API server
+          \item apalis for background polling jobs
+          \item fred (Redis client, async-first)
+          \item SQLx + TimescaleDB for metrics
+          \item reqwest + rustls for mTLS client
+          \item tracing for structured observability
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Technical Architecture - Why React.js}
+  \begin{block}{Frontend Framework Choice: React.js}
+    \scriptsize
+    React.js is chosen over alternatives (Vue.js, Angular) for its ecosystem maturity,
+    component reuse potential, and clear migration path to native mobile applications.
+  \end{block}
+
+  \vspace{0.05cm}
+
+  \tiny
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{React.js Advantages:}
+      \begin{itemize}
+        \setlength{\itemsep}{0pt}
+        \item Largest ecosystem and community
+        \item Mature component libraries (MUI, Ant Design)
+        \item Strong TypeScript integration
+        \item Virtual DOM for efficient re-renders (real-time dashboards)
+        \item React Hooks for state management
+        \item Wide availability of developers
+      \end{itemize}
+
+      \vspace{0.05cm}
+
+      \textbf{Key Libraries:}
+      \begin{itemize}
+        \setlength{\itemsep}{0pt}
+        \item \textbf{Recharts / D3.js}: attestation charts and analytics
+        \item \textbf{TanStack Query}: server state caching, polling, refetch
+        \item \textbf{React Router}: SPA navigation
+        \item \textbf{Zustand / Redux}: client state management
+        \item \textbf{Socket.IO client}: WebSocket real-time updates
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{Mobile Migration Path (React Native):}
+      \begin{itemize}
+        \setlength{\itemsep}{0pt}
+        \item Shared business logic and TypeScript types between web and mobile
+        \item React Native for Android \& iOS from the same codebase
+        \item Mobile app use cases: on-call alert notifications (push), fleet health overview, acknowledge/escalate alerts remotely, agent status lookup
+        \item Shared API client layer (axios/fetch)
+        \item Gradual migration: web-first, mobile later
+      \end{itemize}
+
+      \vspace{0.05cm}
+
+      \textbf{Code Sharing Strategy:}
+      \begin{itemize}
+        \setlength{\itemsep}{0pt}
+        \item Monorepo: \texttt{packages/shared}, \texttt{packages/web}, \texttt{packages/mobile}
+        \item Shared: API client, types, validation, state logic
+        \item Platform-specific: UI components, navigation
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Technical Architecture - Why Rust (Backend)}
+  \begin{block}{Backend Language Choice: Rust}
+    \scriptsize
+    Rust is chosen over Python/Go for its memory safety guarantees, ownership model,
+    and zero-cost abstractions --- critical for a security-sensitive component that holds
+    admin mTLS credentials.
+  \end{block}
+
+  \vspace{0.05cm}
+
+  \tiny
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{Security Advantages:}
+      \begin{itemize}
+        \setlength{\itemsep}{0pt}
+        \item Memory safety without garbage collector
+        \item Ownership model prevents data races at compile time
+        \item No null pointer dereferences, no buffer overflows
+        \item \texttt{rustls}: pure-Rust TLS (no OpenSSL dependency)
+        \item \texttt{\#![forbid(unsafe\_code)]} on dashboard crate
+        \item Aligns with Keylime's Rust agent direction
+      \end{itemize}
+
+      \vspace{0.05cm}
+
+      \textbf{Performance:}
+      \begin{itemize}
+        \setlength{\itemsep}{0pt}
+        \item 400K--585K req/s (TechEmpower benchmarks)
+        \item Lowest memory footprint per connection
+        \item Ideal for containerized/air-gapped deployments
+        \item Native async (Tokio) --- no GIL bottleneck
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{Rust Backend Stack:}
+      \begin{center}
+        \begin{tabular}{|l|l|}
+          \hline
+          \textbf{Layer} & \textbf{Crate} \\
+          \hline
+          Web framework & Axum 0.8 \\
+          \hline
+          Async runtime & Tokio \\
+          \hline
+          HTTP/mTLS client & reqwest + rustls \\
+          \hline
+          WebSockets & Axum built-in \\
+          \hline
+          Background jobs & apalis \\
+          \hline
+          Database & SQLx (TimescaleDB) \\
+          \hline
+          Redis & fred \\
+          \hline
+          Observability & tracing \\
+          \hline
+        \end{tabular}
+      \end{center}
+
+      \vspace{0.05cm}
+
+      \textbf{Ecosystem Coherence:}
+      \begin{itemize}
+        \setlength{\itemsep}{0pt}
+        \item All crates are Tokio-native
+        \item Tower middleware shared across web server, background jobs, and HTTP client
+        \item Compile-time SQL validation (SQLx)
+        \item Single binary deployment (no runtime deps)
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Technical Architecture - Event-Driven Ingestion}
+  \begin{block}{Pivot from Polling to Events}
+    \scriptsize
+    Pure HTTP polling cannot scale beyond $\sim$1,000 agents without competing with
+    attestation traffic on the Verifier. The dashboard uses an event-driven
+    architecture with polling as fallback only.
+  \end{block}
+
+  \vspace{0.05cm}
+
+  \tiny
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{Primary: Event-Driven (Recommended):}
+      \begin{itemize}
+        \setlength{\itemsep}{0pt}
+        \item Keylime ZeroMQ revocation events consumed directly
+        \item Propose upstream: state-change webhook/AMQP emit
+        \item Message broker (RabbitMQ/Kafka) decouples load
+        \item Dashboard subscribes to state-change stream
+        \item Near real-time ($<$1s) without polling
+        \item Zero additional load on Verifier
+      \end{itemize}
+
+      \vspace{0.05cm}
+
+      \textbf{Fallback: Adaptive Polling:}
+      \begin{itemize}
+        \setlength{\itemsep}{0pt}
+        \item Only for environments without event support
+        \item List poll: 30s (not 10s) with ETag/If-Modified
+        \item Detail poll: on-demand only (user clicks)
+        \item Backpressure: double interval if p95 $>$ 500ms
+        \item Pause detail polling if p95 $>$ 2s
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{Data Sources \& Strategy:}
+      \begin{center}
+        \begin{tabular}{|l|l|}
+          \hline
+          \textbf{Data} & \textbf{Ingestion} \\
+          \hline
+          Agent state & Event stream \\
+          \hline
+          Attestation result & Event stream \\
+          \hline
+          Revocations & ZeroMQ events \\
+          \hline
+          Agent detail & On-demand API \\
+          \hline
+          IMA policies & Cache (60s TTL) \\
+          \hline
+          MB policies & Cache (60s TTL) \\
+          \hline
+          Registrar & Cache (30s TTL) \\
+          \hline
+        \end{tabular}
+      \end{center}
+
+      \vspace{0.05cm}
+
+      \textbf{Split-Brain Mitigation:}
+      \begin{itemize}
+        \setlength{\itemsep}{0pt}
+        \item Event sequence numbers detect gaps
+        \item Periodic reconciliation sweep (every 5 min)
+        \item Dashboard marks data as ``stale'' if gap detected
+        \item UI shows last-verified timestamp per agent
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Technical Architecture - IMA Log \& Data Decoupling}
+  \begin{block}{Avoiding IMA Log DDoS on the Verifier}
+    \scriptsize
+    IMA measurement logs can be megabytes per agent. Proxying them through the
+    dashboard backend and Verifier under concurrent SOC analyst load will crash the Verifier.
+    Logs must be decoupled from the real-time monitoring path.
+  \end{block}
+
+  \vspace{0.1cm}
+
+  \scriptsize
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{Log Decoupling Architecture:}
+      \begin{itemize}
+        \setlength{\itemsep}{0pt}
+        \item Keylime pushes IMA/boot logs to centralized log store (Elasticsearch, Splunk, Loki)
+        \item Dashboard queries SIEM directly for historical logs
+        \item Never proxy bulk logs through Verifier API
+        \item Rate-limit concurrent log fetches (max 5 parallel)
+        \item Streaming pagination for large logs
+      \end{itemize}
+
+      \vspace{0.1cm}
+
+      \textbf{Concurrency Protection:}
+      \begin{itemize}
+        \setlength{\itemsep}{0pt}
+        \item Per-user request rate limiting
+        \item Global concurrent API call cap
+        \item Circuit breaker on Verifier latency
+        \item Queue overflow: reject with 429
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{What the Dashboard Caches:}
+      \begin{itemize}
+        \setlength{\itemsep}{0pt}
+        \item Attestation \textit{results} (pass/fail + timestamp)
+        \item Agent metadata (UUID, IP, state)
+        \item Policy checksums and assignment
+        \item Certificate expiry dates
+      \end{itemize}
+
+      \vspace{0.1cm}
+
+      \textbf{What is NEVER Cached:}
+      \begin{itemize}
+        \setlength{\itemsep}{0pt}
+        \item Raw TPM quotes
+        \item IMA measurement logs
+        \item Boot event logs
+        \item PoP tokens or session secrets
+      \end{itemize}
+
+      \vspace{0.1cm}
+
+      \textbf{API Version Compatibility:}
+      \begin{itemize}
+        \setlength{\itemsep}{0pt}
+        \item Negotiate API version on startup (\texttt{GET /versions})
+        \item Support v2 and v3 simultaneously
+        \item Graceful degradation on unknown fields
+        \item Schema migration tool for dashboard upgrades
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Technical Architecture - Deployment \& API Access}
+  \begin{block}{Deployment Options}
+    \scriptsize
+    The dashboard can be deployed through multiple mechanisms to fit different
+    infrastructure environments.
+  \end{block}
+
+  \vspace{0.1cm}
+
+  \scriptsize
+  \begin{center}
+    \begin{tabular}{|l|p{4cm}|p{3.5cm}|}
+      \hline
+      \textbf{Method} & \textbf{Description} & \textbf{Best For} \\
+      \hline
+      \hline
+      Container (Podman/Docker) & Pre-built OCI image & Quick deployments, CI/CD \\
+      \hline
+      Kubernetes (Helm chart) & Helm-managed deployment & Production clusters \\
+      \hline
+      RPM package & Native RHEL/Fedora package & Bare-metal, VM installs \\
+      \hline
+      Systemd service & Direct service management & Single-node setups \\
+      \hline
+    \end{tabular}
+  \end{center}
+
+  \vspace{0.2cm}
+
+  \begin{exampleblock}{Keylime API Access Example}
+    \begin{lstlisting}[language=bash, numbers=none, basicstyle=\ttfamily\tiny]
+# List all agents from verifier (mTLS required)
+curl --cert admin.pem --key admin-key.pem \
+  https://verifier:8881/v2/agents/
+
+# Get specific agent status
+curl --cert admin.pem --key admin-key.pem \
+  https://verifier:8881/v2/agents/{agent_id}
+    \end{lstlisting}
+  \end{exampleblock}
+\end{frame}

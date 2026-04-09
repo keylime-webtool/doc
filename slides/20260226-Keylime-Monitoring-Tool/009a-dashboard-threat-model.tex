@@ -1,0 +1,186 @@
+\section{Dashboard Threat Model}
+
+\begin{frame}{Threat Model - Attack Surface}
+  \begin{block}{The Dashboard as a High-Value Target}
+    \scriptsize
+    The monitoring dashboard holds an admin mTLS certificate with full Keylime API access.
+    A compromise of the dashboard is a compromise of the entire attestation infrastructure.
+  \end{block}
+
+  \vspace{0.1cm}
+
+  \begin{center}
+    \begin{tikzpicture}[scale=0.65, transform shape,
+        comp/.style={rectangle, draw, rounded corners, fill=keylimeblue!15, text width=2cm, align=center, minimum height=0.9cm, font=\tiny\bfseries},
+        threat/.style={rectangle, draw, rounded corners, fill=dangered!15, text width=2cm, align=center, minimum height=0.7cm, font=\tiny},
+        arrow/.style={->, >=stealth, thick, dangered}]
+
+      % Dashboard components
+      \node[comp, fill=infoblue!15] (browser) at (0,2) {Browser\\(Web UI)};
+      \node[comp, fill=warningyellow!15] (backend) at (5,2) {Dashboard\\Backend};
+      \node[comp, fill=codepurple!10] (redis) at (5,-0.5) {Redis\\Cache};
+      \node[comp, fill=codepurple!10] (tsdb) at (9,-0.5) {TimeSeries\\DB};
+      \node[comp] (verifier) at (10,2) {Keylime\\Verifier};
+
+      % Threats
+      \node[threat] (t1) at (0,0) {T1: Session\\Hijacking};
+      \node[threat] (t2) at (2.5,3.8) {T2: XSS /\\Injection};
+      \node[threat] (t3) at (7.5,3.8) {T3: Key\\Exfiltration};
+      \node[threat] (t4) at (5,-2.2) {T4: Cache\\Poisoning};
+      \node[threat] (t5) at (10,0) {T5: Privilege\\Abuse};
+
+      \draw[arrow] (t1) -- (browser);
+      \draw[arrow] (t2) -- (backend);
+      \draw[arrow] (t3) -- (backend);
+      \draw[arrow] (t4) -- (redis);
+      \draw[arrow] (t5) -- (verifier);
+    \end{tikzpicture}
+  \end{center}
+
+\end{frame}
+
+\begin{frame}{Threat Model - Threat Catalog \& Mitigations}
+  \begin{block}{Identified Threats}
+    \scriptsize
+    Each threat targets a specific component and requires dedicated mitigations.
+    Three are rated Critical due to potential for full infrastructure compromise.
+  \end{block}
+
+  \vspace{0.2cm}
+
+  \scriptsize
+  \begin{center}
+    \begin{tabular}{|l|p{3.5cm}|l|p{3cm}|}
+      \hline
+      \textbf{Threat} & \textbf{Impact} & \textbf{Severity} & \textbf{Mitigation} \\
+      \hline
+      \hline
+      T1: Session Hijack & Unauthorized dashboard access & \textcolor{dangered}{Critical} & OIDC + MFA, short-lived tokens \\
+      \hline
+      T2: XSS/Injection & Data exfil, admin impersonation & \textcolor{dangered}{Critical} & CSP headers, input sanitization \\
+      \hline
+      T3: Key Exfiltration & Full Keylime admin access & \textcolor{dangered}{Critical} & HSM/Vault, no disk storage \\
+      \hline
+      T4: Cache Poisoning & Stale/false agent states shown & \textcolor{warningyellow}{High} & Signed cache entries, TTLs \\
+      \hline
+      T5: Privilege Abuse & Delete agents, modify policies & \textcolor{warningyellow}{High} & Read-only proxy, audit log \\
+      \hline
+    \end{tabular}
+  \end{center}
+
+  \vspace{0.2cm}
+
+  \begin{alertblock}{Key Principle}
+    \scriptsize
+    The dashboard must be treated as a \textbf{privileged security component}, not a
+    convenience tool. Its compromise surface must be minimized through defense-in-depth:
+    mTLS sidecar isolation, two-person policy approval, and tamper-evident audit logging.
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{Threat Model - Trust Boundaries}
+  \begin{block}{Four Trust Boundaries}
+    \scriptsize
+    Each boundary crossing requires authentication, encryption, and authorization validation.
+  \end{block}
+
+  \vspace{0.1cm}
+
+  \begin{center}
+    \begin{tikzpicture}[scale=0.62, transform shape,
+        zone/.style={rectangle, draw, dashed, rounded corners, inner sep=0.3cm, font=\tiny\bfseries},
+        comp/.style={rectangle, draw, rounded corners, fill=keylimeblue!15, text width=1.8cm, align=center, minimum height=0.8cm, font=\tiny\bfseries},
+        arrow/.style={->, >=stealth, thick}]
+
+      % Zone 1: User
+      \node[comp, fill=infoblue!15] (user) at (0,0) {User\\Browser};
+      \node[zone, fit=(user), label={[font=\tiny\bfseries,dangered]above:Zone 1: Untrusted}] {};
+
+      % Zone 2: Dashboard
+      \node[comp, fill=warningyellow!15] (api) at (4.5,0.5) {API\\Server};
+      \node[comp, fill=codepurple!10] (cache) at (4.5,-1) {Redis +\\TSDB};
+      \node[zone, fit=(api)(cache), label={[font=\tiny\bfseries,warningyellow!80!black]above:Zone 2: Dashboard DMZ}] {};
+
+      % Zone 3: Keylime
+      \node[comp] (ver) at (9.5,0.5) {Verifier};
+      \node[comp] (reg) at (9.5,-1) {Registrar};
+      \node[zone, fit=(ver)(reg), label={[font=\tiny\bfseries,keylimegreen!70!black]above:Zone 3: Keylime Core}] {};
+
+      % Zone 4: Agents
+      \node[comp, fill=keylimegreen!10] (agents) at (13.5,0) {Agent\\Fleet};
+      \node[zone, fit=(agents), label={[font=\tiny\bfseries,keylimeblue]above:Zone 4: Endpoints}] {};
+
+      % Boundaries
+      \draw[arrow, dangered] (user) -- node[above, font=\tiny] {B1: TLS + OIDC} (api);
+      \draw[arrow, dashed] (api) -- (cache);
+      \draw[arrow, keylimeblue] (api) -- node[above, font=\tiny] {B2: mTLS} (ver);
+      \draw[arrow, keylimeblue, dashed] (api) -- node[below, font=\tiny] {B3: mTLS} (reg);
+      \draw[arrow, keylimegreen!70!black] (ver) -- node[above, font=\tiny] {B4: mTLS} (agents);
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.1cm}
+
+  \scriptsize
+  \begin{center}
+    \begin{tabular}{|l|l|l|l|}
+      \hline
+      \textbf{Boundary} & \textbf{Auth Mechanism} & \textbf{Transport} & \textbf{Data Sensitivity} \\
+      \hline
+      B1: User $\rightarrow$ Dashboard & OIDC/SAML + MFA & TLS 1.3 & Dashboard credentials \\
+      \hline
+      B2: Dashboard $\rightarrow$ Verifier & mTLS (scoped cert) & TLS 1.2+ & Agent state, policies \\
+      \hline
+      B3: Dashboard $\rightarrow$ Registrar & mTLS (admin cert) & TLS 1.2+ & TPM keys, EK certs \\
+      \hline
+      B4: Verifier $\rightarrow$ Agent & mTLS / PoP tokens & TLS 1.2+ & TPM quotes, IMA logs \\
+      \hline
+    \end{tabular}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Threat Model - Data Classification}
+  \begin{block}{Sensitive Data Handling}
+    \scriptsize
+    The dashboard must classify, protect, and minimize retention of security-sensitive data
+    that transits through or is stored in its components.
+  \end{block}
+
+  \vspace{0.1cm}
+
+  \tiny
+  \begin{center}
+    \begin{tabular}{|p{2.5cm}|l|p{2.5cm}|p{3cm}|}
+      \hline
+      \textbf{Data Type} & \textbf{Classification} & \textbf{Storage Policy} & \textbf{Protection} \\
+      \hline
+      \hline
+      mTLS private key & \textcolor{dangered}{SECRET} & Never on disk & HSM or Vault only \\
+      \hline
+      EK/AK public keys & \textcolor{warningyellow}{CONFIDENTIAL} & Cache only (TTL) & Encrypt at rest \\
+      \hline
+      TPM quotes & \textcolor{warningyellow}{CONFIDENTIAL} & Do not cache & Pass-through only \\
+      \hline
+      IMA policy content & \textcolor{warningyellow}{CONFIDENTIAL} & Cache with TTL & Encrypt at rest \\
+      \hline
+      Agent IPs/UUIDs & \textcolor{infoblue}{INTERNAL} & TimeSeries DB & Encrypt at rest \\
+      \hline
+      Attestation results & \textcolor{infoblue}{INTERNAL} & TimeSeries DB & Encrypt at rest \\
+      \hline
+      Dashboard audit log & \textcolor{warningyellow}{CONFIDENTIAL} & Append-only store & Hash-chained, signed \\
+      \hline
+      Dashboard credentials & \textcolor{dangered}{SECRET} & Never persisted & OIDC session tokens \\
+      \hline
+    \end{tabular}
+  \end{center}
+
+  \vspace{0.1cm}
+
+  \begin{alertblock}{Data Minimization Principle}
+    \scriptsize
+    The dashboard must \textbf{never cache or store} TPM quotes, IMA measurement logs,
+    or raw boot event logs. These are passed through from the Keylime API to the UI
+    on demand and discarded. Only attestation \textit{results} (pass/fail + timestamp)
+    are retained for historical analysis.
+  \end{alertblock}
+\end{frame}
