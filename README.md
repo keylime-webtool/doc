@@ -9,6 +9,14 @@ Documentation and presentation slides for the Keylime Web Tool project.
 | `slides/20260226-Keylime-Monitoring-Tool` | Keylime Monitoring Dashboard: comprehensive monitoring & operations tool for the Keylime trust system |
 | `slides/20260305-Keylime-Monitoring-Tool-Stakeholders` | Keylime Monitoring Dashboard: stakeholder-oriented overview |
 
+## Specifications
+
+The `spec/` directory contains the formal requirements and review documents for the project:
+
+| Document | Description |
+|----------|-------------|
+| `spec/SRS-Keylime-Monitoring-Tool.md` | Software Requirements Specification (SRS) covering 70 functional, 23 non-functional, and 29 security requirements with Gherkin acceptance criteria. Includes implementation refinements (Section 7) tracking data models, API contracts, and enumerations that emerged during development. |
+
 ## Building
 
 Requires a TeX Live installation with `pdflatex` and the Beamer package.
