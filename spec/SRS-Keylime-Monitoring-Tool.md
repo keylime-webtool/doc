@@ -133,6 +133,7 @@ The System transforms Keylime from a CLI-driven security tool into a visual oper
 | NFR-021 | WebSocket real-time updates for UI | MUST | Technical Architecture - Data Flow |
 | NFR-022 | Signed update packages with SBOM for offline updates | MUST | Deployment - Offline & Air-Gapped |
 | NFR-023 | Maximum 5 parallel concurrent log fetches to Verifier | MUST | Technical Architecture - IMA Log & Data Decoupling |
+| NFR-024 | AI Assistant query performance and rate limiting | SHOULD | AI Assistant - Conversational Interface |
 
 ### 2.3 Security Requirements
 
@@ -2114,7 +2115,7 @@ Feature: AI Assistant with Keylime MCP
     Given the user submits a query to the AI Assistant
     When the assistant processes the query and returns a response
     Then an audit log entry MUST be created with action "AI_ASSISTANT_QUERY"
-    And the entry MUST include the actor, query summary, resources accessed, and timestamp
+    And the entry MUST include the actor, MCP tools invoked, resources accessed, and timestamp
     And raw query text MUST NOT be stored if it may contain sensitive data
 
   Scenario: AI Assistant not available for unauthenticated users
@@ -2619,6 +2620,28 @@ Feature: Concurrent Log Fetch Limit
     Given 3 IMA log fetch requests are currently in progress
     When a 4th user requests an IMA log view
     Then the request MUST proceed immediately without queuing
+```
+
+### NFR-024: AI Assistant Query Performance and Rate Limiting
+
+**Description:** The System SHOULD enforce rate limiting on AI Assistant queries to prevent abuse and ensure backend stability. Each user session SHOULD be limited to a configurable maximum number of queries per minute (default: 10). The assistant SHOULD respond to queries within 10 seconds; if the LLM or MCP server exceeds this threshold, the System SHOULD display a timeout message and allow the user to retry.
+
+**Trace:** AI Assistant - Conversational Interface
+
+```gherkin
+Feature: AI Assistant Query Performance and Rate Limiting
+
+  Scenario: Rate limit exceeded
+    Given the user has submitted 10 AI Assistant queries in the last 60 seconds
+    When the user submits an 11th query
+    Then the System SHOULD reject the query with "Rate limit exceeded — please wait before submitting another query"
+    And the rejection SHOULD be recorded in the audit log
+
+  Scenario: Query timeout
+    Given the user submits a query to the AI Assistant
+    When the LLM or MCP server does not respond within 10 seconds
+    Then the System SHOULD display "Query timed out — the AI service is not responding. Please try again."
+    And the user SHOULD be able to retry the query
 ```
 
 ---
