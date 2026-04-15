@@ -1,0 +1,64 @@
+% Slide 10: Getting Started Tomorrow
+% Visual: A 4-step "Monday morning" action plan in sequential boxes.
+% Talking Points:
+%   - Step 1: Pick a small, well-scoped feature you need to build this week.
+%   - Step 2: Write a 1-2 page Markdown spec with the 6 sections we covered.
+%   - Step 3: Feed it to Claude Code and see what happens.
+%   - Step 4: Iterate -- compare output to spec, refine, regenerate.
+% Presenter Script:
+%   "I don't want this to be a 'that was cool' talk. I want you to do this
+%    Monday morning. Here's your action plan. Step one: pick a feature. Not
+%    your biggest project -- something small. A new API endpoint. A settings
+%    page. A migration script. Step two: write the spec. Use the six-section
+%    template. It should take you an hour or two. Step three: feed it to Claude
+%    Code. Literally: 'Read spec.md and implement it.' Step four: compare the
+%    output to your spec. Where it's wrong, fix the spec and regenerate. I
+%    promise you -- after one cycle of this, you will never go back to
+%    prompt-driven development."
+
+\section{Getting Started}
+
+\begin{frame}{Getting Started -- Your Monday Morning Plan}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.72, transform shape,
+        actionstep/.style={rectangle, draw, rounded corners, fill=keylimeblue!8,
+                     text width=9cm, minimum height=1.3cm, font=\scriptsize,
+                     inner sep=0.25cm},
+        arrow/.style={->, >=stealth, thick, keylimeblue}]
+
+      \node[actionstep] (s1) at (0,4) {
+        \textbf{1. Pick a Feature} \hfill \faIcon{crosshairs}\\
+        \tiny Choose something small and well-scoped: a new endpoint, a settings page,
+        a CLI tool. Not your biggest project -- something you can finish this week.
+      };
+      \node[actionstep] (s2) at (0,2) {
+        \textbf{2. Write the Spec (1--2 pages)} \hfill \faIcon{file-alt}\\
+        \tiny Use the 6-section template: Overview, Data Model, Functional Requirements,
+        API Contracts, Non-Functional Requirements, Acceptance Criteria.
+      };
+      \node[actionstep] (s3) at (0,0) {
+        \textbf{3. Feed It to Claude Code} \hfill \faIcon{robot}\\
+        \tiny \texttt{> Read spec.md and implement it.}\\
+        That's the whole prompt. Let the spec do the talking.
+      };
+      \node[actionstep] (s4) at (0,-2) {
+        \textbf{4. Review, Refine, Regenerate} \hfill \faIcon{sync-alt}\\
+        \tiny Compare output to spec. Where it's wrong, fix the spec first.\\
+        One cycle of this and you'll never go back.
+      };
+
+      \draw[arrow] (s1) -- (s2);
+      \draw[arrow] (s2) -- (s3);
+      \draw[arrow] (s3) -- (s4);
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.3cm}
+
+  \begin{center}
+    \colorbox{successgreen!10}{\parbox{0.85\textwidth}{\centering\scriptsize
+      \textbf{Time investment:} 2--3 hours for the spec. Minutes for the generation.\\
+      \textbf{Return:} A working, tested, deployable feature by end of day.
+    }}
+  \end{center}
+\end{frame}

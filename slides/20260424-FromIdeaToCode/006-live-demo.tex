@@ -1,0 +1,77 @@
+% Slide 6: Live Demo
+% Visual: A large terminal mockup placeholder. Below, a brief outline of the demo steps.
+%   This is where the presenter switches to a live terminal.
+% Talking Points:
+%   - DEMO PLACEHOLDER: Switch to terminal and run Claude Code against the spec.
+%   - Show the spec being ingested, the AI asking clarifying questions, and code output.
+%   - Highlight: the AI generates tests, CI config, and documentation -- not just code.
+% Presenter Script:
+%   "Alright, let's stop talking and start building. I'm going to switch to my
+%    terminal now. What you're about to see is me feeding that exact spec we
+%    just looked at into Claude Code. I'm going to say: 'Read the spec at
+%    spec/SRS.md and implement it.' That's it. Watch what happens.
+%    [PERFORM LIVE DEMO]
+%    ... notice it didn't just write the React components. It generated the API
+%    handlers, the database schema, the test suite, and the CI pipeline.
+%    Every functional requirement from the spec maps to a test case. Every API
+%    endpoint matches the contract. This isn't magic -- it's what happens when
+%    you give a powerful AI a clear, unambiguous spec to work from."
+
+\section{Live Demo}
+
+\begin{frame}{Live Demo -- From Spec to Code}
+  \begin{center}
+    \begin{tikzpicture}
+      % Terminal window mockup
+      \fill[sidebarblue, rounded corners=4pt] (-5.5,-2.5) rectangle (5.5,2.5);
+      \fill[black!90, rounded corners=2pt] (-5.3,-2.3) rectangle (5.3,2.0);
+
+      % Title bar dots
+      \fill[dangered!80] (-5.0,2.25) circle (0.1);
+      \fill[warningyellow!80] (-4.7,2.25) circle (0.1);
+      \fill[successgreen!80] (-4.4,2.25) circle (0.1);
+
+      % Terminal text
+      \node[anchor=west, font=\ttfamily\fontsize{5}{6}\selectfont, text=successgreen] at (-5.0,1.5) {
+        \$ claude
+      };
+      \node[anchor=west, font=\ttfamily\fontsize{5}{6}\selectfont, text=white] at (-5.0,1.0) {
+        > Read the spec at spec/SRS.md and implement
+      };
+      \node[anchor=west, font=\ttfamily\fontsize{5}{6}\selectfont, text=white] at (-5.0,0.6) {
+        ~~the alert dashboard described in it.
+      };
+      \node[anchor=west, font=\ttfamily\fontsize{5}{6}\selectfont, text=codepurple] at (-5.0,0.0) {
+        Claude is reading spec/SRS.md ...
+      };
+      \node[anchor=west, font=\ttfamily\fontsize{5}{6}\selectfont, text=codepurple] at (-5.0,-0.4) {
+        Generating project structure ...
+      };
+      \node[anchor=west, font=\ttfamily\fontsize{5}{6}\selectfont, text=codepurple] at (-5.0,-0.8) {
+        Writing src/api/alerts.ts ...
+      };
+      \node[anchor=west, font=\ttfamily\fontsize{5}{6}\selectfont, text=codepurple] at (-5.0,-1.2) {
+        Writing src/components/AlertList.tsx ...
+      };
+      \node[anchor=west, font=\ttfamily\fontsize{5}{6}\selectfont, text=successgreen] at (-5.0,-1.8) {
+        \_ ...
+      };
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.2cm}
+
+  \begin{block}{Demo Steps}
+    \scriptsize
+    \begin{enumerate}
+      \item Feed the Markdown spec to Claude Code
+      \item Watch it generate: code, tests, configs, CI pipeline
+      \item Verify: every \texttt{FR-NNN} maps to a test case
+      \item Run the test suite -- all green from the first pass
+    \end{enumerate}
+  \end{block}
+
+  \begin{center}
+    \scriptsize\textit{``Read the spec and implement it.'' -- That's the whole prompt.}
+  \end{center}
+\end{frame}

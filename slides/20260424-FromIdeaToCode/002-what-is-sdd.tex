@@ -1,0 +1,84 @@
+% Slide 2: What Is Spec-Driven Development?
+% Visual: A pipeline diagram showing Idea -> Spec -> Code -> Ship, with the spec
+%   stage expanded and emphasized. Below, a comparison: "Spec = the new compiler".
+% Talking Points:
+%   - SDD is writing a formal, structured specification BEFORE any code is written.
+%   - The spec is not documentation -- it is the primary engineering artifact.
+%   - Think of writing the spec as "compiling your intent" into machine-readable form.
+% Presenter Script:
+%   "So what is Spec-Driven Development? It's deceptively simple: you write a
+%    rigorous, structured specification -- in Markdown, not UML -- before a single
+%    line of code exists. This is NOT a requirements doc that sits in Confluence
+%    and rots. This IS the engineering artifact. It defines functional requirements,
+%    API contracts, data models, edge cases, and acceptance criteria. Here's the
+%    mental model I want you to take away: writing the spec IS compiling. You are
+%    compiling your intent from the messy human language in your head into a
+%    precise, structured format that an AI agent can execute. If your spec doesn't
+%    compile -- if it's ambiguous, incomplete, or contradictory -- the output code
+%    will have bugs. Just like a real compiler."
+
+\section{Spec-Driven Development}
+
+\begin{frame}{What Is Spec-Driven Development?}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.8, transform shape,
+        stage/.style={rectangle, draw, rounded corners, minimum width=2.5cm,
+                      minimum height=1.2cm, font=\scriptsize\bfseries, align=center},
+        arrow/.style={->, >=stealth, thick}]
+
+      \node[stage, fill=keylimegray!15] (idea) at (0,0) {\faIcon{lightbulb}\\Idea};
+      \node[stage, fill=rhred!15, draw=rhred, line width=1.5pt] (spec) at (3.5,0) {\faIcon{file-alt}\\Spec};
+      \node[stage, fill=keylimeblue!15] (code) at (7,0) {\faIcon{code}\\Code};
+      \node[stage, fill=keylimegreen!15] (ship) at (10.5,0) {\faIcon{rocket}\\Ship};
+
+      \draw[arrow, keylimegray] (idea) -- (spec);
+      \draw[arrow, rhred] (spec) -- (code);
+      \draw[arrow, keylimeblue] (code) -- (ship);
+
+      % Expansion below spec
+      \node[rectangle, draw, rounded corners, fill=rhred!5, text width=6cm,
+            font=\tiny, inner sep=0.2cm, below=0.8cm of spec] (detail) {
+        \textbf{The Spec contains:}\\
+        Functional requirements, API contracts, data models,\\
+        edge cases, error handling, acceptance criteria
+      };
+      \draw[dashed, rhred] (spec) -- (detail);
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.3cm}
+
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{What It Is}
+        \scriptsize
+        \begin{itemize}
+          \item A \textbf{structured Markdown document}
+          \item The \textbf{primary engineering artifact}
+          \item Machine-readable intent
+          \item Versioned alongside code
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{alertblock}{What It Is NOT}
+        \scriptsize
+        \begin{itemize}
+          \item A Confluence doc that rots
+          \item A Jira ticket with two sentences
+          \item UML diagrams nobody reads
+          \item An afterthought or formality
+        \end{itemize}
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+
+  \vspace{0.3cm}
+
+  \begin{center}
+    \colorbox{rhred!10}{\parbox{0.8\textwidth}{\centering\scriptsize
+      \textbf{Mental model:} Writing the spec = \textbf{compiling your intent}.\\
+      Ambiguous spec = compiler errors. Clear spec = working code.
+    }}
+  \end{center}
+\end{frame}

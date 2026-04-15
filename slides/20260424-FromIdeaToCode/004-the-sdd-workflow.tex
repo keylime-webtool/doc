@@ -1,0 +1,70 @@
+% Slide 4: The SDD + AI Workflow
+% Visual: A vertical flowchart showing the 5-step workflow from idea to deployed code.
+%   Each step shows who does it (Human / AI / Both) and approximate time.
+% Talking Points:
+%   - Step 1: Human writes the spec (the hard, creative work).
+%   - Step 2: AI reviews the spec for ambiguities, gaps, and contradictions.
+%   - Step 3: AI generates the codebase from the spec.
+%   - Step 4: Human reviews, AI iterates.
+%   - Step 5: Ship with confidence -- the spec IS the documentation.
+% Presenter Script:
+%   "Here's what the actual workflow looks like. Step one: you write the spec.
+%    This is the hard, creative, high-value engineering work. You're making
+%    architectural decisions, defining constraints, thinking about edge cases.
+%    Step two -- and this is where it gets interesting -- you ask the AI to
+%    REVIEW your spec before it writes any code. Claude Code will find ambiguities,
+%    missing error cases, contradictory requirements. It's like a code review
+%    for your design. Step three: the AI generates the full codebase. Not
+%    snippets -- the whole thing. Step four: you review the code against the spec.
+%    If something's wrong, you fix the spec first, then regenerate. Step five:
+%    ship it. And here's the bonus -- the spec IS your documentation. It's
+%    already written, already accurate, already versioned."
+
+\section{The Workflow}
+
+\begin{frame}{The SDD + Claude Code Workflow}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.72, transform shape,
+        stepbox/.style={rectangle, draw, rounded corners, text width=7.5cm,
+                        minimum height=1cm, font=\scriptsize, inner sep=0.2cm},
+        arrow/.style={->, >=stealth, thick, keylimeblue}]
+
+      \node[stepbox, fill=keylimeorange!12] (s1) at (0,4.2) {
+        \faIcon{user}~\textbf{1. Write the Spec} \hfill \textcolor{keylimegray}{\tiny HUMAN}\\
+        \tiny Define requirements, data models, APIs, acceptance criteria in Markdown
+      };
+      \node[stepbox, fill=keylimeblue!10] (s2) at (0,2.6) {
+        \faIcon{robot}~\textbf{2. AI Reviews the Spec} \hfill \textcolor{keylimegray}{\tiny AI}\\
+        \tiny Find ambiguities, missing edge cases, contradictions, gaps
+      };
+      \node[stepbox, fill=keylimeblue!10] (s3) at (0,1.0) {
+        \faIcon{robot}~\textbf{3. AI Generates Codebase} \hfill \textcolor{keylimegray}{\tiny AI}\\
+        \tiny Full project: code, tests, configs, CI/CD -- not snippets
+      };
+      \node[stepbox, fill=keylimeorange!12] (s4) at (0,-0.6) {
+        \faIcon{user-check}~\textbf{4. Human Reviews Against Spec} \hfill \textcolor{keylimegray}{\tiny BOTH}\\
+        \tiny If wrong: fix the spec first, then regenerate
+      };
+      \node[stepbox, fill=successgreen!12] (s5) at (0,-2.2) {
+        \faIcon{rocket}~\textbf{5. Ship It} \hfill \textcolor{keylimegray}{\tiny BOTH}\\
+        \tiny The spec IS the documentation -- already written, versioned, accurate
+      };
+
+      \draw[arrow] (s1) -- (s2);
+      \draw[arrow] (s2) -- (s3);
+      \draw[arrow] (s3) -- (s4);
+      \draw[arrow] (s4) -- (s5);
+
+      % Feedback loop
+      \draw[arrow, dashed, dangered] (s4.east) to[out=0,in=0] node[right, font=\tiny, text=dangered] {fix spec} (s1.east);
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.2cm}
+
+  \begin{block}{Key Principle}
+    \scriptsize
+    When the code is wrong, \textbf{fix the spec first}. The spec is the source of truth.\\
+    Code is a \textit{derived artifact} -- regenerate, don't patch.
+  \end{block}
+\end{frame}

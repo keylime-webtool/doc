@@ -1,0 +1,69 @@
+% Slide 7: What Just Happened
+% Visual: A breakdown of what Claude Code produced during the demo, organized
+%   as a tree of generated artifacts with counts.
+% Talking Points:
+%   - The AI generated a complete, deployable project -- not snippets.
+%   - Every functional requirement traced to at least one test.
+%   - The generated code is reviewable against the spec -- no detective work needed.
+% Presenter Script:
+%   "Let's debrief what just happened. In about five minutes, Claude Code
+%    produced a complete, deployable project. Not a skeleton -- a working app.
+%    Look at what it generated: API handlers with proper error codes matching the
+%    spec. React components with the exact filters we defined. A test suite where
+%    every FR-NNN has a corresponding test. Database migrations matching the data
+%    model. A CI config. And here's the part that changes how you do code review:
+%    you review the code AGAINST the spec. FR-003 says 'acknowledge alerts' --
+%    does the code do that? Yes or no. No detective work. No guessing intent.
+%    The spec makes code review deterministic."
+
+\section{Results}
+
+\begin{frame}{What Just Happened}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.72, transform shape,
+        artifact/.style={rectangle, draw, rounded corners, fill=keylimeblue!8,
+                         text width=4.5cm, minimum height=1.2cm, font=\scriptsize,
+                         inner sep=0.2cm}]
+
+      \node[artifact] (a1) at (0,3) {
+        \faIcon{code}~\textbf{API Handlers}\\
+        \tiny Endpoints matching spec contracts\\
+        Proper error codes (400, 401, 409, 500)
+      };
+      \node[artifact] (a2) at (6.5,3) {
+        \faIcon{palette}~\textbf{UI Components}\\
+        \tiny Alert list, filters, pagination\\
+        Exactly what FR-001 through FR-004 defined
+      };
+      \node[artifact] (a3) at (0,0.8) {
+        \faIcon{vial}~\textbf{Test Suite}\\
+        \tiny Every \texttt{FR-NNN} $\rightarrow$ test case\\
+        Unit + integration coverage
+      };
+      \node[artifact] (a4) at (6.5,0.8) {
+        \faIcon{database}~\textbf{Schema / Migrations}\\
+        \tiny Tables matching the data model\\
+        Enums, constraints, indexes
+      };
+      \node[artifact] (a5) at (0,-1.4) {
+        \faIcon{cogs}~\textbf{CI / Config}\\
+        \tiny GitHub Actions, linting, Docker\\
+        Ready to deploy
+      };
+      \node[artifact] (a6) at (6.5,-1.4) {
+        \faIcon{book}~\textbf{Documentation}\\
+        \tiny API docs, README, setup guide\\
+        Derived from the spec itself
+      };
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.3cm}
+
+  \begin{block}{The Code Review Revolution}
+    \scriptsize
+    Review code \textbf{against the spec}, not against your intuition.\\
+    \texttt{FR-003} says ``acknowledge alerts'' -- does the code do that? \textbf{Yes or no.}\\
+    No detective work. No guessing intent. \textbf{Deterministic code review.}
+  \end{block}
+\end{frame}

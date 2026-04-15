@@ -1,0 +1,48 @@
+% Slide 1: The Reality
+% Visual: Six pain-point boxes in a 3x2 grid showing the problems with AI coding today.
+% Talking Points:
+%   - AI coding tools are everywhere, but most teams get inconsistent results.
+%   - The root cause is not the AI -- it is the input: vague prompts produce vague code.
+%   - The missing ingredient is a rigorous specification.
+% Presenter Script:
+%   "Raise your hand if you've tried an AI coding tool and gotten... garbage.
+%    You're not alone. Every team I talk to has the same story: sometimes the AI
+%    nails it, sometimes it hallucinates an entire ORM you didn't ask for.
+%    Here's the uncomfortable truth: the AI isn't the bottleneck -- we are.
+%    We're feeding it vague prompts and expecting production code. That's like
+%    handing an architect a napkin sketch and expecting blueprints."
+
+\section{The Problem}
+
+\begin{frame}{The Reality -- AI Coding Without a Spec}
+  \begin{alertblock}{A Familiar Story}
+    \scriptsize
+    AI coding assistants are powerful, but most teams experience wildly inconsistent
+    results. The problem is not the model -- \textbf{it is the input}.
+  \end{alertblock}
+
+  \vspace{0.3cm}
+
+  \begin{center}
+    \begin{tikzpicture}[scale=0.72, transform shape,
+        pain/.style={rectangle, draw, rounded corners, fill=dangered!12, text width=3.5cm,
+                     align=center, minimum height=1.4cm, font=\scriptsize}]
+
+      \node[pain] (p1) at (0,0) {\faIcon{comments}\\[0.1cm]\textbf{Vague Prompts}\\``Build me a dashboard''};
+      \node[pain] (p2) at (4.5,0) {\faIcon{dice}\\[0.1cm]\textbf{Inconsistent Output}\\Works sometimes, not others};
+      \node[pain] (p3) at (9,0) {\faIcon{redo}\\[0.1cm]\textbf{Endless Iteration}\\Prompt-tweak-retry loop};
+
+      \node[pain] (p4) at (0,-2.8) {\faIcon{exclamation-triangle}\\[0.1cm]\textbf{Hallucinated Features}\\Code you never asked for};
+      \node[pain] (p5) at (4.5,-2.8) {\faIcon{puzzle-piece}\\[0.1cm]\textbf{No Acceptance Criteria}\\``Is this done?'' -- Unknown};
+      \node[pain] (p6) at (9,-2.8) {\faIcon{user-slash}\\[0.1cm]\textbf{Lost Context}\\AI forgets across sessions};
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.2cm}
+
+  \begin{block}{The Core Insight}
+    \scriptsize
+    Garbage in, garbage out. The quality of AI-generated code is a \textbf{direct function
+    of the quality of the specification} it receives.
+  \end{block}
+\end{frame}

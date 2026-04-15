@@ -1,0 +1,95 @@
+% Slide 5: Anatomy of a Great Spec
+% Visual: A mock Markdown spec document showing the key sections, with annotations
+%   highlighting what each section gives the AI.
+% Talking Points:
+%   - A spec has 6 essential sections: Overview, Data Model, Functional Requirements,
+%     API Contracts, Non-Functional Requirements, and Acceptance Criteria.
+%   - Each section constrains the AI in a specific, useful way.
+%   - The spec shown here is the one we will feed to Claude Code in the live demo.
+% Presenter Script:
+%   "Let's look at what a real spec looks like. This is the actual document
+%    I'm about to feed to Claude Code in the demo. It has six sections. The
+%    Overview tells the AI WHAT we're building and WHY -- this prevents scope
+%    creep. The Data Model defines every entity and relationship -- no guessing.
+%    Functional Requirements are numbered, testable statements: FR-001, the
+%    system SHALL do X. API Contracts define every endpoint, request, response,
+%    and error code. Non-functional requirements cover performance, security,
+%    accessibility. And Acceptance Criteria are the definition of done -- the AI
+%    can self-verify against these. Notice: this is Markdown. Not UML, not a
+%    proprietary format. It lives in your repo, gets versioned with git, and
+%    every engineer can read it."
+
+\section{The Spec}
+
+\begin{frame}[fragile]{Anatomy of a Great Spec}
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \begin{lstlisting}[style=markdown, basicstyle=\ttfamily\fontsize{4}{5}\selectfont]
+# Alert Dashboard - SRS
+
+## 1. Overview
+Real-time alert dashboard for
+monitoring Keylime attestation events.
+
+## 2. Data Model
+- Alert: {id, severity, agent_id,
+  message, timestamp, acknowledged}
+- Severity: enum(critical, warning, info)
+
+## 3. Functional Requirements
+- FR-001: Display alerts in real-time
+- FR-002: Filter by severity and date
+- FR-003: Acknowledge/dismiss alerts
+- FR-004: Paginate results (25/page)
+
+## 4. API Contracts
+GET /api/alerts?severity=critical
+Response: {alerts: [], total, page}
+Errors: 400, 401, 500
+
+## 5. Non-Functional Requirements
+- NFR-001: < 200ms response time
+- NFR-002: WCAG 2.1 AA accessible
+- NFR-003: 95% test coverage
+
+## 6. Acceptance Criteria
+- [ ] Alert list renders in < 1s
+- [ ] Filters reduce result set
+- [ ] Ack persists across reload
+      \end{lstlisting}
+    \end{column}
+    \begin{column}{0.45\textwidth}
+      \vspace{0.2cm}
+      \begin{tikzpicture}[scale=0.65, transform shape,
+          annot/.style={rectangle, draw, rounded corners, fill=keylimeblue!8,
+                        text width=3.8cm, font=\tiny, inner sep=0.15cm}]
+
+        \node[annot] (a1) at (0,5.5) {
+          \faIcon{compass}~\textbf{Overview}\\
+          Prevents scope creep -- tells AI the boundaries of the world
+        };
+        \node[annot] (a2) at (0,4.0) {
+          \faIcon{database}~\textbf{Data Model}\\
+          Eliminates guessing about entity shapes and relationships
+        };
+        \node[annot] (a3) at (0,2.5) {
+          \faIcon{clipboard-list}~\textbf{Functional Reqs}\\
+          Numbered, testable: \texttt{FR-NNN}\\
+          Each one maps to test cases
+        };
+        \node[annot] (a4) at (0,1.0) {
+          \faIcon{plug}~\textbf{API Contracts}\\
+          Endpoints, payloads, error codes -- no hallucinated APIs
+        };
+        \node[annot] (a5) at (0,-0.5) {
+          \faIcon{tachometer-alt}~\textbf{Non-Functional Reqs}\\
+          Performance, security, a11y -- constraints, not wishes
+        };
+        \node[annot] (a6) at (0,-2.0) {
+          \faIcon{check-double}~\textbf{Acceptance Criteria}\\
+          Definition of ``done'' -- AI self-verifies against these
+        };
+      \end{tikzpicture}
+    \end{column}
+  \end{columns}
+\end{frame}

@@ -1,0 +1,75 @@
+% Slide 8: SDD + AI vs. Traditional Development
+% Visual: A two-column comparison table showing timelines and effort for each approach.
+% Talking Points:
+%   - Traditional: idea -> meetings -> tickets -> sprint -> code -> review -> repeat.
+%   - SDD + AI: idea -> spec -> generate -> review -> ship.
+%   - The human effort shifts from writing code to writing specs and reviewing output.
+% Presenter Script:
+%   "Let's compare. Traditional development: you have an idea, you write some
+%    tickets, you have a sprint planning meeting, you assign it to a developer,
+%    they code for a week, you do a code review, they fix things, you merge,
+%    and maybe it ships in two to three weeks. With SDD plus Claude Code: you
+%    write the spec -- maybe a day of focused work. You feed it to the AI --
+%    that's minutes, not days. You review the output against the spec -- hours,
+%    not weeks. Total wall-clock time: one to two days for what used to take
+%    two to three weeks. But here's the important part: the human EFFORT didn't
+%    disappear. It shifted. You're spending your brain cycles on design, not
+%    syntax. On architecture, not boilerplate. That is a strictly better use
+%    of engineering time."
+
+\begin{frame}{SDD + AI vs. Traditional Development}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.72, transform shape]
+      % Headers
+      \node[font=\scriptsize\bfseries, text=dangered] at (-3.5,4.8) {Traditional};
+      \node[font=\scriptsize\bfseries, text=successgreen] at (3.5,4.8) {SDD + Claude Code};
+
+      % Divider
+      \draw[keylimegray, thick] (0,-2.5) -- (0,4.2);
+
+      % Traditional steps
+      \foreach \y/\step/\time in {
+        3.5/{Idea \& Meetings}/{2 days},
+        2.5/{Write Tickets}/{1 day},
+        1.5/{Sprint Planning}/{0.5 days},
+        0.5/{Develop Code}/{5--10 days},
+        -0.5/{Code Review}/{2--3 days},
+        -1.5/{Fix \& Iterate}/{2--3 days}} {
+        \node[rectangle, draw, rounded corners, fill=dangered!8, text width=3cm,
+              minimum height=0.7cm, font=\tiny, inner sep=0.1cm, anchor=east] at (-0.3,\y) {
+          \step
+        };
+        \node[font=\tiny\bfseries, text=keylimegray, anchor=west] at (-6.2,\y) {\time};
+      }
+
+      % SDD steps
+      \foreach \y/\step/\time in {
+        3.5/{Write the Spec}/{4--8 hours},
+        2.1/{AI Reviews Spec}/{15 min},
+        0.7/{AI Generates Code}/{5--30 min},
+        -0.7/{Review vs Spec}/{2--4 hours},
+        -2.1/{Ship It}/{30 min}} {
+        \node[rectangle, draw, rounded corners, fill=successgreen!8, text width=3cm,
+              minimum height=0.7cm, font=\tiny, inner sep=0.1cm, anchor=west] at (0.3,\y) {
+          \step
+        };
+        \node[font=\tiny\bfseries, text=keylimegray, anchor=east] at (6.2,\y) {\time};
+      }
+
+      % Totals
+      \draw[keylimegray, dashed] (-6.5,-2.2) -- (6.5,-2.2);
+      \node[font=\scriptsize\bfseries, text=dangered] at (-3.5,-2.8) {2--3 weeks};
+      \node[font=\scriptsize\bfseries, text=successgreen] at (3.5,-2.8) {1--2 days};
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.1cm}
+
+  \begin{center}
+    \colorbox{keylimeblue!10}{\parbox{0.85\textwidth}{\centering\scriptsize
+      \textbf{The effort doesn't disappear -- it shifts.}\\
+      From writing code to writing specs. From syntax to architecture.\\
+      That is a strictly better use of engineering time.
+    }}
+  \end{center}
+\end{frame}

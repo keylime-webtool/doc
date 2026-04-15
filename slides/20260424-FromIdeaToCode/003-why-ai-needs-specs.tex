@@ -1,0 +1,90 @@
+% Slide 3: Why AI Agents Thrive on Specs
+% Visual: A side-by-side comparison. Left: a vague prompt and bad output.
+%   Right: a structured spec and clean output. Center: the AI agent box.
+% Talking Points:
+%   - LLMs are stateless pattern matchers -- they need all context in one shot.
+%   - A spec provides: scope boundaries, acceptance criteria, and deterministic checks.
+%   - The spec is the "contract" between human intent and machine execution.
+% Presenter Script:
+%   "Why does this matter specifically for AI agents? Because an LLM doesn't
+%    remember your last conversation. It doesn't know your codebase politics.
+%    It doesn't know that 'dashboard' means the React one, not the Grafana one.
+%    Every time you invoke Claude Code, it starts from zero. A spec solves this
+%    by giving the agent ALL the context it needs in a single, structured document.
+%    Scope boundaries tell it what NOT to build. Acceptance criteria tell it when
+%    to stop. Data models tell it the shape of the world. Without these, the AI
+%    is guessing. With them, it's executing."
+
+\section{Why AI Needs Specs}
+
+\begin{frame}{Why AI Agents Thrive on Specs}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.7, transform shape]
+      % Left side - vague prompt
+      \node[rectangle, draw, rounded corners, fill=dangered!10, text width=3.8cm,
+            minimum height=2cm, font=\tiny, inner sep=0.2cm] (vague) at (0,0) {
+        \textbf{\scriptsize Vague Prompt}\\[0.2cm]
+        \texttt{``Build me a REST API for\\user management with auth''}\\[0.2cm]
+        \textcolor{dangered}{No data model}\\
+        \textcolor{dangered}{No auth strategy}\\
+        \textcolor{dangered}{No error handling}\\
+        \textcolor{dangered}{No scope boundaries}
+      };
+
+      % AI Agent box
+      \node[rectangle, draw, rounded corners, fill=keylimeblue!15,
+            minimum width=2cm, minimum height=1.5cm, font=\scriptsize\bfseries,
+            align=center] (ai) at (5.25,0) {
+        \faIcon{robot}\\AI Agent
+      };
+
+      % Right side - structured spec
+      \node[rectangle, draw, rounded corners, fill=successgreen!10, text width=3.8cm,
+            minimum height=2cm, font=\tiny, inner sep=0.2cm] (spec) at (10.5,0) {
+        \textbf{\scriptsize Structured Spec}\\[0.2cm]
+        \texttt{FR-001: POST /api/users}\\
+        \texttt{Data: \{name, email, role\}}\\
+        \texttt{Auth: JWT + RBAC}\\
+        \texttt{Errors: 400, 401, 409}\\
+        \texttt{Test: 95\% coverage}
+      };
+
+      % Arrows
+      \draw[->, >=stealth, thick, dangered] (vague) -- node[above, font=\tiny] {guessing} (ai);
+      \draw[->, >=stealth, thick, successgreen] (spec) -- node[above, font=\tiny] {executing} (ai);
+
+      % Output labels
+      \node[font=\tiny\bfseries, text=dangered, below=0.3cm of vague] {Hallucinated features};
+      \node[font=\tiny\bfseries, text=successgreen, below=0.3cm of spec] {Deterministic output};
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.3cm}
+
+  \begin{block}{What a Spec Gives the AI Agent}
+    \scriptsize
+    \begin{columns}[T]
+      \begin{column}{0.30\textwidth}
+        \faIcon{border-all}~\textbf{Scope boundaries}\\%
+        \tiny What to build AND what not to build
+      \end{column}
+      \begin{column}{0.30\textwidth}
+        \faIcon{check-double}~\textbf{Acceptance criteria}\\%
+        \tiny When to stop -- deterministic ``done''
+      \end{column}
+      \begin{column}{0.30\textwidth}
+        \faIcon{project-diagram}~\textbf{Full context}\\%
+        \tiny Data models, APIs, error handling
+      \end{column}
+    \end{columns}
+  \end{block}
+
+  \vspace{0.2cm}
+
+  \begin{center}
+    \colorbox{keylimeblue!10}{\parbox{0.8\textwidth}{\centering\scriptsize
+      \textbf{The spec is the contract} between human intent and machine execution.\\
+      No contract = no guarantees.
+    }}
+  \end{center}
+\end{frame}

@@ -1,0 +1,58 @@
+% Slide 9: Pitfalls & How to Avoid Them
+% Visual: Three warning boxes with common mistakes and their fixes.
+% Talking Points:
+%   - Pitfall 1: Writing specs that are too vague -- "the system should be fast".
+%   - Pitfall 2: Skipping the AI review step -- specs have bugs too.
+%   - Pitfall 3: Patching generated code instead of fixing the spec.
+% Presenter Script:
+%   "Now, SDD isn't magic. There are real pitfalls. Number one: vague specs.
+%    If your spec says 'the system should be fast,' the AI has no idea what
+%    that means. Write 'response time under 200 milliseconds at the 95th
+%    percentile.' Measurable. Testable. Number two: skipping the AI review.
+%    Your spec has bugs, just like your code. Let the AI find them before it
+%    builds on top of them. A contradictory spec produces contradictory code.
+%    Number three -- and this is the hardest habit to break -- don't patch the
+%    generated code by hand. If the code is wrong, the spec is wrong. Fix the
+%    spec, regenerate. The moment you start hand-editing generated code, you've
+%    broken the traceability chain and you're back to the old world."
+
+\section{Pitfalls}
+
+\begin{frame}{Pitfalls \& How to Avoid Them}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.72, transform shape,
+        pitfall/.style={rectangle, draw, rounded corners, fill=warningyellow!15,
+                        text width=10cm, minimum height=1.6cm, font=\scriptsize,
+                        inner sep=0.25cm}]
+
+      \node[pitfall] (p1) at (0,3.5) {
+        \faIcon{exclamation-triangle}~\textbf{Pitfall 1: Vague Requirements}\\[0.1cm]
+        \tiny\textcolor{dangered}{\textbf{Bad:}} ``The system should be fast.''\\
+        \textcolor{successgreen}{\textbf{Good:}} ``NFR-001: Response time < 200ms at p95 under 1000 concurrent users.''\\
+        \textbf{Rule:} If you can't write a test for it, it's not a requirement.
+      };
+
+      \node[pitfall] (p2) at (0,1.0) {
+        \faIcon{exclamation-triangle}~\textbf{Pitfall 2: Skipping the AI Review}\\[0.1cm]
+        \tiny Your spec has bugs, just like your code. A contradictory spec produces contradictory code.\\
+        \textbf{Rule:} Always ask the AI to review the spec for gaps and contradictions \textit{before} generation.
+      };
+
+      \node[pitfall] (p3) at (0,-1.5) {
+        \faIcon{exclamation-triangle}~\textbf{Pitfall 3: Patching Generated Code by Hand}\\[0.1cm]
+        \tiny The moment you hand-edit generated code, you break the spec-to-code traceability chain.\\
+        \textbf{Rule:} If the code is wrong, the spec is wrong. Fix the spec, regenerate.
+      };
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.3cm}
+
+  \begin{block}{The Golden Rule of SDD}
+    \scriptsize
+    \begin{center}
+      The spec is the \textbf{source of truth}. Code is a derived artifact.\\
+      Never edit the derivative -- always fix the source.
+    \end{center}
+  \end{block}
+\end{frame}

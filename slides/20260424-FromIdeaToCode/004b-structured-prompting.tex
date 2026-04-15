@@ -1,0 +1,72 @@
+% Slide 4b: The PCTCF Structured Prompting Framework
+% Visual: A 5-block vertical layout showing each component of the framework,
+%   with annotations explaining how each one constrains AI behavior.
+% Talking Points:
+%   - Structured prompts are the bridge between human intent and AI execution.
+%   - The [Persona] [Context] [Task] [Constraints] [Format] framework turns
+%     vague requests into precise, reproducible instructions for both docs and code.
+%   - This same framework drives the creation of specs, presentations, and code --
+%     it is universal.
+% Presenter Script:
+%   "Before we jump to the demo, I want to show you the glue that makes all of
+%    this work -- and it's not just the spec. It's HOW you talk to the AI. We
+%    use a structured prompting framework with five components: Persona, Context,
+%    Task, Constraints, and Format. Persona tells the AI WHO it is -- 'Act as a
+%    senior Rust developer with security expertise.' Context tells it WHY -- the
+%    background, the stakes, the audience. Task is the WHAT -- crystal clear,
+%    no ambiguity. Constraints are the guardrails -- what NOT to do, what limits
+%    to respect. And Format is the shape of the output -- 'give me Beamer LaTeX,'
+%    'give me a Rust crate,' 'give me a Markdown spec.' This is the framework
+%    I used to generate THIS presentation. The same framework writes our specs.
+%    The same framework generates our code. It is the universal interface between
+%    human intent and machine execution."
+
+\begin{frame}{Structured Prompting -- The Universal Interface}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.72, transform shape,
+        block/.style={rectangle, draw, rounded corners, text width=8.5cm,
+                      minimum height=0.9cm, font=\scriptsize, inner sep=0.2cm},
+        arrow/.style={->, >=stealth, thick, keylimeblue}]
+
+      \node[block, fill=rhred!12] (persona) at (0,4.5) {
+        \textbf{[Persona]} \hfill \textcolor{keylimegray}{\tiny WHO}\\
+        \tiny ``Act as a Principal Developer Advocate and Agile Architecture Expert.''\\
+        Tells the AI what expertise to apply -- sets the tone, depth, and vocabulary.
+      };
+      \node[block, fill=keylimeorange!12] (context) at (0,2.8) {
+        \textbf{[Context]} \hfill \textcolor{keylimegray}{\tiny WHY}\\
+        \tiny ``15-minute talk for engineers and PMs on SDD + AI coding agents.''\\
+        Background, audience, stakes -- prevents the AI from guessing scope.
+      };
+      \node[block, fill=keylimeblue!10] (task) at (0,1.1) {
+        \textbf{[Task]} \hfill \textcolor{keylimegray}{\tiny WHAT}\\
+        \tiny ``Create a slide-by-slide outline with presenter scripts.''\\
+        Crystal-clear deliverable -- no ambiguity about what ``done'' looks like.
+      };
+      \node[block, fill=warningyellow!15] (constraints) at (0,-0.6) {
+        \textbf{[Constraints]} \hfill \textcolor{keylimegray}{\tiny GUARDRAILS}\\
+        \tiny ``8--12 slides, include a demo placeholder, avoid corporate fluff.''\\
+        What NOT to do is as important as what to do -- prevents scope creep.
+      };
+      \node[block, fill=successgreen!12] (format) at (0,-2.3) {
+        \textbf{[Format]} \hfill \textcolor{keylimegray}{\tiny SHAPE}\\
+        \tiny ``Output as a structured Beamer/LaTeX document, one file per slide.''\\
+        The output shape -- Markdown spec, LaTeX slides, Rust crate, React app.
+      };
+
+      \draw[arrow] (persona) -- (context);
+      \draw[arrow] (context) -- (task);
+      \draw[arrow] (task) -- (constraints);
+      \draw[arrow] (constraints) -- (format);
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.2cm}
+
+  \begin{block}{One Framework, Every Artifact}
+    \scriptsize
+    This framework generated \textbf{this presentation}, writes our \textbf{specs},
+    and produces our \textbf{code}. Same structure, different [Format].\\
+    It is the universal interface between human intent and machine execution.
+  \end{block}
+\end{frame}

@@ -1,0 +1,70 @@
+% Slide 11: Call to Action / Thank You
+% Visual: The key takeaway in large text, followed by contact info and resources.
+% Talking Points:
+%   - The single takeaway: "Writing a great spec is the new compiling."
+%   - AI agents are force multipliers -- but only with clear, structured input.
+%   - The future belongs to engineers who can specify, not just code.
+% Presenter Script:
+%   "One takeaway. If you remember nothing else from this talk, remember this:
+%    writing a great spec is the new compiling. The engineers who will thrive
+%    in the age of AI are not the ones who type the fastest. They're the ones
+%    who think the clearest. Who can take a messy idea and distill it into a
+%    precise, unambiguous specification that a machine can execute flawlessly.
+%    That is the superpower. The spec is the new code. Thank you."
+
+\section{Conclusion}
+
+\begin{frame}{The Takeaway}
+  \vspace{0.5cm}
+
+  \begin{center}
+    \begin{tikzpicture}
+      \node[rectangle, draw=rhred, rounded corners=8pt, line width=2pt,
+            fill=rhred!5, inner sep=0.6cm, text width=9cm] {
+        \begin{center}
+          \Large\bfseries
+          ``Writing a great spec\\is the new compiling.''
+        \end{center}
+      };
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.5cm}
+
+  \begin{center}
+    \begin{tikzpicture}[scale=0.75, transform shape,
+        point/.style={rectangle, draw, rounded corners, fill=keylimeblue!8,
+                      text width=3.2cm, minimum height=1.4cm, font=\scriptsize,
+                      inner sep=0.2cm, align=center}]
+
+      \node[point] (p1) at (0,0) {
+        \faIcon{file-alt}\\[0.1cm]
+        \textbf{Spec = Source of Truth}\\
+        \tiny Code is a derived artifact
+      };
+      \node[point] (p2) at (4.5,0) {
+        \faIcon{robot}\\[0.1cm]
+        \textbf{AI = Force Multiplier}\\
+        \tiny Only as good as its input
+      };
+      \node[point] (p3) at (9,0) {
+        \faIcon{brain}\\[0.1cm]
+        \textbf{Engineers = Architects}\\
+        \tiny Think clearly, specify precisely
+      };
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.5cm}
+
+  \begin{center}
+    \Large{\textbf{Questions?}}
+  \end{center}
+
+  \vspace{0.3cm}
+
+  \begin{center}
+    \scriptsize
+    \textit{Contact: sec-eng-special@redhat.com | Security Special Projects}
+  \end{center}
+\end{frame}
