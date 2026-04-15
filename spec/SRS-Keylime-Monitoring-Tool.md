@@ -3463,7 +3463,7 @@ Each stage result MUST include `duration_ms` (milliseconds spent in this stage, 
 
 **State Machine:**
 
-```
+```text
 New → Acknowledged → UnderInvestigation → Resolved
  │         │                │
  │         │                └──────────────→ Dismissed
