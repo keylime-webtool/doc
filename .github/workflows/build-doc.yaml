@@ -5,18 +5,29 @@ name: build
   push:
     branches:
       - main
-    paths-ignore:
-      - '**.md'
-      - '**.sh'
-      - '**.yaml'
   pull_request:
-    paths-ignore:
-      - '**.md'
-      - '**.sh'
-      - '**.yaml'
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      buildable: ${{ steps.filter.outputs.buildable }}
+    steps:
+      - uses: dorny/paths-filter@v4
+        id: filter
+        with:
+          filters: |
+            buildable:
+              - 'slides/**'
+              - 'Makefile'
+              - '.github/workflows/build-doc.yaml'
+              - '.github/workflows/install-dependencies'
+
   build:
+    needs: changes
+    if: needs.changes.outputs.buildable == 'true'
     runs-on: ubuntu-latest
     continue-on-error: ${{ ! matrix.stable }}
     strategy:
