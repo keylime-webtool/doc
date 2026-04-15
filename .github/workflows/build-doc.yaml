@@ -8,26 +8,7 @@ name: build
   pull_request:
 
 jobs:
-  changes:
-    runs-on: ubuntu-latest
-    permissions:
-      pull-requests: read
-    outputs:
-      buildable: ${{ steps.filter.outputs.buildable }}
-    steps:
-      - uses: dorny/paths-filter@v4
-        id: filter
-        with:
-          filters: |
-            buildable:
-              - 'slides/**'
-              - 'Makefile'
-              - '.github/workflows/build-doc.yaml'
-              - '.github/workflows/install-dependencies'
-
   build:
-    needs: changes
-    if: needs.changes.outputs.buildable == 'true'
     runs-on: ubuntu-latest
     continue-on-error: ${{ ! matrix.stable }}
     strategy:
@@ -39,17 +20,46 @@ jobs:
           - os: quay.io/fedora/fedora:rawhide
             stable: false
     steps:
+      - name: Install git
+        run: dnf install -y git-core
+
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Check for buildable changes
+        id: filter
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            git fetch origin "${{ github.event.pull_request.base.sha }}"
+            CHANGED=$(git diff --name-only \
+              "${{ github.event.pull_request.base.sha }}" HEAD)
+          else
+            CHANGED=$(git diff --name-only HEAD~1 HEAD 2>/dev/null || echo "")
+          fi
+          if echo "$CHANGED" | grep -qE \
+            '^(slides/|Makefile$|\.github/workflows/(build-doc\.yaml|install-dependencies)$)'; then
+            echo "buildable=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "buildable=false" >> "$GITHUB_OUTPUT"
+          fi
+          echo "Changed files:"
+          echo "$CHANGED"
+          echo "buildable=$(cat "$GITHUB_OUTPUT" | grep buildable | cut -d= -f2)"
 
       - name: Show OS information
+        if: steps.filter.outputs.buildable == 'true'
         run: |
           cat /etc/os-release 2>/dev/null || \
           echo /etc/os-release not available
 
       - name: Install build dependencies
+        if: steps.filter.outputs.buildable == 'true'
         run: bash .github/workflows/install-dependencies
 
       - name: Build documentation
+        if: steps.filter.outputs.buildable == 'true'
         run: |
           make -C slides test all
 
