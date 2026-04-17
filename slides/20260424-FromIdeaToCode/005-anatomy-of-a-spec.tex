@@ -22,6 +22,7 @@
 \section{The Spec}
 
 \begin{frame}[fragile]{Anatomy of a Great Spec}
+  \vspace{-0.6cm}
   \begin{columns}[T]
     \begin{column}{0.52\textwidth}
       \begin{lstlisting}[style=markdown, basicstyle=\ttfamily\fontsize{4}{5}\selectfont]
@@ -58,38 +59,46 @@ Errors: 400, 401, 500
 - [ ] Ack persists across reload
       \end{lstlisting}
     \end{column}
-    \begin{column}{0.45\textwidth}
+    \begin{column}{0.48\textwidth}
       \vspace{0.2cm}
       \begin{tikzpicture}[scale=0.65, transform shape,
           annot/.style={rectangle, draw, rounded corners, fill=keylimeblue!8,
-                        text width=3.8cm, font=\tiny, inner sep=0.15cm}]
+                        text width=4.6cm, font=\scriptsize, inner sep=0.15cm}]
 
-        \node[annot] (a1) at (0,5.5) {
+        \node[annot] (a1) at (0,4.4) {
           \faIcon{compass}~\textbf{Overview}\\
           Prevents scope creep -- tells AI the boundaries of the world
         };
-        \node[annot] (a2) at (0,4.0) {
+        \node[annot] (a2) at (0,2.9) {
           \faIcon{database}~\textbf{Data Model}\\
           Eliminates guessing about entity shapes and relationships
         };
-        \node[annot] (a3) at (0,2.5) {
+        \node[annot] (a3) at (0,1.4) {
           \faIcon{clipboard-list}~\textbf{Functional Reqs}\\
           Numbered, testable: \texttt{FR-NNN}\\
           Each one maps to test cases
         };
-        \node[annot] (a4) at (0,1.0) {
+        \node[annot] (a4) at (0,-0.1) {
           \faIcon{plug}~\textbf{API Contracts}\\
           Endpoints, payloads, error codes -- no hallucinated APIs
         };
-        \node[annot] (a5) at (0,-0.5) {
+        \node[annot] (a5) at (0,-1.6) {
           \faIcon{tachometer-alt}~\textbf{Non-Functional Reqs}\\
           Performance, security, a11y -- constraints, not wishes
         };
-        \node[annot] (a6) at (0,-2.0) {
+        \node[annot] (a6) at (0,-3.1) {
           \faIcon{check-double}~\textbf{Acceptance Criteria}\\
           Definition of ``done'' -- AI self-verifies against these
         };
+
       \end{tikzpicture}
     \end{column}
   \end{columns}
+
+  \vspace{-0.3cm}
+
+  \begin{block}{\faIcon{lightbulb}~NOTE for the Product Owner}
+    \centering\scriptsize
+    Could this be mapped to JIRA Epics?
+  \end{block}
 \end{frame}
