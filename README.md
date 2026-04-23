@@ -11,11 +11,8 @@ Documentation and presentation slides for the Keylime Web Tool project.
 
 ## Specifications
 
-The `spec/` directory contains the formal requirements and review documents for the project:
-
-| Document | Description |
-|----------|-------------|
-| `spec/SRS-Keylime-Monitoring-Tool.md` | Software Requirements Specification (SRS) covering 70 functional, 23 non-functional, and 29 security requirements with Gherkin acceptance criteria. Includes implementation refinements (Section 7) tracking data models, API contracts, and enumerations that emerged during development. |
+The formal specifications (SRS and SDD) have moved to their own repository:
+**<https://github.com/keylime-webtool/spec>**
 
 ## Building
 

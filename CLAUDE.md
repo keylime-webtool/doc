@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Purpose
 
-Documentation repository for the Keylime Monitoring Dashboard project. Contains LaTeX/Beamer presentations, the formal SRS (Software Requirements Specification), and the SDD (Software Design Description). Licensed under CC BY-SA 4.0.
+Documentation repository for the Keylime Monitoring Dashboard project. Contains LaTeX/Beamer presentations. The formal SRS and SDD have moved to [keylime-webtool/spec](https://github.com/keylime-webtool/spec). Licensed under CC BY-SA 4.0.
 
 ## Build Commands
 
@@ -44,9 +44,7 @@ git config core.hooksPath .githooks
 
 ## Repository Structure
 
-- **`spec/`** — Formal specifications:
-  - `SRS-Keylime-Monitoring-Tool.md` — 70 FRs, 23 NFRs, 29 SRs with Gherkin acceptance criteria and implementation refinements (Section 7)
-  - `SDD-Keylime-Monitoring-Tool.md` — IEEE 1016-2009 design description covering architecture, data models, API contracts, and state machines
+- **`spec/`** — Redirect to [keylime-webtool/spec](https://github.com/keylime-webtool/spec) where the SRS and SDD now live
 - **`slides/`** — LaTeX/Beamer presentations, each in a date-prefixed directory with numbered `.tex` files (`000-` is the main document that `\include`s the rest)
 - **`slides/beamerthemeRedHat.sty`** — Shared Red Hat Beamer theme (symlinked from each presentation directory)
 - **`slides/fonts/`** — Red Hat Display font family (shared, symlinked)
@@ -61,7 +59,4 @@ git config core.hooksPath .githooks
 
 ## Spec Conventions
 
-- Requirements use tags: `FR-NNN` (functional), `NFR-NNN` (non-functional), `SR-NNN` (security)
-- RFC 2119 keywords (MUST, SHALL, SHOULD, MAY) indicate requirement levels
-- Acceptance criteria use Gherkin `Given/When/Then` syntax
-- Section 7 of the SRS tracks implementation refinements (data models, API contracts, enumerations) that emerged during development
+The SRS and SDD now live in [keylime-webtool/spec](https://github.com/keylime-webtool/spec). Refer to that repository's CLAUDE.md for spec conventions.
